@@ -1,5 +1,5 @@
 class AppConfig {
-  static const String authDomain = 'desktop-p9h6p2a.saury-wage.ts.net';
+  static const String authDomain = 'dorossii.mattuu.com/';
   static String get baseUrl => 'https://$authDomain';
   
   static const String loginEndpoint = '/auth/login';
