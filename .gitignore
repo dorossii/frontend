@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+Podfile.lock
+macos/Flutter/GeneratedPluginRegistrant.swift
+ios/Runner.xcodeproj/project.pbxproj
+ios/Runner.xcworkspace/contents.xcworkspacedata
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugins.cmake
