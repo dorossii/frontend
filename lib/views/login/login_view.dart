@@ -17,15 +17,15 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 箒のサイズ
-    final broomWidth = MediaQuery.of(context).size.width * 0.9;
+    final broomWidth = MediaQuery.of(context).size.width * 1.1;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
           // 上部の箒 (赤) 
           Positioned(
-            top: -100, // 画面の上からはみ出させる
-            left: -140, // 画面の左からはみ出させる
+            top: -120, // 画面の上からはみ出させる
+            left: -100, // 画面の左からはみ出させる
             child: RotationTransition(
               turns: const AlwaysStoppedAnimation(0 / 360), // 少し反時計回りに傾ける
               child: Image.asset(
@@ -38,7 +38,7 @@ class LoginView extends StatelessWidget {
           // 下部の箒 (青) 
           Positioned(
             bottom: -150, // 画面の下からはみ出させる
-            right: -120, // 画面の右からはみ出させる
+            right: -150, // 画面の右からはみ出させる
             child: RotationTransition(
               turns: const AlwaysStoppedAnimation(0 / 360), // 少し時計回りに傾ける
               child: Image.asset(
@@ -77,7 +77,7 @@ class LoginView extends StatelessWidget {
                         color: Color(0xFFFFD700), 
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'MyFont', 
+                        fontFamily: 'Anton SC', 
                       ),
                     ),
                     const SizedBox(height: 270), 
@@ -120,8 +120,8 @@ class LoginView extends StatelessWidget {
 
                       // 墓石
                       Positioned(
-                        top: -35, 
-                        right: -25, 
+                        top: -15, 
+                        right: -45, 
                         child: Image.asset(
                           'images/grave.png', // あなたの墓石アイコン画像のパス
                           width: 60, // アイコンのサイズ
