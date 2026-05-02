@@ -1,33 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../models/user_info.dart';
 import 'package:authbase_mobile/constants/app_config.dart';
 
-class UserInfo {
-  final String userId;
-  final String name;
-  final String email;
-  final String provCode;
-  final String provUid;
 
-  UserInfo({
-    required this.userId,
-    required this.name,
-    required this.email,
-    required this.provCode,
-    required this.provUid,
-  });
-
-  factory UserInfo.fromJson(Map<String, dynamic> json) {
-    return UserInfo(
-      userId: json['user_id'] ?? '',
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      provCode: json['prov_code'] ?? '',
-      provUid: json['prov_uid'] ?? '',
-    );
-  }
-}
 
 class AuthService {
   static final String _meEndpoint = '${AppConfig.baseUrl}/auth/me';

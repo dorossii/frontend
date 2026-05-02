@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:authbase_mobile/constants/app_config.dart';
+import '../models/user_info.dart';
 
 class AuthManager {
   static const _storage = FlutterSecureStorage();
@@ -96,7 +97,7 @@ class AuthManager {
   }
 
   /// 現在のユーザー情報を取得
-  static Future<Map<String, dynamic>?> getCurrentUserInfo() async {
+  static Future<UserInfo?> getCurrentUserInfo() async {
     final refreshToken = await getRefreshToken();
     if (refreshToken == null) {
       debugPrint("❌ getCurrentUserInfo: No refresh token");
@@ -112,7 +113,8 @@ class AuthManager {
       debugPrint("🔍 ${AppConfig.meEndpoint} response: ${response.statusCode} - ${response.body}");
 
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final jsonData = json.decode(response.body);
+      return UserInfo.fromJson(jsonData);
       }
     } catch (e) {
       debugPrint("❌ getCurrentUserInfo error: $e");

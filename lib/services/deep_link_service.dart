@@ -1,5 +1,6 @@
 import 'package:authbase_mobile/services/auth_service.dart';
 import 'package:authbase_mobile/services/auth_manager.dart';
+import '../models/user_info.dart';
 
 /// ディープリンクの「中身処理」だけ担当
 class DeepLinkService {
@@ -17,10 +18,10 @@ class DeepLinkService {
       await AuthManager.saveRefreshToken(refreshToken);
 
       // ③ ユーザー情報取得
-      final userInfoMap = await AuthManager.getCurrentUserInfo();
-      if (userInfoMap == null) return null;
+      final userInfo = await AuthManager.getCurrentUserInfo();
+      if (userInfo == null) return null;
 
-      return UserInfo.fromJson(userInfoMap);
+      return userInfo;
 
     } catch (e) {
       return null;

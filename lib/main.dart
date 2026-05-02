@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 
+import 'models/user_info.dart';
 import 'views/login/login_screen.dart';
 import 'package:authbase_mobile/screens/home_screen.dart';
 import 'package:authbase_mobile/services/deep_link_service.dart';
@@ -113,16 +114,40 @@ class _MyAppState extends State<MyApp> {
         future: AuthManager.getRefreshToken(),
         builder: (context, snapshot) {
 
-          // ローディング
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
+          
+      if (snapshot.data != null) {
+  return FutureBuilder<UserInfo?>(
+    future: AuthManager.getCurrentUserInfo(),
+    builder: (context, snapshot) {
 
-          // トークンあり
-          if (snapshot.data != null) {
-            return const LoginScreen(); // ← 今は簡略
+      // ローディング
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }
+
+      // データなし（トークン無効）
+      if (!snapshot.hasData) {
+        return const LoginScreen();
+      }
+
+      final userInfo = snapshot.data!;
+
+      return HomeScreen(
+        userInfo: userInfo,
+        onLogout: () async {
+          await AuthManager.logout();
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
+            (_) => false,
+          );
+        },
+      );
+    },
+  );
+
           }
 
           // 未ログイン
