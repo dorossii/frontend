@@ -110,6 +110,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
       home: FutureBuilder<String?>(
         future: AuthManager.getRefreshToken(),
         builder: (context, snapshot) {
