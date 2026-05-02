@@ -120,8 +120,8 @@ class LoginView extends StatelessWidget {
 
                       // 墓石
                       Positioned(
-                        top: -15, 
-                        right: -45, 
+                        top: -55, 
+                        right: -10, 
                         child: Image.asset(
                           'images/grave.png', // あなたの墓石アイコン画像のパス
                           width: 60, // アイコンのサイズ
