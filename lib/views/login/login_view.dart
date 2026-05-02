@@ -27,7 +27,7 @@ class LoginView extends StatelessWidget {
             top: -120, // 画面の上からはみ出させる
             left: -100, // 画面の左からはみ出させる
             child: RotationTransition(
-              turns: const AlwaysStoppedAnimation(0 / 360), // 少し反時計回りに傾ける
+              turns: const AlwaysStoppedAnimation(0 / 360), 
               child: Image.asset(
                 'images/broom1.png', 
                 width: broomWidth,
@@ -40,7 +40,7 @@ class LoginView extends StatelessWidget {
             bottom: -150, // 画面の下からはみ出させる
             right: -150, // 画面の右からはみ出させる
             child: RotationTransition(
-              turns: const AlwaysStoppedAnimation(0 / 360), // 少し時計回りに傾ける
+              turns: const AlwaysStoppedAnimation(0 / 360), 
               child: Image.asset(
                 'images/broom2.png',
                 width: broomWidth,
@@ -62,6 +62,7 @@ class LoginView extends StatelessWidget {
                   children: [
                     const SizedBox(height: 100), // 上部の箒と被りすぎないように調整
 
+                    // TODO 配置　サイズ
                     // 中央のロゴ
                     Image.asset(
                       'images/logo.png', 
@@ -70,6 +71,7 @@ class LoginView extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
+                    // TODO フォント、グラデーション
                     // 「DORKSSII」テキスト
                     const Text(
                       'DORKSSII',
@@ -85,6 +87,7 @@ class LoginView extends StatelessWidget {
                       alignment: Alignment.center,
                       clipBehavior: Clip.none,
                 children: [
+                  // TODO ボタンサイズ　角丸
                   SizedBox(
                           width: 200, 
                           height: 56,
@@ -107,6 +110,7 @@ class LoginView extends StatelessWidget {
                                   ),
                                 )
                               // 通常
+                              // TODO フォント　サイズ
                               : const Text(
                                   'ログイン',
                                   style: TextStyle(
@@ -123,7 +127,7 @@ class LoginView extends StatelessWidget {
                         top: -55, 
                         right: -10, 
                         child: Image.asset(
-                          'images/grave.png', // あなたの墓石アイコン画像のパス
+                          'images/grave.png', 
                           width: 60, // アイコンのサイズ
                           fit: BoxFit.contain,
                         ),
