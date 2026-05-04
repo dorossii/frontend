@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../components/Colors.dart';
+import '../../components/colors.dart';
 
 // login画面のUI
 
@@ -18,6 +18,7 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     // 箒のサイズ
     final broomWidth = MediaQuery.of(context).size.width * 1.1;
+    
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
@@ -60,34 +61,35 @@ class LoginView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 100), // 上部の箒と被りすぎないように調整
+                    const SizedBox(height: 150), // 上部の箒と被りすぎないように調整
 
-                    // TODO 配置　サイズ
                     // 中央のロゴ
                     Image.asset(
                       'images/logo.png', 
-                      width: 150,
+                      width: 170,
                       fit: BoxFit.contain,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
 
-                    // TODO フォント、グラデーション
-                    // 「DORKSSII」テキスト
-                    const Text(
-                      'DORKSSII',
-                      style: TextStyle(
-                        color: Color(0xFFFFD700), 
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Anton SC', 
-                      ),
+                    // タイトル
+                    GradientText(
+                        'DOROSSII',
+                        gradient: AppColors.goldGradient,
+                        style: const TextStyle(
+                          fontFamily: 'LogoFont',
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(offset: Offset(0, 3), blurRadius: 5, color: Colors.black26),
+                          ],
+                        ),
                     ),
-                    const SizedBox(height: 270), 
+                     const SizedBox(height: 270), 
                     Stack(
                       alignment: Alignment.center,
                       clipBehavior: Clip.none,
                 children: [
-                  // TODO ボタンサイズ　角丸
+                  // ボタン
                   SizedBox(
                           width: 200, 
                           height: 56,
@@ -96,7 +98,7 @@ class LoginView extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.BtnBackground,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                           child: isLoading
@@ -109,13 +111,13 @@ class LoginView extends StatelessWidget {
                                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                   ),
                                 )
-                              // 通常
-                              // TODO フォント　サイズ
+                              // ログイン
                               : const Text(
                                   'ログイン',
                                   style: TextStyle(
+                                    fontFamily: 'TextFont',
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -124,11 +126,11 @@ class LoginView extends StatelessWidget {
 
                       // 墓石
                       Positioned(
-                        top: -55, 
-                        right: -10, 
+                        top: -65, 
+                        right: -5, 
                         child: Image.asset(
                           'images/grave.png', 
-                          width: 60, // アイコンのサイズ
+                          width: 70, 
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -140,7 +142,7 @@ class LoginView extends StatelessWidget {
                     const SizedBox(height: 24),
                     const Text(
                       'ブラウザでログインを完了してください',
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                      style: TextStyle(fontFamily: 'TextFont', color: Colors.white, fontSize: 14),
                     ),
                   ],
                 ],
