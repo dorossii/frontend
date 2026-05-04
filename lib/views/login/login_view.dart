@@ -17,7 +17,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 箒のサイズ
-    final broomWidth = MediaQuery.of(context).size.width * 1.1;
+    final broomWidth = MediaQuery.of(context).size.width * 1.2;
     
     return Scaffold(
       backgroundColor: AppColors.background,
