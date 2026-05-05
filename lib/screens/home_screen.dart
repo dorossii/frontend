@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:authbase_mobile/services/auth_service.dart';
 import 'package:authbase_mobile/services/auth_manager.dart';
+import '../models/user_info.dart';
 
 class HomeScreen extends StatelessWidget {
   final UserInfo userInfo;
