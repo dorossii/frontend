@@ -52,8 +52,6 @@ class _AppState extends State<App> {
         // 中身だけ変わる
         body: _getScreen(),
 
-        // 画面によってfooterの中身が変わるため
-        // 状態をもたせる
         bottomNavigationBar: AppFooter(
           currentPage: _currentPage,
           onTap: (page) {
