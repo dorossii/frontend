@@ -45,7 +45,9 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: const AppHeader(),
+        appBar: AppHeader(
+          currentPage: _currentPage,
+        ),
 
         // 中身だけ変わる
         body: _getScreen(),
