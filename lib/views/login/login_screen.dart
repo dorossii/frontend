@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_view.dart';
-import 'login_viewmodel.dart';
+import 'login_view_model.dart';
 import '/screens/browser_launched_screen.dart';
 
 // login画面の制御と状態管理
