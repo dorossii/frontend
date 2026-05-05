@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'models/user_info.dart';
 import 'views/login/login_screen.dart';
-import 'package:authbase_mobile/screens/home_screen.dart';
+import 'views/app.dart';
 import 'package:authbase_mobile/services/deep_link_service.dart';
 import 'package:authbase_mobile/services/auth_manager.dart';
 
@@ -90,17 +90,7 @@ class _MyAppState extends State<MyApp> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => HomeScreen(
-          userInfo: userInfo,
-          onLogout: () async {
-            await AuthManager.logout();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => const LoginScreen()),
-              (_) => false,
-            );
-          },
-        ),
+        builder: (_) => const App(),
       ),
       (_) => false,
     );
@@ -135,17 +125,7 @@ class _MyAppState extends State<MyApp> {
 
       final userInfo = snapshot.data!;
 
-      return HomeScreen(
-        userInfo: userInfo,
-        onLogout: () async {
-          await AuthManager.logout();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => const LoginScreen()),
-            (_) => false,
-          );
-        },
-      );
+      return const App();
     },
   );
 

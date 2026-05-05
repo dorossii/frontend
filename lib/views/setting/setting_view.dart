@@ -11,3 +11,12 @@ class SettingView extends StatelessWidget {
     return const Center(child: Text('Setting'));
   }
 }
+
+// onLogout: () async {
+//             await AuthManager.logout();
+//             Navigator.pushAndRemoveUntil(
+//               context,
+//               MaterialPageRoute(builder: (_) => const LoginScreen()),
+//               (_) => false,
+//             );
+//           },
