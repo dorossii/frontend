@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '/views/login/login_screen.dart';
 import '/views/top/top_screen.dart';
 import '/views/task/task_screen.dart';
 import '/views/friend/friend_screen.dart';
 import '/views/setting/setting_screen.dart';
+
+
+import '/services/auth_manager.dart';
 
 import '../components/widgets/app_header.dart';
 import '../components/widgets/app_footer.dart';
@@ -36,7 +40,26 @@ class _AppState extends State<App> {
       case PageType.friend:
         return const FriendScreen();
       case PageType.setting:
-        return const SettingScreen();
+        return SettingScreen(
+            // ログアウト処理
+      onLogoutPressed: () async {
+
+        // トークン削除
+        await AuthManager.logout();
+
+        // contextがまだ有効か確認
+        if (!context.mounted) return;
+
+        // ログイン画面へ戻る
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ),
+          (route) => false,
+          );
+        },
+      );
     }
   }
 

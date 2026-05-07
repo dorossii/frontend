@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
-import 'setting_view_model.dart';
 
-class SettingView extends StatelessWidget {
-  final SettingViewModel viewModel;
+class SettingsView extends StatelessWidget {
 
-  const SettingView({super.key, required this.viewModel});
+  final VoidCallback onLogoutPressed;
+
+  const SettingsView({
+    super.key,
+    required this.onLogoutPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Setting'));
+    return ListView(
+      children: [
+
+        ListTile(
+          leading: const Icon(Icons.logout),
+          title: const Text('ログアウト'),
+
+          onTap: onLogoutPressed,
+        ),
+      ],
+    );
   }
 }
-
-// onLogout: () async {
-//             await AuthManager.logout();
-//             Navigator.pushAndRemoveUntil(
-//               context,
-//               MaterialPageRoute(builder: (_) => const LoginScreen()),
-//               (_) => false,
-//             );
-//           },
