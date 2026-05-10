@@ -5,7 +5,12 @@ class AppColors {
 
   static const Color background = Color(0xFF005B5C);
   static const Color btnBackground = Color(0xFF55A871);
-  static const Color subBackground = Color(0xFFFFFFFF);
+  static const Color subBackground = Color(0xFFA1CBC5);
+  static const Color subWhiteBackground = Color(0xFFF9F6EE);
+  static const Color sub = Color(0xFFFFDB4D);
+  static const Color edgew = Color(0xFF004E4F);
+  static const Color text = Color(0xFF033535);
+
 
   // ゴールドのグラデーション（上から下）
   static const Gradient goldGradient = LinearGradient(
