@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:authbase_mobile/components/Colors.dart'; 
+import 'package:authbase_mobile/components/colors.dart'; 
 import 'top_view_model.dart';
 
 class TopView extends StatelessWidget {
@@ -39,7 +39,7 @@ class TopView extends StatelessWidget {
             child: SafeArea(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 0),
                 decoration: const BoxDecoration(
                   color: AppColors.background, 
                   border: Border(top: BorderSide(color: AppColors.sub, width: 2)),
@@ -212,24 +212,76 @@ class TopView extends StatelessWidget {
     );
   }
 
-  Widget _buildRescueButton() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 70,
-          height: 70,
-          decoration: BoxDecoration(
-            color: Colors.orange,
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white, width: 2),
-            boxShadow: const [BoxShadow(color: Colors.black26, offset: Offset(0, 2), blurRadius: 4)],
+// 友達救済ボタンのウィジェット
+    Widget _buildRescueButton() {
+    return GestureDetector(
+      onTap: () {
+        // ボタンがタップされたときの処理をここに書く
+        print("レスキューがタップされました！");
+      },
+    child: SizedBox(
+      width: 110, 
+      height: 120, 
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        clipBehavior: Clip.none, 
+        children: [
+          // 背面の土台カード
+          Container(
+            width: 110,
+            height: 100, 
+            decoration: BoxDecoration(
+              color: AppColors.darkBackground,
+              borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(5),
+              bottomLeft: Radius.circular(5),
+            ),
+              border: Border.all(
+                color: AppColors.darkEdgey, 
+                width: 3,
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end, 
+              children: [
+                const Text(
+                  "友達救済",
+                  style: TextStyle(
+                    color: AppColors.subWhiteBackground,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'textFont',
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    "レスキューボタン",
+                    style: TextStyle(
+                      color: AppColors.subWhiteBackground,
+                      fontSize: 9,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'textFont',
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 35),
-        ),
-        const SizedBox(height: 4),
-        const Text("友達救済", style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
-      ],
+
+          // はみ出すボタン画像
+          Positioned(
+            top: 0, 
+            child: Image.asset(
+              'images/rescue.png',
+              width: 80, 
+              height: 80,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ],
+      ),
+    )
     );
   }
 }
