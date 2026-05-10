@@ -43,7 +43,7 @@ class TopView extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: AppColors.background,
-                  border: Border(top: BorderSide(color: const Color(0xFFB2D3D2), width: 2)),
+                  border: Border(top: BorderSide(color: AppColors.sub, width: 2)),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.black26,
@@ -84,17 +84,25 @@ class TopView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Colors.white, fontSize: 10)),
+        Text(label, style: const TextStyle(
+          color: AppColors.text,
+          fontFamily: 'TextFont',
+          fontSize: 10,
+        )),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.subWhiteBackground,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            style: const TextStyle(
+              color: AppColors.text,
+              fontSize: 14,
+              fontFamily: 'TextFont',
+            ),
           ),
         ),
       ],
@@ -111,12 +119,12 @@ class TopView extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.orange,
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white, width: 2),
+            border: Border.all(color: AppColors.subWhiteBackground, width: 2),
           ),
           child: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 30),
         ),
         const SizedBox(height: 4),
-        const Text("友達救済", style: TextStyle(color: Colors.white, fontSize: 10)),
+        const Text("友達救済", style: TextStyle(color: AppColors.subWhiteBackground, fontSize: 10)),
       ],
     );
   }
