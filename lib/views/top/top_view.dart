@@ -1,5 +1,5 @@
-import 'package:authbase_mobile/components/Colors.dart';
 import 'package:flutter/material.dart';
+import 'package:authbase_mobile/components/Colors.dart'; 
 import 'top_view_model.dart';
 
 class TopView extends StatelessWidget {
@@ -12,7 +12,7 @@ class TopView extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // 背景画像 
+          // 背景画像
           Positioned.fill(
             child: Image.asset(
               'images/home1.webp',
@@ -20,11 +20,11 @@ class TopView extends StatelessWidget {
             ),
           ),
 
-          // キャラクター画像 
+          // キャラクター画像
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 180), // 下部パネルとの位置調整
+              padding: const EdgeInsets.only(bottom: 180),
               child: Image.asset(
                 'images/character.png',
                 height: 320,
@@ -33,18 +33,17 @@ class TopView extends StatelessWidget {
             ),
           ),
 
-
-          // ステータスとレスキューボタンのパネル
+          // ステータスとボタンのコンテナ
           Align(
             alignment: Alignment.bottomCenter,
             child: SafeArea(
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
+                decoration: const BoxDecoration(
+                  color: AppColors.background, 
                   border: Border(top: BorderSide(color: AppColors.sub, width: 2)),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
                       blurRadius: 10,
@@ -53,21 +52,19 @@ class TopView extends StatelessWidget {
                   ],
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min, // コンテンツに合わせる
                   children: [
-                    // 左側：ステータス
-                    Expanded(
+                    SizedBox(
+                      width: 250,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _buildStatusBox("汚さレベル", "ちょー汚すぎうける"),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 8),
                           _buildStatusBox("HP", "30/100"),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    // 右側：レスキューボタン
+                    const Spacer(),
                     _buildRescueButton(),
                   ],
                 ),
@@ -79,52 +76,159 @@ class TopView extends StatelessWidget {
     );
   }
 
-  // ステータスボックスのパーツ
+  // 重複を削除し、1つにまとめたステータスボックス生成関数 （ラベルと値を引数で受け取る）
   Widget _buildStatusBox(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(
-          color: AppColors.text,
-          fontFamily: 'TextFont',
-          fontSize: 10,
-        )),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          decoration: BoxDecoration(
-            color: AppColors.subWhiteBackground,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            value,
-            style: const TextStyle(
-              color: AppColors.text,
-              fontSize: 14,
-              fontFamily: 'TextFont',
+    return SizedBox(
+      width: double.infinity,
+      height: 70, 
+      child: Stack(
+        children: [
+          // 後ろ側の図形（影パーツ）
+          Positioned.fill(
+            child: Padding(
+              // メインのカードのサイズと揃える
+              padding: const EdgeInsets.only(top: 28, left: 6, bottom: 0, right: 0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.subBackground,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.edgew, width: 2.5),
+                  // 影の追加
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+              ),
             ),
+          ),
+
+          // 手前のメインカード（ラベル一体型）
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 6,
+            bottom: 6,
+            child: _buildCardShape(label: label, value: value),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 手前のカード専用：ラベルとボックスを一体化させる描画
+  Widget _buildCardShape({
+    required String label,
+    required String value,
+  }) {
+    final baseColor = AppColors.subBackground;
+    final borderColor = AppColors.edgew;
+
+    return Stack(
+      children: [
+        // メインボックス
+        Padding(
+          padding: const EdgeInsets.only(top: 18), // ラベルの高さ分を確保
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: baseColor,
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(8),
+                bottomLeft: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+                // 左上を直角にしてラベルと馴染ませる
+                topLeft: Radius.zero,
+              ),
+              border: Border.all(color: borderColor, width: 2.5),
+            ),
+            padding: const EdgeInsets.all(4), // 緑の縁取りの太さ
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppColors.subWhiteBackground, // 内側の白いエリア
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'textFont',
+                  color: AppColors.text,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // ラベル部分（ボックスの上に重ねて、下の線を隠す）
+        Positioned(
+          top: 0,
+          left: 0,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            decoration: BoxDecoration(
+              color: baseColor,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(6),
+                topRight: Radius.circular(6),
+              ),
+              border: Border(
+                top: BorderSide(color: borderColor, width: 2.5),
+                left: BorderSide(color: borderColor, width: 2.5),
+                right: BorderSide(color: borderColor, width: 2.5),
+                bottom: BorderSide.none, // 下の線を消してボックスと繋げる
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 2), 
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'textFont',
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.text,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // 繋ぎ目の「左の縦線」を補強
+        Positioned(
+          top: 22,
+          left: 0,
+          child: Container(
+            width: 2.5,
+            height: 5,
+            color: borderColor,
           ),
         ),
       ],
     );
   }
 
-  // レスキューボタンのパーツ
   Widget _buildRescueButton() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          width: 70,
+          height: 70,
           decoration: BoxDecoration(
             color: Colors.orange,
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.subWhiteBackground, width: 2),
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: const [BoxShadow(color: Colors.black26, offset: Offset(0, 2), blurRadius: 4)],
           ),
-          child: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 30),
+          child: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 35),
         ),
         const SizedBox(height: 4),
-        const Text("友達救済", style: TextStyle(color: AppColors.subWhiteBackground, fontSize: 10)),
+        const Text("友達救済", style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
       ],
     );
   }
