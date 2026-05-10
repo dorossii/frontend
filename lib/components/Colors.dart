@@ -4,7 +4,8 @@ class AppColors {
   AppColors._();
 
   static const Color background = Color(0xFF005B5C);
-  static const Color BtnBackground = Color(0xFF55A871);
+  static const Color btnBackground = Color(0xFF55A871);
+  static const Color subBackground = Color(0xFFFFFFFF);
 
   // ゴールドのグラデーション（上から下）
   static const Gradient goldGradient = LinearGradient(
