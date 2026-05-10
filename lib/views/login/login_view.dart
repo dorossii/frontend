@@ -96,7 +96,7 @@ class LoginView extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: isLoading ? null : onLoginPressed,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.BtnBackground,
+                              backgroundColor: AppColors.btnBackground,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
