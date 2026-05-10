@@ -12,6 +12,7 @@ class AppColors {
   static const Color edgew = Color(0xFF004E4F);
   static const Color darkEdgey = Color(0xFF002222);
   static const Color text = Color(0xFF033535);
+  static const Color grayBackground = Color(0xFFEEEEEE);
 
 
   // ゴールドのグラデーション（上から下）

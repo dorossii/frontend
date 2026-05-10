@@ -44,7 +44,8 @@ class FriendView extends StatelessWidget {
                 hintText: '検索',
                 prefixIcon: const Icon(Icons.search, color: Colors.black26),
                 filled: true,
-                fillColor: AppColors.text,
+                fillColor: AppColors.grayBackground,
+                hintStyle: const TextStyle(color: Color(0xFF9E9E9E), fontFamily: 'textFont'),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -93,12 +94,12 @@ class FriendView extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2C2C2C)),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2C2C2C), fontFamily: 'textFont'),
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Text("HP ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF004D4B))),
+                    const Text("HP ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF004D4B), fontFamily: 'textFont')),
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -118,7 +119,7 @@ class FriendView extends StatelessWidget {
           ),
           const SizedBox(width: 15),
 
-          // 右側のアクションボタン
+          // フレンドのお家に行くボタン
           _buildActionButton(),
         ],
       ),
@@ -130,10 +131,10 @@ class FriendView extends StatelessWidget {
       width: 45,
       height: 45,
       decoration: BoxDecoration(
-        color: const Color(0xFF81A99C),
+        color: AppColors.btnBackground,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Icon(Icons.group_add, color: Colors.white),
+      child: Image.asset('images/friend_go.png', width: 24, height: 24)
     );
   }
 }
