@@ -67,9 +67,9 @@ class FriendView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
                 _buildFriendItem("yoh", 0.1, AppColors.icon8, 'images/icons/pineTree.png'),
-                _buildFriendItem("お猫様", 0.4, AppColors.icon3, 'images/icons/cafe.png'),
-                _buildFriendItem("saya", 0.3, AppColors.icon4, 'images/icons/bird.png'),
-                _buildFriendItem("ごろちゃん", 0.9, AppColors.icon5, 'images/icons/rocketCat.png'),
+                _buildFriendItem("お猫様", 0.6, AppColors.icon3, 'images/icons/cafe.png'),
+                _buildFriendItem("saya", 0.4, AppColors.icon4, 'images/icons/bird.png'),
+                _buildFriendItem("ごろちゃん", 1.0, AppColors.icon5, 'images/icons/rocketCat.png'),
                 
               ],
             ),
@@ -82,12 +82,14 @@ class FriendView extends StatelessWidget {
   Widget _buildFriendItem(String name, double hpValue, Color iconColor, String mainImagePath) {
       // HPの値に応じて右下のキャラクター画像（ステータス画像）を決定する
       String statusImagePath;
-      if (hpValue > 0.8) {
+      if (hpValue > 0.9) {
         statusImagePath = 'images/status/godIcon.png';   // 神
-      } else if (hpValue > 0.3) {
+      } else if (hpValue > 0.4) {
         statusImagePath = 'images/status/humanIcon.png';   // 普通
+      } else if (hpValue > 0.3) {
+        statusImagePath = 'images/status/human2Icon.png'; // 普通の死にかけ
       } else {
-        statusImagePath = 'images/status/zombieIcon.png'; // ゾンビ状態
+        statusImagePath = 'images/status/zombieIcon.png';  // ゾンビ
       }
 
     return Container(
@@ -134,28 +136,10 @@ class FriendView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text,  fontFamily: 'textFont'),
-                ),
+                Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Text("HP ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.text, fontFamily: 'textFont')),
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: LinearProgressIndicator(
-                          value: hpValue,
-                          minHeight: 12,
-                          backgroundColor: const Color(0xFFEBEBEB),
-                          // HPの色を緑系に設定
-                          valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF8BC34A)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                
+                HpBar(value: hpValue),
               ],
             ),
           ),
@@ -169,14 +153,69 @@ class FriendView extends StatelessWidget {
   }
 
   Widget _buildActionButton() {
-    return Container(
-      width: 45,
-      height: 45,
-      decoration: BoxDecoration(
-        color: AppColors.btnBackground,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Image.asset('images/friend_go.png', width: 24, height: 24)
+  return GradientButton(
+    imagePath: 'images/friend_go.png',
+    gradient: AppColors.greenGradient,
+    onTap: () => print("レスキュー！"),
+  );
+}
+}
+
+
+// hpゲージの色を緑系にするためのカスタムウィジェット
+class HpBar extends StatelessWidget {
+  const HpBar({
+    super.key,
+    required this.value, // 0.0 〜 1.0 の値
+    this.height = 12.0,
+  });
+
+  final double value;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    // 0.4以下なら赤系、0.5以上なら緑系のグラデーションを選択
+    final gradient = value <= 0.4
+        ? const LinearGradient(
+            colors: [Color(0xFFD53B2A), Color(0xFFFFDB4D)], // ピンチ（赤）
+          )
+        : const LinearGradient(
+            colors: [Color(0xFFFEE590), Color(0xFF55A871)], // 元気（緑）
+          );
+
+    return Row(
+      children: [
+        const Text(
+          "HP ",
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'textFont',
+            color: AppColors.text,
+          ),
+        ),
+        Expanded(
+          child: Container(
+            height: height,
+            decoration: BoxDecoration(
+              color: const Color(0xFFEBEBEB),
+              borderRadius: BorderRadius.circular(height / 2),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: value.clamp(0.0, 1.0), // 念のため範囲を制限
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                decoration: BoxDecoration(
+                  gradient: gradient,
+                  borderRadius: BorderRadius.circular(height / 2),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

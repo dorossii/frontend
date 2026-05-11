@@ -25,6 +25,15 @@ class AppColors {
   static const Color icon8 = Color(0xFFBFECE6);
 
 
+  // 緑のグラデーション（上から下）
+  static const Gradient greenGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xFF55A871),
+      Color(0xFF62C884),
+    ],
+  );
   // ゴールドのグラデーション（上から下）
   static const Gradient goldGradient = LinearGradient(
     begin: Alignment.topCenter,
@@ -59,6 +68,45 @@ class GradientText extends StatelessWidget {
       child: Text(
         text,
         style: (style ?? const TextStyle()).copyWith(color: Colors.white),
+      ),
+    );
+  }
+}
+
+// グラデーションボタン
+class GradientButton extends StatelessWidget {
+  const GradientButton({
+    super.key,
+    required this.imagePath,
+    required this.gradient,
+    this.onTap,
+  });
+
+  final String imagePath;
+  final Gradient gradient;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 45,
+        height: 45,
+        decoration: BoxDecoration(
+          gradient: gradient, 
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Image.asset(imagePath, width: 24, height: 24),
+        ),
       ),
     );
   }
