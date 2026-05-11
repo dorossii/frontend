@@ -38,7 +38,7 @@ class FriendView extends StatelessWidget {
 
           // 検索バー
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
             child: TextField(
               decoration: InputDecoration(
                 hintText: '検索',
@@ -58,10 +58,12 @@ class FriendView extends StatelessWidget {
           // フレンドリスト
           Expanded(
             child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
-                _buildFriendItem("大阪 太郎", 0.7, 'images/icon1.png'),
-                _buildFriendItem("東京 花子", 0.4, 'images/icon2.png'),
-                _buildFriendItem("名古屋 次郎", 0.9, 'images/icon3.png'),
+                _buildFriendItem("大阪 太郎", 0.1, AppColors.icon1, 'images/icons/pc.png'),
+                _buildFriendItem("お猫様", 0.4, AppColors.icon2, 'images/icons/space.png'),
+                _buildFriendItem("saya", 0.3, AppColors.icon4, 'images/icons/bird.png'),
+                _buildFriendItem("ごろちゃん", 0.9, AppColors.icon5, 'images/icons/game.png'),
                 
               ],
             ),
@@ -71,10 +73,10 @@ class FriendView extends StatelessWidget {
     );
   }
 
-  Widget _buildFriendItem(String name, double hpValue, String mainImagePath) {
+  Widget _buildFriendItem(String name, double hpValue, Color iconColor, String mainImagePath) {
       // HPの値に応じて右下のキャラクター画像（ステータス画像）を決定する
       String statusImagePath;
-      if (hpValue > 0.6) {
+      if (hpValue > 0.8) {
         statusImagePath = 'images/status/godIcon.png';   // 神
       } else if (hpValue > 0.3) {
         statusImagePath = 'images/status/humanIcon.png';   // 普通
@@ -95,17 +97,17 @@ class FriendView extends StatelessWidget {
           children: [
             // メインの丸アイコン
             CircleAvatar(
-              radius: 35,
-              backgroundColor: const Color(0xFF638D87),
+              radius: 30,
               backgroundImage: AssetImage(mainImagePath),
+              backgroundColor: iconColor,
             ),
             // 右下のキャラクター（HP連動）
             Positioned(
               right: -10,
               bottom: -10,
               child: Container(
-                width: 40,
-                height: 40,
+                width: 35,
+                height: 35,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                 ),
@@ -128,12 +130,12 @@ class FriendView extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2C2C2C), fontFamily: 'textFont'),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text,  fontFamily: 'textFont'),
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Text("HP ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF004D4B), fontFamily: 'textFont')),
+                    const Text("HP ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.text, fontFamily: 'textFont')),
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),

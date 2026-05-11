@@ -72,6 +72,7 @@ flutter:
   assets:
     - images/
     - images/status/
+    - images/icons/
   #   - images/a_dot_ham.jpeg
 
   fonts:
