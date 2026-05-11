@@ -14,7 +14,16 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
     final topPadding = MediaQuery.of(context).padding.top;
 
     return Container(
+      decoration: BoxDecoration(
       color: AppColors.background,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.6), // 影の色と透明度
+          blurRadius: 8,                       // 影のぼかし具合
+          offset: const Offset(0, 3),          // 下方向に3pxずらす
+        ),
+      ],
+    ),
       padding: EdgeInsets.only(top: topPadding),
       // isTop が true ならログ、false ならステータスを表示
       child: isTop ? _buildLogHeader() : _buildMyStatusHeader(),
