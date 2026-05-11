@@ -28,7 +28,7 @@ class FriendView extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF002D2C),
                     fontSize: 13,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                     fontFamily: 'textFont',
                   ),
                 ),
@@ -38,18 +38,24 @@ class FriendView extends StatelessWidget {
 
           // 検索バー
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: '検索',
-                prefixIcon: const Icon(Icons.search, color: Colors.black26),
-                filled: true,
-                fillColor: AppColors.grayBackground,
-                hintStyle: const TextStyle(color: Color(0xFF9E9E9E), fontFamily: 'textFont'),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+            child: SizedBox(
+              height: 36, 
+              child: TextField(
+                style: const TextStyle(fontSize: 14), 
+                decoration: InputDecoration(
+                  hintText: '検索',
+                  hintStyle: const TextStyle(fontSize: 14, color: AppColors.text, fontFamily: 'textFont'),
+                  prefixIcon: const Icon(Icons.search, color: AppColors.text, size: 20),
+                  filled: true,
+                  fillColor: AppColors.grayBackground,
+                  isDense: true, 
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12), 
+                  
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
             ),
@@ -60,10 +66,10 @@ class FriendView extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
-                _buildFriendItem("大阪 太郎", 0.1, AppColors.icon1, 'images/icons/pc.png'),
-                _buildFriendItem("お猫様", 0.4, AppColors.icon2, 'images/icons/space.png'),
+                _buildFriendItem("yoh", 0.1, AppColors.icon8, 'images/icons/pineTree.png'),
+                _buildFriendItem("お猫様", 0.4, AppColors.icon3, 'images/icons/cafe.png'),
                 _buildFriendItem("saya", 0.3, AppColors.icon4, 'images/icons/bird.png'),
-                _buildFriendItem("ごろちゃん", 0.9, AppColors.icon5, 'images/icons/game.png'),
+                _buildFriendItem("ごろちゃん", 0.9, AppColors.icon5, 'images/icons/rocketCat.png'),
                 
               ],
             ),
