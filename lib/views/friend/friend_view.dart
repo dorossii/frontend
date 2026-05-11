@@ -71,7 +71,17 @@ class FriendView extends StatelessWidget {
     );
   }
 
-  Widget _buildFriendItem(String name, double hpValue, String imagePath) {
+  Widget _buildFriendItem(String name, double hpValue, String mainImagePath) {
+      // HPの値に応じて右下のキャラクター画像（ステータス画像）を決定する
+      String statusImagePath;
+      if (hpValue > 0.6) {
+        statusImagePath = 'images/status/godIcon.png';   // 神
+      } else if (hpValue > 0.3) {
+        statusImagePath = 'images/status/humanIcon.png';   // 普通
+      } else {
+        statusImagePath = 'images/status/zombieIcon.png'; // ゾンビ状態
+      }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       decoration: const BoxDecoration(
@@ -80,11 +90,35 @@ class FriendView extends StatelessWidget {
       child: Row(
         children: [
           // アイコン部分
-          CircleAvatar(
-            radius: 35,
-            backgroundColor: const Color(0xFF638D87), 
-            backgroundImage: AssetImage(imagePath),
-          ),
+          Stack(
+          clipBehavior: Clip.none, // キャラクターのはみ出しを許可
+          children: [
+            // メインの丸アイコン
+            CircleAvatar(
+              radius: 35,
+              backgroundColor: const Color(0xFF638D87),
+              backgroundImage: AssetImage(mainImagePath),
+            ),
+            // 右下のキャラクター（HP連動）
+            Positioned(
+              right: -10,
+              bottom: -10,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: ClipOval(
+                  child: Image.asset(
+                    statusImagePath,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
           const SizedBox(width: 15),
 
           // 名前とHPゲージ
