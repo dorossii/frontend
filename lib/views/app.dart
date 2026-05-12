@@ -38,7 +38,7 @@ class _AppState extends State<App> {
       case PageType.task:
         return const TaskScreen();
       case PageType.friend:
-        return const FriendScreen();
+        return const FriendListScreen();
       case PageType.setting:
         return SettingScreen(
             // ログアウト処理
