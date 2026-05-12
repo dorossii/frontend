@@ -58,7 +58,10 @@ class FooterView extends StatelessWidget {
     final bool isActive = currentIndex == index;
     
     // カラーパレットの精細化
-    final Color outerBorder = isActive ? AppColors.sub : const Color(0xFF3D4540); // 外枠
+    final List<Color> outerGradientColors = isActive 
+      ? [const Color(0xFFFEE590), const Color(0xFFAD7B23)] // 活性：金色グラデ
+      : [const Color(0xFF7A867E), const Color(0xFF3D4540)]; // 非活性：暗いグレーグラデ
+
     final Color innerBorder = isActive ? AppColors.edgew : const Color(0xFF7A867E); // 内枠
     final List<Color> tileGradient = isActive 
         ? [const Color(0xFF62C884), const Color(0xFF55A871)] // アクティブ時の緑グラデ
@@ -66,17 +69,22 @@ class FooterView extends StatelessWidget {
 
     return BottomNavigationBarItem(
       icon: Container(
-        width: 46,
-        height: 46,
+        width: 48,
+        height: 48,
         margin: const EdgeInsets.only(bottom: 4, top: 6),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          // 外側の「厚み」を表現する暗い縁
-          border: Border.all(color: outerBorder, width: 2.5),
+        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: outerGradientColors,
+        ),
           boxShadow: [
             BoxShadow(color: Colors.black.withOpacity(0.4), offset: const Offset(0, 3), blurRadius: 4),
           ],
         ),
+        // 外枠のグラデーションを反映させるための内側のコンテナ
+        padding: const EdgeInsets.all(2.5),
         child: Container(
           // 内側のハイライト縁
           decoration: BoxDecoration(
@@ -92,14 +100,14 @@ class FooterView extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               // アイコンの彫り込み（ドロップシャドウ）
-              Image.asset(iconPath, width: 40, height: 40, color: Colors.black.withOpacity(0.5)),
+              Image.asset(iconPath, width: 38, height: 38, color: Colors.black.withOpacity(0.5)),
               // アイコン本体
               Padding(
                 padding: const EdgeInsets.only(top: 1), // わずかに上に
                 child: Image.asset(
                   iconPath,
-                  width: 40,
-                  height: 40,
+                  width: 38,
+                  height: 38,
                   color: isActive ? null: AppColors.gray
                 ),
               ),
