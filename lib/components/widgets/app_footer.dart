@@ -28,7 +28,8 @@ class AppFooter extends StatelessWidget {
           if (index == 1) onTap(PageType.task);
           if (index == 2) onTap(PageType.friend);
           if (index == 3) onTap(PageType.setting);
-        }
+        },
+        isTop: isTop,
     );
   }
 
