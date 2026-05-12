@@ -17,36 +17,22 @@ class AppFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final isTop = currentPage == PageType.top;
 
-    final items = isTop ? _topItems() : _defaultItems();
+    final items = _Items();
     final currentIndex = isTop ? 0 : _getIndex(currentPage);
 
     return FooterView(
       items: items,
       currentIndex: currentIndex,
       onTap: (index) {
-        if (isTop) {
-          if (index == 0) onTap(PageType.task);
-          if (index == 1) onTap(PageType.friend);
-          if (index == 2) onTap(PageType.setting);
-        } else {
           if (index == 0) onTap(PageType.top);
           if (index == 1) onTap(PageType.task);
           if (index == 2) onTap(PageType.friend);
           if (index == 3) onTap(PageType.setting);
         }
-      },
     );
   }
 
-  List<BottomNavigationBarItem> _topItems() {
-    return const [
-      BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Task'),
-      BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Friend'),
-      BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
-    ];
-  }
-
-  List<BottomNavigationBarItem> _defaultItems() {
+  List<BottomNavigationBarItem> _Items() {
     return const [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Top'),
       BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Task'),
