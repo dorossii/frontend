@@ -20,7 +20,7 @@ class AppFooter extends StatelessWidget {
     return FooterView(
       currentIndex: _getIndex(currentPage),
       onTap: (index) {
-        // indexとPageTypeをしっかり対応させる
+        // indexとPageTypeを対応させる
         final pages = [PageType.top, PageType.task, PageType.friend, PageType.setting];
         onTap(pages[index]);
       },

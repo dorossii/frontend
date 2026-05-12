@@ -58,7 +58,7 @@ class FooterView extends StatelessWidget {
     final bool isActive = currentIndex == index;
     
     // カラーパレットの精細化
-    final Color outerBorder = isActive ? const Color(0xFF8E732A) : const Color(0xFF3D4540); // 外枠
+    final Color outerBorder = isActive ? AppColors.sub : const Color(0xFF3D4540); // 外枠
     final Color innerBorder = isActive ? AppColors.edgew : const Color(0xFF7A867E); // 内枠
     final List<Color> tileGradient = isActive 
         ? [const Color(0xFF62C884), const Color(0xFF55A871)] // アクティブ時の緑グラデ
@@ -72,7 +72,7 @@ class FooterView extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           // 外側の「厚み」を表現する暗い縁
-          border: Border.all(color: outerBorder, width: 2),
+          border: Border.all(color: outerBorder, width: 2.5),
           boxShadow: [
             BoxShadow(color: Colors.black.withOpacity(0.4), offset: const Offset(0, 3), blurRadius: 4),
           ],
@@ -92,14 +92,14 @@ class FooterView extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               // アイコンの彫り込み（ドロップシャドウ）
-              Image.asset(iconPath, width: 26, height: 26, color: Colors.black.withOpacity(0.5)),
+              Image.asset(iconPath, width: 40, height: 40, color: Colors.black.withOpacity(0.5)),
               // アイコン本体
               Padding(
                 padding: const EdgeInsets.only(top: 1), // わずかに上に
                 child: Image.asset(
                   iconPath,
-                  width: 32,
-                  height: 32,
+                  width: 40,
+                  height: 40,
                   color: isActive ? null: AppColors.gray
                 ),
               ),
