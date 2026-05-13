@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'friend_view_model.dart';
 import 'package:authbase_mobile/components/colors.dart';
 
-class FriendView extends StatelessWidget {
-  final FriendViewModel viewModel;
 
-  const FriendView({super.key, required this.viewModel});
+
+
+class FriendListView extends StatelessWidget {
+  final FriendListViewModel viewModel;
+
+  const FriendListView({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +69,10 @@ class FriendView extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
-                _buildFriendItem("yoh", 0.1, AppColors.icon8, 'images/icons/pineTree.png'),
-                _buildFriendItem("お猫様", 0.6, AppColors.icon3, 'images/icons/cafe.png'),
-                _buildFriendItem("saya", 0.4, AppColors.icon4, 'images/icons/bird.png'),
-                _buildFriendItem("ごろちゃん", 1.0, AppColors.icon5, 'images/icons/rocketCat.png'),
+                _buildFriendItem(context,"yoh", 0.1, AppColors.icon8, 'images/icons/pineTree.png'),
+                _buildFriendItem(context,"お猫様", 0.6, AppColors.icon3, 'images/icons/cafe.png'),
+                _buildFriendItem(context,"saya", 0.4, AppColors.icon4, 'images/icons/bird.png'),
+                _buildFriendItem(context,"ごろちゃん", 1.0, AppColors.icon5, 'images/icons/rocketCat.png'),
                 
               ],
             ),
@@ -79,7 +82,7 @@ class FriendView extends StatelessWidget {
     );
   }
 
-  Widget _buildFriendItem(String name, double hpValue, Color iconColor, String mainImagePath) {
+  Widget _buildFriendItem(BuildContext context, String name, double hpValue, Color iconColor, String mainImagePath) {
       // HPの値に応じて右下のキャラクター画像（ステータス画像）を決定する
       String statusImagePath;
       if (hpValue > 0.9) {
@@ -146,17 +149,17 @@ class FriendView extends StatelessWidget {
           const SizedBox(width: 15),
 
           // フレンドのお家に行くボタン
-          _buildActionButton(),
+          _buildActionButton(context, name, iconColor),
         ],
       ),
     );
   }
 
-  Widget _buildActionButton() {
+  Widget _buildActionButton(BuildContext context, String name, Color color) {
   return GradientButton(
     imagePath: 'images/friend_go.png',
     gradient: AppColors.greenGradient,
-    onTap: () => print("レスキュー！"),
+    onTap: () => viewModel.onFriendTapped(context, name, color),
   );
 }
 }

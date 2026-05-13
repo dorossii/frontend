@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '/views/login/login_screen.dart';
 import '/views/top/top_screen.dart';
 import '/views/task/task_screen.dart';
-import '/views/friend/friend_screen.dart';
+import 'friend/friend_list/friend_screen.dart';
 import '/views/setting/setting_screen.dart';
 
 
@@ -38,7 +38,11 @@ class _AppState extends State<App> {
       case PageType.task:
         return const TaskScreen();
       case PageType.friend:
-        return const FriendScreen();
+        return FriendListScreen(onTabSelected: (page) {
+            setState(() {
+              _currentPage = page;
+            });
+          },);
       case PageType.setting:
         return SettingScreen(
             // ログアウト処理
