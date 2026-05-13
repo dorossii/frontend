@@ -8,9 +8,10 @@ import '../../app.dart';
 
 class FriendHomeView extends StatelessWidget {
   final FriendHomeViewModel viewModel;
+  final Color themeColor;
   final Function(PageType) onTabSelected;
 
-  const FriendHomeView({super.key, required this.viewModel, required this.onTabSelected});
+  const FriendHomeView({super.key, required this.viewModel, required this.themeColor, required this.onTabSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ Align(
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF4A352A), // 木っぽい茶色
+        color: themeColor, // 木っぽい茶色
         borderRadius: BorderRadius.circular(4),
         border: Border.all(color: const Color(0xFF2D1E16), width: 3),
         boxShadow: [

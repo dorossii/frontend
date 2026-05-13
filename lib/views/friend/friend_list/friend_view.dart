@@ -149,17 +149,17 @@ class FriendListView extends StatelessWidget {
           const SizedBox(width: 15),
 
           // フレンドのお家に行くボタン
-          _buildActionButton(context, name),
+          _buildActionButton(context, name, iconColor),
         ],
       ),
     );
   }
 
-  Widget _buildActionButton(BuildContext context, String name) {
+  Widget _buildActionButton(BuildContext context, String name, Color color) {
   return GradientButton(
     imagePath: 'images/friend_go.png',
     gradient: AppColors.greenGradient,
-    onTap: () => viewModel.onFriendTapped(context, name),
+    onTap: () => viewModel.onFriendTapped(context, name, color),
   );
 }
 }

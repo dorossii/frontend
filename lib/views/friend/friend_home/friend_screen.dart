@@ -5,11 +5,13 @@ import '../../../views/app.dart';
 
 class FriendHomeScreen extends StatelessWidget {
   final String name; 
+  final Color themeColor;
   final Function(PageType) onTabSelected; 
 
   const FriendHomeScreen({
     super.key, 
     required this.name, 
+    required this.themeColor,
     required this.onTabSelected,
   });
 
@@ -18,6 +20,7 @@ class FriendHomeScreen extends StatelessWidget {
     final viewModel = FriendHomeViewModel(friendName: name);
     return FriendHomeView(
       viewModel: viewModel,
+      themeColor: themeColor,
       onTabSelected: onTabSelected, // Viewへ渡す
     );
   }

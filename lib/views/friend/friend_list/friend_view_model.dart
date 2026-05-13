@@ -8,12 +8,13 @@ class FriendListViewModel {
   // コンストラクタで受け取る
   FriendListViewModel({required this.onTabSelected});
 
-  void onFriendTapped(BuildContext context, String name) {
+  void onFriendTapped(BuildContext context, String name, Color color) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => FriendHomeScreen(
           name: name, 
+          themeColor: color,
           onTabSelected: onTabSelected, 
         ),
       ),
