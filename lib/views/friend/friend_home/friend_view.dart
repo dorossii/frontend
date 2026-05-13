@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:authbase_mobile/components/colors.dart'; 
 import 'friend_view_model.dart';
-
+// ヘッダーフッター表示のために、PageTypeをインポート
+import '../../../components/widgets/app_header.dart';
+import '../../../components/widgets/app_footer.dart';
+import '../../app.dart';
 
 class FriendHomeView extends StatelessWidget {
   final FriendHomeViewModel viewModel;
@@ -11,6 +14,16 @@ class FriendHomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // 共通ヘッダーを配置（Friendタブとして表示）
+      appBar: AppHeader(currentPage: PageType.friend),
+
+      bottomNavigationBar: AppFooter(
+        currentPage: null,
+        onTap: (page) {
+          // 詳細から別タブ（Taskなど）へ行くなら、一旦popしてリストに戻る
+          Navigator.pop(context);
+        },
+      ),
       body: Stack(
         children: [
           // 背景画像

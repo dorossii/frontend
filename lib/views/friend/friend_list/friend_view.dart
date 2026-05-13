@@ -3,6 +3,8 @@ import 'friend_view_model.dart';
 import 'package:authbase_mobile/components/colors.dart';
 
 
+
+
 class FriendListView extends StatelessWidget {
   final FriendListViewModel viewModel;
 

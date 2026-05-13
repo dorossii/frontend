@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import '../../components/colors.dart';
-
+import '../../views/app.dart';
 class FooterView extends StatelessWidget {
-  final int currentIndex;
+  final PageType? currentPage;
   final Function(int) onTap;
   final bool isTop;
 
   const FooterView({
     super.key,
-    required this.currentIndex,
+    this.currentPage, // requiredを外してnullを許容
     required this.onTap,
     required this.isTop,
   });
 
   @override
   Widget build(BuildContext context) {
-    // アイコンのスタイルを統一するための関数
+    // 詳細画面（null）またはトップページの時は、上部の線と影を隠す
+    final bool hideDecorator = isTop || currentPage == null;
+
     final List<BottomNavigationBarItem> items = [
       _buildStyledItem("images/footer/home_icon.png", "Top", 0),
       _buildStyledItem("images/footer/task_icon.png", "Task", 1),
@@ -25,12 +27,11 @@ class FooterView extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        // 背景色と、トップページ以外のときの上部の金色の線と影
         color: AppColors.background, 
-        border: isTop ? null : const Border(
+        border: hideDecorator ? null : const Border(
           top: BorderSide(color: AppColors.sub, width: 1.5),
         ),
-        boxShadow: isTop ? [] : [
+        boxShadow: hideDecorator ? [] : [
           BoxShadow(
             color: Colors.black.withOpacity(0.6),
             blurRadius: 15,
@@ -41,11 +42,12 @@ class FooterView extends StatelessWidget {
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: items,
-        currentIndex: currentIndex,
+        currentIndex: _getSelectedIndex(currentPage), // メソッド名を統一
         onTap: onTap,
         backgroundColor: Colors.transparent, 
         elevation: 0,
-        selectedItemColor:  AppColors.sub,
+        // currentPageがnullのときは、ラベルの色もグレーにする
+        selectedItemColor: currentPage == null ? AppColors.gray : AppColors.sub,
         unselectedItemColor: AppColors.gray,
         selectedLabelStyle: const TextStyle(fontFamily: 'textFont', fontSize: 12, fontWeight: FontWeight.bold),
         unselectedLabelStyle: const TextStyle(fontFamily: 'textFont', fontSize: 12),
@@ -55,17 +57,17 @@ class FooterView extends StatelessWidget {
   }
 
   BottomNavigationBarItem _buildStyledItem(String iconPath, String label, int index) {
-    final bool isActive = currentIndex == index;
-    
-    // カラーパレットの精細化
-    final List<Color> outerGradientColors = isActive 
-      ? [const Color(0xFFFEE590), const Color(0xFFAD7B23)] // 活性：金色グラデ
-      : [const Color(0xFF7A867E), const Color(0xFF3D4540)]; // 非活性：暗いグレーグラデ
+    // ★ここがポイント：currentPageがnullのときは、強制的にfalseにする
+    final bool isActive = currentPage != null && _getSelectedIndex(currentPage) == index;
 
-    final Color innerBorder = isActive ? AppColors.edgew : const Color(0xFF7A867E); // 内枠
+    final List<Color> outerGradientColors = isActive 
+      ? [const Color(0xFFFEE590), const Color(0xFFAD7B23)]
+      : [const Color(0xFF7A867E), const Color(0xFF3D4540)];
+
+    final Color innerBorder = isActive ? AppColors.edgew : const Color(0xFF7A867E);
     final List<Color> tileGradient = isActive 
-        ? [const Color(0xFF62C884), const Color(0xFF55A871)] // アクティブ時の緑グラデ
-        : [const Color(0xFF4A544E), const Color(0xFF353D38)]; // 非アクティブ時の沈んだ色
+        ? [const Color(0xFF62C884), const Color(0xFF55A871)]
+        : [const Color(0xFF4A544E), const Color(0xFF353D38)];
 
     return BottomNavigationBarItem(
       icon: Container(
@@ -73,20 +75,18 @@ class FooterView extends StatelessWidget {
         height: 48,
         margin: const EdgeInsets.only(bottom: 4, top: 6),
         decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: outerGradientColors,
-        ),
+          borderRadius: BorderRadius.circular(12),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: outerGradientColors,
+          ),
           boxShadow: [
             BoxShadow(color: Colors.black.withOpacity(0.4), offset: const Offset(0, 3), blurRadius: 4),
           ],
         ),
-        // 外枠のグラデーションを反映させるための内側のコンテナ
         padding: const EdgeInsets.all(2.5),
         child: Container(
-          // 内側のハイライト縁
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: innerBorder, width: 1.5),
@@ -99,16 +99,14 @@ class FooterView extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // アイコンの彫り込み（ドロップシャドウ）
               Image.asset(iconPath, width: 38, height: 38, color: Colors.black.withOpacity(0.5)),
-              // アイコン本体
               Padding(
-                padding: const EdgeInsets.only(top: 1), // わずかに上に
+                padding: const EdgeInsets.only(top: 1),
                 child: Image.asset(
                   iconPath,
                   width: 38,
                   height: 38,
-                  color: isActive ? null: AppColors.gray
+                  color: isActive ? null : AppColors.gray,
                 ),
               ),
             ],
@@ -117,5 +115,11 @@ class FooterView extends StatelessWidget {
       ),
       label: label,
     );
+  }
+
+  // 名前を統一し、ロジックを整理
+  int _getSelectedIndex(PageType? type) {
+    if (type == null) return 2; // お家のときはFriendの位置にインデックスを置いておく
+    return type.index; 
   }
 }

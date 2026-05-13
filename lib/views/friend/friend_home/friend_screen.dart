@@ -8,9 +8,8 @@ class FriendHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 詳細画面用のViewModelを作成
+    // 詳細用のViewModelを作って、Viewに渡す
     final viewModel = FriendHomeViewModel(friendName: name);
-    // 詳細画面のViewに渡す
     return FriendHomeView(viewModel: viewModel);
   }
 }
