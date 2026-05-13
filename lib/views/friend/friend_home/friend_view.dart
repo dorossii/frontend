@@ -8,8 +8,9 @@ import '../../app.dart';
 
 class FriendHomeView extends StatelessWidget {
   final FriendHomeViewModel viewModel;
+  final Function(PageType) onTabSelected;
 
-  const FriendHomeView({super.key, required this.viewModel});
+  const FriendHomeView({super.key, required this.viewModel, required this.onTabSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +21,10 @@ class FriendHomeView extends StatelessWidget {
       bottomNavigationBar: AppFooter(
         currentPage: null,
         onTap: (page) {
-          // 詳細から別タブ（Taskなど）へ行くなら、一旦popしてリストに戻る
+          // 1. お家画面を閉じる
           Navigator.pop(context);
+          // 2. 親（App.dart）のタブを切り替える
+          onTabSelected(page);
         },
       ),
       body: Stack(

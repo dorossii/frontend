@@ -38,7 +38,11 @@ class _AppState extends State<App> {
       case PageType.task:
         return const TaskScreen();
       case PageType.friend:
-        return const FriendListScreen();
+        return FriendListScreen(onTabSelected: (page) {
+            setState(() {
+              _currentPage = page;
+            });
+          },);
       case PageType.setting:
         return SettingScreen(
             // ログアウト処理

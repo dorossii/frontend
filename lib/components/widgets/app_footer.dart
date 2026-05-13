@@ -28,7 +28,23 @@ class AppFooter extends StatelessWidget {
           PageType.friend, 
           PageType.setting
         ];
-        onTap(pages[index]);
+        final targetPage = pages[index];
+        
+       if (currentPage == null) {
+    // 1. まず、親（App.dart）のタブを切り替える指示を出す
+    // これにより、詳細画面の「裏側」で画面が切り替わります
+    onTap(targetPage);
+
+    // 2. ほんの少しだけ待ってから、詳細画面（自分）を閉じる
+    // これで「真っ暗」な隙間を作らずに済みます
+    Future.delayed(const Duration(milliseconds: 50), () {
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+    });
+  } else {
+    onTap(targetPage);
+  }
       },
       isTop: isTop,
     );

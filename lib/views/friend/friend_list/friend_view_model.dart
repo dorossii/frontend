@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import '../friend_home/friend_screen.dart';
+import '../../../views/app.dart';
 
 class FriendListViewModel {
+  final Function(PageType) onTabSelected;
+
+  // コンストラクタで受け取る
+  FriendListViewModel({required this.onTabSelected});
+
   void onFriendTapped(BuildContext context, String name) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        // 遷移先は「Screen」にする。引数は name
-        builder: (context) => FriendHomeScreen(name: name),
+        builder: (context) => FriendHomeScreen(
+          name: name, 
+          onTabSelected: onTabSelected, 
+        ),
       ),
     );
   }
