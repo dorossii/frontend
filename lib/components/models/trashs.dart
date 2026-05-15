@@ -1,10 +1,12 @@
+import 'trash_animation_type.dart';
+import 'trash_type.dart';
 // ゴミ箱に入れるオブジェクトのクラス
 class TrashObject {
 
-  /// 画像
-  final String image;
+  /// ゴミ種類
+  final TrashType type;
 
-  /// 配置位置
+  /// 位置
   final double x;
   final double y;
 
@@ -15,12 +17,19 @@ class TrashObject {
   /// 回転
   final double rotation;
 
+  /// アニメーション
+  final TrashAnimationType animation;
+
   const TrashObject({
-    required this.image,
+    required this.type,
     required this.x,
     required this.y,
     required this.width,
     required this.height,
+
     this.rotation = 0,
+
+    this.animation =
+        TrashAnimationType.none,
   });
 }

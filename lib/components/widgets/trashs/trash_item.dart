@@ -1,32 +1,32 @@
+// ==============================================
+// widgets/trash/trash_item.dart
+// ==============================================
+
 import 'package:flutter/material.dart';
+
+import '../../extensions/trash_type_extension.dart';
+import '../../models/trashs.dart';
 
 class TrashItem extends StatelessWidget {
 
-  final String image;
-
-  final double width;
-  final double height;
-
-  final double rotation;
+  final TrashObject trash;
 
   const TrashItem({
     super.key,
-    required this.image,
-    required this.width,
-    required this.height,
-    required this.rotation,
+    required this.trash,
   });
 
   @override
   Widget build(BuildContext context) {
 
     return Transform.rotate(
-      angle: rotation,
+      angle: trash.rotation,
 
       child: Image.asset(
-        image,
-        width: width,
-        height: height,
+        trash.type.image,
+
+        width: trash.width,
+        height: trash.height,
       ),
     );
   }

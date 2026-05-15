@@ -1,126 +1,116 @@
 import '../models/status.dart';
+import '../models/state_theme.dart';
+import '../models/trash_animation_type.dart';
 import '../models/trashs.dart';
-// キャラクターの状態に応じたゴミの配置を定義するエクステンション
-extension LifeStateLayout on LifeState {
+import '../models/trash_type.dart';
 
-  List<TrashObject> get trashLayout {
+// LifeStateに応じたテーマを定義するエクステンション
+extension LifeStateExtension on LifeState {
+
+  StateTheme get theme {
 
     switch (this) {
+
+      // ========================================
       // RIP
+      // ========================================
       case LifeState.rip:
-        return [
 
-          TrashObject(
-            image: '',
-            x: 0.5,
-            y: 0.82,
-            width: 260,
-            height: 260,
-          ),
+        return StateTheme(
 
-          TrashObject(
-            image: '',
-            x: 0.2,
-            y: 0.85,
-            width: 90,
-            height: 90,
-            rotation: -0.3,
-          ),
+          background:
+              'assets/bg/rip_bg.webp',
 
-          TrashObject(
-            image: '',
-            x: 0.8,
-            y: 0.83,
-            width: 100,
-            height: 100,
-            rotation: 0.4,
-          ),
-        ];
+          character:
+              'assets/chara/rip.webp',
 
-      // critical
-      case LifeState.critical:
-        return [
+          darkness: 0.9,
 
-          TrashObject(
-            image: '',
-            x: 0.5,
-            y: 0.84,
-            width: 180,
-            height: 180,
-          ),
+          trashes: [
 
-          TrashObject(
-            image: '',
-            x: 0.25,
-            y: 0.8,
-            width: 70,
-            height: 70,
-          ),
-        ];
+            TrashObject(
+              type: TrashType.mountain,
 
-      // danger
-      case LifeState.danger:
-        return [
+              x: 0.5,
+              y: 0.8,
 
-          TrashObject(
-            image: '',
-            x: 0.7,
-            y: 0.82,
-            width: 60,
-            height: 60,
-          ),
-        ];
+              width: 240,
+              height: 240,
 
-      // dirty
-      case LifeState.dirty:
-        return [
+              animation:
+                  TrashAnimationType.shaking,
+            ),
 
-          TrashObject(
-            image: '',
-            x: 0.7,
-            y: 0.82,
-            width: 60,
-            height: 60,
-          ),
-        ];
+            TrashObject(
+              type: TrashType.pizza,
 
-      // normal
-      case LifeState.normal:
-        return [
+              x: 0.8,
+              y: 0.85,
 
-          TrashObject(
-            image: '',
-            x: 0.7,
-            y: 0.82,
-            width: 60,
-            height: 60,
-          ),
-        ];
-      
-      // slightlyDirty
-      case LifeState.slightlyDirty:
-        return [
+              width: 100,
+              height: 100,
 
-          TrashObject(
-            image: '',
-            x: 0.7,
-            y: 0.82,
-            width: 60,
-            height: 60,
-          ),
-        ];
-      
-      // clean
+              rotation: 0.4,
+
+              animation:
+                  TrashAnimationType.floating,
+            ),
+          ],
+        );
+
+      // ========================================
+      // CLEAN
+      // ========================================
       case LifeState.clean:
-        return [];
-      
-      // perfect
-      case LifeState.perfect:
-        return [];
 
-      // god
+        return StateTheme(
+
+          background:
+              'assets/bg/clean_bg.webp',
+
+          character:
+              'assets/chara/clean.webp',
+
+          darkness: 0,
+
+          trashes: [],
+        );
+
+      // ========================================
+      // GOD
+      // ========================================
       case LifeState.god:
-        return [];
+
+        return StateTheme(
+
+          background:
+              'assets/bg/god_bg.webp',
+
+          character:
+              'assets/chara/god.webp',
+
+          darkness: 0,
+
+          trashes: [],
+        );
+
+      // ========================================
+      // DEFAULT
+      // ========================================
+      default:
+
+        return StateTheme(
+
+          background:
+              'assets/bg/default_bg.webp',
+
+          character:
+              'assets/chara/default.webp',
+
+          darkness: 0.2,
+
+          trashes: [],
+        );
     }
   }
 }
