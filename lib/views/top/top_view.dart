@@ -1,76 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:authbase_mobile/components/colors.dart'; 
+import 'package:authbase_mobile/components/colors.dart';
 import 'top_view_model.dart';
 import '../../components/extensions/life_state_layout.dart';
 import '../../components/widgets/character/character_layer.dart';
 
-class TopView extends StatelessWidget {
+class TopView extends StatefulWidget {
   final TopViewModel viewModel;
-  
 
   const TopView({super.key, required this.viewModel});
 
   @override
+  State<TopView> createState() => _TopViewState();
+}
+
+class _TopViewState extends State<TopView> {
+  @override
+  void initState() {
+    super.initState();
+
+    widget.viewModel.initialize(() {
+      // API取得後UI更新
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final theme =
-    viewModel.currentState.theme;
+    final theme = widget.viewModel.currentState.theme;
+    final user = widget.viewModel.userStatus;
+
     return Scaffold(
-      body: Stack(
-        children: [
-          // 背景画像
-          Positioned.fill(
-            child: Image.asset(
-              theme.background,
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          
-          // キャラクター
-          CharacterLayer(
-            theme: theme,
-          ),
-
-          // ステータスとボタンのコンテナ
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SafeArea(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 0),
-                decoration: const BoxDecoration(
-                  color: AppColors.background, 
-                  border: Border(top: BorderSide(color: AppColors.sub, width: 2)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      offset: Offset(0, -4),
-                    ),
-                  ],
+      body: widget.viewModel.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
+              children: [
+                // 背景画像
+                Positioned.fill(
+                  child: Image.asset(theme.background, fit: BoxFit.cover),
                 ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 250,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+
+                // キャラクター
+                CharacterLayer(theme: theme),
+
+                // ステータスとボタンのコンテナ
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SafeArea(
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        top: 16,
+                        bottom: 16,
+                        right: 0,
+                      ),
+                      decoration: const BoxDecoration(
+                        color: AppColors.background,
+                        border: Border(
+                          top: BorderSide(color: AppColors.sub, width: 2),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                            offset: Offset(0, -4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
                         children: [
-                          _buildStatusBox("汚さレベル", "ちょー汚すぎうける"),
-                          const SizedBox(height: 8),
-                          _buildStatusBox("HP", "30/100"),
+                          SizedBox(
+                            width: 250,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildStatusBox("汚さレベル", theme.description),
+                                const SizedBox(height: 8),
+                                _buildStatusBox(
+                                  "HP",
+                                  "${(user?.healthPoint ?? 0)/10}/100",
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          _buildRescueButton(),
                         ],
                       ),
                     ),
-                    const Spacer(),
-                    _buildRescueButton(),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -78,14 +99,19 @@ class TopView extends StatelessWidget {
   Widget _buildStatusBox(String label, String value) {
     return SizedBox(
       width: double.infinity,
-      height: 70, 
+      height: 70,
       child: Stack(
         children: [
           // 後ろ側の図形（影パーツ）
           Positioned.fill(
             child: Padding(
               // メインのカードのサイズと揃える
-              padding: const EdgeInsets.only(top: 28, left: 6, bottom: 0, right: 0),
+              padding: const EdgeInsets.only(
+                top: 28,
+                left: 6,
+                bottom: 0,
+                right: 0,
+              ),
               child: Container(
                 decoration: BoxDecoration(
                   color: AppColors.subBackground,
@@ -118,10 +144,7 @@ class TopView extends StatelessWidget {
   }
 
   // 手前のカード専用：ラベルとボックスを一体化させる描画
-  Widget _buildCardShape({
-    required String label,
-    required String value,
-  }) {
+  Widget _buildCardShape({required String label, required String value}) {
     final baseColor = AppColors.subBackground;
     final borderColor = AppColors.edgew;
 
@@ -182,7 +205,7 @@ class TopView extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 2), 
+              padding: const EdgeInsets.only(bottom: 2),
               child: Text(
                 label,
                 style: const TextStyle(
@@ -200,86 +223,79 @@ class TopView extends StatelessWidget {
         Positioned(
           top: 22,
           left: 0,
-          child: Container(
-            width: 2.5,
-            height: 5,
-            color: borderColor,
-          ),
+          child: Container(width: 2.5, height: 5, color: borderColor),
         ),
       ],
     );
   }
 
-// 友達救済ボタンのウィジェット
-    Widget _buildRescueButton() {
+  // 友達救済ボタンのウィジェット
+  Widget _buildRescueButton() {
     return GestureDetector(
       onTap: () {
         // ボタンがタップされたときの処理をここに書く
         print("レスキューがタップされました！");
       },
-    child: SizedBox(
-      width: 110, 
-      height: 120, 
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        clipBehavior: Clip.none, 
-        children: [
-          // 背面の土台カード
-          Container(
-            width: 110,
-            height: 100, 
-            decoration: BoxDecoration(
-              color: AppColors.darkBackground,
-              borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(5),
-              bottomLeft: Radius.circular(5),
-            ),
-              border: Border.all(
-                color: AppColors.darkEdgey, 
-                width: 3,
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end, 
-              children: [
-                const Text(
-                  "友達救済",
-                  style: TextStyle(
-                    color: AppColors.subWhiteBackground,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'textFont',
-                  ),
+      child: SizedBox(
+        width: 110,
+        height: 120,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          clipBehavior: Clip.none,
+          children: [
+            // 背面の土台カード
+            Container(
+              width: 110,
+              height: 100,
+              decoration: BoxDecoration(
+                color: AppColors.darkBackground,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  bottomLeft: Radius.circular(5),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    "レスキューボタン",
+                border: Border.all(color: AppColors.darkEdgey, width: 3),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Text(
+                    "友達救済",
                     style: TextStyle(
                       color: AppColors.subWhiteBackground,
-                      fontSize: 9,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'textFont',
                     ),
                   ),
-                ),
-              ],
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      "レスキューボタン",
+                      style: TextStyle(
+                        color: AppColors.subWhiteBackground,
+                        fontSize: 9,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'textFont',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // はみ出すボタン画像
-          Positioned(
-            top: 0, 
-            child: Image.asset(
-              'images/rescue.png',
-              width: 80, 
-              height: 80,
-              fit: BoxFit.contain,
+            // はみ出すボタン画像
+            Positioned(
+              top: 0,
+              child: Image.asset(
+                'images/rescue.png',
+                width: 80,
+                height: 80,
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    )
     );
   }
 }

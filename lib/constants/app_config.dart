@@ -11,7 +11,7 @@ class AppConfig {
 // モックのAPIレスポンスを定義
 class MockApiResponse {
     static const String mockDomain = 'mock-dorossii.mattuu.com';
-    static String get baseUrl => 'https://$mockDomain';
+    static const String baseUrl = 'https://$mockDomain';
 
     // User
     // トップ画面ユーザーステータスの取得

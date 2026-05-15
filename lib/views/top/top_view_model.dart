@@ -1,49 +1,101 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 import '../../components/models/status.dart';
+import '../../models/user_status.dart';
+import '../../services/user/user_service.dart';
 
 class TopViewModel {
+  /// ===================================
+  /// デバッグモード
+  /// true  → デザイン確認用
+  /// false → API使用
+  /// ===================================
+  final bool isDebugMode;
 
-  /// 現在状態
-  LifeState currentState =
-      LifeState.normal;
+  TopViewModel({this.isDebugMode = false});
 
-  /// デバッグ用
+  LifeState currentState = LifeState.normal;
+
+  /// デバッグ用Index
   int currentIndex = 0;
 
+  /// タイマー
   Timer? timer;
 
-  List<LifeState> states =
-      LifeState.values;
+  /// 状態一覧
+  List<LifeState> states = LifeState.values;
 
-  /// ===================================
-  /// デバッグ切り替え
-  /// ===================================
-  void startDebugLoop(
-    void Function() onUpdate,
-  ) {
+  /// APIから取得したユーザー情報
+  UserStatus? userStatus;
 
-    timer = Timer.periodic(
+  /// ローディング状態
+  bool isLoading = false;
 
-      const Duration(seconds: 3),
+  /// API通信クラス
+  final UserService _service = UserService();
 
-      (_) {
+  /// 初期化
+  Future<void> initialize(void Function() onUpdate) async {
 
-        currentIndex++;
-
-        if (currentIndex >= states.length) {
-          currentIndex = 0;
-        }
-
-        currentState =
-            states[currentIndex];
-
-        onUpdate();
-      },
-    );
+     timer?.cancel();
+    /// デバッグモード
+    if (isDebugMode) {
+      startDebugLoop(onUpdate);
+    } else {
+      await fetchUser(onUpdate);
+    }
   }
 
+  /// APIからユーザー情報取得
+  Future<void> fetchUser(void Function() onUpdate) async {
+    /// ローディング開始
+    isLoading = true;
+
+    /// UI更新
+    onUpdate();
+
+    try {
+      /// API通信
+      userStatus = await _service.fetchUserStatus();
+
+      /// 汚さレベル → 状態変換
+      currentState = LifeState.fromValue(userStatus!.dirtLevel);
+    } catch (e) {
+      /// エラー表示
+      debugPrint(e.toString());
+    }
+
+    /// ローディング終了
+    isLoading = false;
+
+    /// UI更新
+    onUpdate();
+  }
+
+  /// デバッグ用状態切り替え
+  void startDebugLoop(void Function() onUpdate) {
+    timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      /// 次の状態へ
+      currentIndex++;
+
+      /// 最後まで行ったら戻る
+      if (currentIndex >= states.length) {
+        currentIndex = 0;
+      }
+
+      /// 状態更新
+      currentState = states[currentIndex];
+
+      /// UI更新
+      onUpdate();
+    });
+  }
+
+  /// 終了処理
   void dispose() {
+    /// タイマー破棄
     timer?.cancel();
   }
 }

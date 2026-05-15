@@ -4,27 +4,22 @@ import '../models/character_animation_type.dart';
 
 // LifeStateに応じたテーマを定義するエクステンション
 extension LifeStateExtension on LifeState {
-
   StateTheme get theme {
-
     switch (this) {
-
       // ========================================
       // RIP
       // ========================================
       case LifeState.rip:
-
         return StateTheme(
+          background: 'images/home/home_dirty.webp',
 
-          background:
-              'images/home/home_dirty.webp',
-
-          character:
-              'images/chara/rip.webp',
+          character: 'images/chara/rip.webp',
 
           characterHeight: 200,
 
           animation: CharacterAnimationType.none,
+
+          description: '手遅れです...',
 
           darkness: 0.9,
 
@@ -35,19 +30,16 @@ extension LifeStateExtension on LifeState {
       // critical
       // ========================================
       case LifeState.critical:
-
         return StateTheme(
+          background: 'images/home/home_dirty.webp',
 
-          background:
-              'images/home/home_dirty.webp',
-
-          character:
-              'images/chara/critical.webp',
+          character: 'images/chara/critical.webp',
 
           characterHeight: 200,
 
-          animation:
-              CharacterAnimationType.twitch,
+          animation: CharacterAnimationType.twitch,
+
+          description: '限界だよ...',
 
           darkness: 0,
 
@@ -58,22 +50,18 @@ extension LifeStateExtension on LifeState {
       // danger
       // ========================================
       case LifeState.danger:
-
         return StateTheme(
+          background: 'images/home/home_dirty.webp',
 
-          background:
-              'images/home/home_dirty.webp',
-
-          character:
-              'images/chara/danger.webp',
+          character: 'images/chara/danger.webp',
 
           characterHeight: 300,
 
-          animation:
-              CharacterAnimationType.wobble,
+          animation: CharacterAnimationType.wobble,
+
+          description: 'ゾンビになっちゃった',
 
           darkness: 0,
-
 
           trashes: [],
         );
@@ -82,19 +70,16 @@ extension LifeStateExtension on LifeState {
       // dirty
       // ========================================
       case LifeState.dirty:
-
         return StateTheme(
+          background: 'images/home/home_dirty.webp',
 
-          background:
-              'images/home/home_dirty.webp',
-
-          character:
-              'images/chara/dirty.webp',
+          character: 'images/chara/dirty.webp',
 
           characterHeight: 320,
 
-          animation:
-              CharacterAnimationType.tired,
+          animation: CharacterAnimationType.tired,
+
+          description: '汚くなってきたかも',
 
           darkness: 0,
 
@@ -104,19 +89,15 @@ extension LifeStateExtension on LifeState {
       // normal
       // ========================================
       case LifeState.normal:
-
         return StateTheme(
+          background: 'images/home/home_normal.webp',
 
-          background:
-              'images/home/home_normal.webp',
-
-          character:
-              'images/chara/normal.webp',
+          character: 'images/chara/normal.webp',
 
           characterHeight: 320,
 
-          animation:
-              CharacterAnimationType.breathing,
+          animation: CharacterAnimationType.breathing,
+          description: '少し汚くなってきた',
 
           darkness: 0,
 
@@ -126,19 +107,15 @@ extension LifeStateExtension on LifeState {
       // slightlyDirty
       // ========================================
       case LifeState.slightlyDirty:
-
         return StateTheme(
+          background: 'images/home/home_normal.webp',
 
-          background:
-              'images/home/home_normal.webp',
-
-          character:
-              'images/chara/slightlyDirty.webp',
+          character: 'images/chara/slightlyDirty.webp',
 
           characterHeight: 320,
 
-          animation:
-              CharacterAnimationType.breathing,
+          animation: CharacterAnimationType.breathing,
+          description: 'まだまだ大丈夫',
 
           darkness: 0,
 
@@ -148,42 +125,34 @@ extension LifeStateExtension on LifeState {
       // CLEAN
       // ========================================
       case LifeState.clean:
-
         return StateTheme(
+          background: 'images/home/home_normal.webp',
 
-          background:
-              'images/home/home_normal.webp',
-
-          character:
-              'images/chara/clean.webp',
+          character: 'images/chara/clean.webp',
 
           characterHeight: 320,
 
-          animation:
-              CharacterAnimationType.bounce,
+          animation: CharacterAnimationType.bounce,
+          description: 'きれいになった！',
 
           darkness: 0,
 
           trashes: [],
         );
 
-        // ========================================
+      // ========================================
       // perfect
       // ========================================
       case LifeState.perfect:
-
         return StateTheme(
+          background: 'images/home/home_clean.webp',
 
-          background:
-              'images/home/home_clean.webp',
-
-          character:
-              'images/chara/perfect.webp',
+          character: 'images/chara/perfect.webp',
 
           characterHeight: 340,
 
-          animation:
-              CharacterAnimationType.floating,
+          animation: CharacterAnimationType.floating,
+          description: '完璧な状態！',
 
           darkness: 0,
 
@@ -193,20 +162,15 @@ extension LifeStateExtension on LifeState {
       // GOD
       // ========================================
       case LifeState.god:
-
         return StateTheme(
+          background: 'images/home/home_clean.webp',
 
-          background:
-              'images/home/home_clean.webp',
-
-          character:
-              'images/chara/god.webp',
+          character: 'images/chara/god.webp',
 
           characterHeight: 340,
 
-          animation:
-              CharacterAnimationType.floating,
-
+          animation: CharacterAnimationType.floating,
+          description: '神の領域！',
 
           darkness: 0,
 
