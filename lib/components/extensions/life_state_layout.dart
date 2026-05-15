@@ -24,6 +24,8 @@ extension LifeStateExtension on LifeState {
           character:
               'images/chara/rip.webp',
 
+          characterHeight: 200,
+
           darkness: 0.9,
 
           trashes: [
@@ -71,6 +73,8 @@ extension LifeStateExtension on LifeState {
           character:
               'images/chara/critical.webp',
 
+          characterHeight: 200,
+
           darkness: 0,
 
           trashes: [],
@@ -88,6 +92,8 @@ extension LifeStateExtension on LifeState {
 
           character:
               'images/chara/danger.webp',
+
+          characterHeight: 300,
 
           darkness: 0,
 
@@ -107,6 +113,8 @@ extension LifeStateExtension on LifeState {
           character:
               'images/chara/dirty.webp',
 
+          characterHeight: 320,
+
           darkness: 0,
 
           trashes: [],
@@ -123,6 +131,8 @@ extension LifeStateExtension on LifeState {
 
           character:
               'images/chara/normal.webp',
+
+          characterHeight: 320,
 
           darkness: 0,
 
@@ -141,6 +151,8 @@ extension LifeStateExtension on LifeState {
           character:
               'images/chara/slightlyDirty.webp',
 
+          characterHeight: 320,
+
           darkness: 0,
 
           trashes: [],
@@ -157,6 +169,8 @@ extension LifeStateExtension on LifeState {
 
           character:
               'images/chara/clean.webp',
+
+          characterHeight: 320,
 
           darkness: 0,
 
@@ -176,6 +190,8 @@ extension LifeStateExtension on LifeState {
           character:
               'images/chara/perfect.webp',
 
+          characterHeight: 340,
+
           darkness: 0,
 
           trashes: [],
@@ -192,6 +208,8 @@ extension LifeStateExtension on LifeState {
 
           character:
               'images/chara/god.webp',
+
+          characterHeight: 340,
 
           darkness: 0,
 

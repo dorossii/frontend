@@ -31,7 +31,7 @@ class TopView extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 180),
               child: Image.asset(
                 theme.character,
-                height: 320,
+                height: theme.characterHeight,
                 fit: BoxFit.contain,
               ),
             ),

@@ -11,6 +11,9 @@ class StateTheme {
   /// キャラ画像
   final String character;
 
+  /// キャラクターサイズ
+  final double characterHeight;
+
   /// ゴミ配置
   final List<TrashObject> trashes;
 
@@ -20,6 +23,7 @@ class StateTheme {
   const StateTheme({
     required this.background,
     required this.character,
+    required this.characterHeight,
     required this.trashes,
     required this.darkness,
   });
