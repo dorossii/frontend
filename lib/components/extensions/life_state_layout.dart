@@ -1,5 +1,5 @@
-import 'status.dart';
-import 'trashs.dart';
+import '../models/status.dart';
+import '../models/trashs.dart';
 // キャラクターの状態に応じたゴミの配置を定義するエクステンション
 extension LifeStateLayout on LifeState {
 
