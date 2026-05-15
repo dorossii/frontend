@@ -373,7 +373,7 @@ class _CharacterLayerState
               // GOD
               ? -12 +
                   (floatingController.value
-                      * 24)
+                      * 40)
 
               // PERFECT
               : -5 +
