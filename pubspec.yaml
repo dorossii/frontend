@@ -74,6 +74,7 @@ flutter:
     - images/status/
     - images/icons/
     - images/footer/
+    - images/home/
   #   - images/a_dot_ham.jpeg
 
   fonts:
