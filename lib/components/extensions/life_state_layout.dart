@@ -19,7 +19,7 @@ extension LifeStateExtension on LifeState {
         return StateTheme(
 
           background:
-              'assets/bg/rip_bg.webp',
+              'images/home/home_dirty.webp',
 
           character:
               'assets/chara/rip.webp',
@@ -59,6 +59,93 @@ extension LifeStateExtension on LifeState {
         );
 
       // ========================================
+      // critical
+      // ========================================
+      case LifeState.critical:
+
+        return StateTheme(
+
+          background:
+              'images/home/home_dirty.webp',
+
+          character:
+              'assets/chara/critical.webp',
+
+          darkness: 0,
+
+          trashes: [],
+        );
+
+      // ========================================
+      // danger
+      // ========================================
+      case LifeState.danger:
+
+        return StateTheme(
+
+          background:
+              'images/home/home_dirty.webp',
+
+          character:
+              'assets/chara/danger.webp',
+
+          darkness: 0,
+
+          trashes: [],
+        );
+
+      // ========================================
+      // dirty
+      // ========================================
+      case LifeState.dirty:
+
+        return StateTheme(
+
+          background:
+              'images/home/home_dirty.webp',
+
+          character:
+              'assets/chara/dirty.webp',
+
+          darkness: 0,
+
+          trashes: [],
+        );
+      // ========================================
+      // normal
+      // ========================================
+      case LifeState.normal:
+
+        return StateTheme(
+
+          background:
+              'images/home/home_normal.webp',
+
+          character:
+              'assets/chara/normal.webp',
+
+          darkness: 0,
+
+          trashes: [],
+        );
+      // ========================================
+      // slightlyDirty
+      // ========================================
+      case LifeState.slightlyDirty:
+
+        return StateTheme(
+
+          background:
+              'images/home/home_normal.webp',
+
+          character:
+              'assets/chara/slightlyDirty.webp',
+
+          darkness: 0,
+
+          trashes: [],
+        );
+      // ========================================
       // CLEAN
       // ========================================
       case LifeState.clean:
@@ -66,7 +153,7 @@ extension LifeStateExtension on LifeState {
         return StateTheme(
 
           background:
-              'assets/bg/clean_bg.webp',
+              'images/home/home_normal.webp',
 
           character:
               'assets/chara/clean.webp',
@@ -76,6 +163,23 @@ extension LifeStateExtension on LifeState {
           trashes: [],
         );
 
+        // ========================================
+      // perfect
+      // ========================================
+      case LifeState.perfect:
+
+        return StateTheme(
+
+          background:
+              'images/home/home_clean.webp',
+
+          character:
+              'assets/chara/perfect.webp',
+
+          darkness: 0,
+
+          trashes: [],
+        );
       // ========================================
       // GOD
       // ========================================
@@ -84,30 +188,12 @@ extension LifeStateExtension on LifeState {
         return StateTheme(
 
           background:
-              'assets/bg/god_bg.webp',
+              'images/home/home_clean.webp',
 
           character:
               'assets/chara/god.webp',
 
           darkness: 0,
-
-          trashes: [],
-        );
-
-      // ========================================
-      // DEFAULT
-      // ========================================
-      default:
-
-        return StateTheme(
-
-          background:
-              'assets/bg/default_bg.webp',
-
-          character:
-              'assets/chara/default.webp',
-
-          darkness: 0.2,
 
           trashes: [],
         );
