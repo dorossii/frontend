@@ -22,7 +22,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_dirty.webp',
 
           character:
-              'assets/chara/rip.webp',
+              'images/chara/rip.webp',
 
           darkness: 0.9,
 
@@ -69,7 +69,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_dirty.webp',
 
           character:
-              'assets/chara/critical.webp',
+              'images/chara/critical.webp',
 
           darkness: 0,
 
@@ -87,7 +87,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_dirty.webp',
 
           character:
-              'assets/chara/danger.webp',
+              'images/chara/danger.webp',
 
           darkness: 0,
 
@@ -105,7 +105,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_dirty.webp',
 
           character:
-              'assets/chara/dirty.webp',
+              'images/chara/dirty.webp',
 
           darkness: 0,
 
@@ -122,7 +122,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_normal.webp',
 
           character:
-              'assets/chara/normal.webp',
+              'images/chara/normal.webp',
 
           darkness: 0,
 
@@ -139,7 +139,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_normal.webp',
 
           character:
-              'assets/chara/slightlyDirty.webp',
+              'images/chara/slightlyDirty.webp',
 
           darkness: 0,
 
@@ -156,7 +156,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_normal.webp',
 
           character:
-              'assets/chara/clean.webp',
+              'images/chara/clean.webp',
 
           darkness: 0,
 
@@ -174,7 +174,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_clean.webp',
 
           character:
-              'assets/chara/perfect.webp',
+              'images/chara/perfect.webp',
 
           darkness: 0,
 
@@ -191,7 +191,7 @@ extension LifeStateExtension on LifeState {
               'images/home/home_clean.webp',
 
           character:
-              'assets/chara/god.webp',
+              'images/chara/god.webp',
 
           darkness: 0,
 
