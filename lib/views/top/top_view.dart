@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:authbase_mobile/components/colors.dart'; 
 import 'top_view_model.dart';
 import '../../components/extensions/life_state_layout.dart';
+import '../../components/widgets/character/character_layer.dart';
 
 class TopView extends StatelessWidget {
   final TopViewModel viewModel;
@@ -24,17 +25,10 @@ class TopView extends StatelessWidget {
             ),
           ),
 
-          // キャラクター画像
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 180),
-              child: Image.asset(
-                theme.character,
-                height: theme.characterHeight,
-                fit: BoxFit.contain,
-              ),
-            ),
+          
+          // キャラクター
+          CharacterLayer(
+            theme: theme,
           ),
 
           // ステータスとボタンのコンテナ

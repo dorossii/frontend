@@ -1,8 +1,6 @@
 import '../models/status.dart';
 import '../models/state_theme.dart';
-import '../models/trash_animation_type.dart';
-import '../models/trashs.dart';
-import '../models/trash_type.dart';
+import '../models/character_animation_type.dart';
 
 // LifeStateに応じたテーマを定義するエクステンション
 extension LifeStateExtension on LifeState {
@@ -26,38 +24,11 @@ extension LifeStateExtension on LifeState {
 
           characterHeight: 200,
 
+          animation: CharacterAnimationType.none,
+
           darkness: 0.9,
 
-          trashes: [
-
-            TrashObject(
-              type: TrashType.mountain,
-
-              x: 0.5,
-              y: 0.8,
-
-              width: 240,
-              height: 240,
-
-              animation:
-                  TrashAnimationType.shaking,
-            ),
-
-            TrashObject(
-              type: TrashType.pizza,
-
-              x: 0.8,
-              y: 0.85,
-
-              width: 100,
-              height: 100,
-
-              rotation: 0.4,
-
-              animation:
-                  TrashAnimationType.floating,
-            ),
-          ],
+          trashes: [],
         );
 
       // ========================================
@@ -74,6 +45,9 @@ extension LifeStateExtension on LifeState {
               'images/chara/critical.webp',
 
           characterHeight: 200,
+
+          animation:
+              CharacterAnimationType.twitch,
 
           darkness: 0,
 
@@ -95,7 +69,11 @@ extension LifeStateExtension on LifeState {
 
           characterHeight: 300,
 
+          animation:
+              CharacterAnimationType.wobble,
+
           darkness: 0,
+
 
           trashes: [],
         );
@@ -114,6 +92,9 @@ extension LifeStateExtension on LifeState {
               'images/chara/dirty.webp',
 
           characterHeight: 320,
+
+          animation:
+              CharacterAnimationType.tired,
 
           darkness: 0,
 
@@ -134,6 +115,9 @@ extension LifeStateExtension on LifeState {
 
           characterHeight: 320,
 
+          animation:
+              CharacterAnimationType.breathing,
+
           darkness: 0,
 
           trashes: [],
@@ -153,6 +137,9 @@ extension LifeStateExtension on LifeState {
 
           characterHeight: 320,
 
+          animation:
+              CharacterAnimationType.breathing,
+
           darkness: 0,
 
           trashes: [],
@@ -171,6 +158,9 @@ extension LifeStateExtension on LifeState {
               'images/chara/clean.webp',
 
           characterHeight: 320,
+
+          animation:
+              CharacterAnimationType.bounce,
 
           darkness: 0,
 
@@ -192,6 +182,9 @@ extension LifeStateExtension on LifeState {
 
           characterHeight: 340,
 
+          animation:
+              CharacterAnimationType.floating,
+
           darkness: 0,
 
           trashes: [],
@@ -210,6 +203,10 @@ extension LifeStateExtension on LifeState {
               'images/chara/god.webp',
 
           characterHeight: 340,
+
+          animation:
+              CharacterAnimationType.floating,
+
 
           darkness: 0,
 

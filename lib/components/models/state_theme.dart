@@ -1,4 +1,5 @@
 import 'trashs.dart';
+import 'character_animation_type.dart';
 
 /// ===============================
 /// 状態ごとのUIセット
@@ -14,6 +15,9 @@ class StateTheme {
   /// キャラクターサイズ
   final double characterHeight;
 
+  /// アニメーション
+  final CharacterAnimationType animation;
+
   /// ゴミ配置
   final List<TrashObject> trashes;
 
@@ -24,6 +28,7 @@ class StateTheme {
     required this.background,
     required this.character,
     required this.characterHeight,
+    this.animation =CharacterAnimationType.none,
     required this.trashes,
     required this.darkness,
   });
