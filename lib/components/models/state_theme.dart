@@ -18,6 +18,9 @@ class StateTheme {
   /// アニメーション
   final CharacterAnimationType animation;
 
+  /// ステータスの説明文
+  final String description;
+
   /// ゴミ配置
   final List<TrashObject> trashes;
 
@@ -29,6 +32,7 @@ class StateTheme {
     required this.character,
     required this.characterHeight,
     this.animation =CharacterAnimationType.none,
+    this.description = '普通の状態です',
     required this.trashes,
     required this.darkness,
   });

@@ -3,23 +3,23 @@
 /// ===============================
 enum LifeState {
 
-  rip(0),
+  rip(8),
 
-  critical(1),
+  critical(7),
 
-  danger(2),
+  danger(6),
 
-  dirty(3),
+  dirty(5),
 
   normal(4),
 
-  slightlyDirty(5),
+  slightlyDirty(3),
 
-  clean(6),
+  clean(2),
 
-  perfect(7),
+  perfect(1),
 
-  god(8);
+  god(0);
 
   final int value;
 
