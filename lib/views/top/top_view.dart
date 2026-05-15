@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:authbase_mobile/components/colors.dart'; 
 import 'top_view_model.dart';
+import '../../components/extensions/life_state_layout.dart';
+import '../../components/widgets/character/character_layer.dart';
 
 class TopView extends StatelessWidget {
   final TopViewModel viewModel;
+  
 
   const TopView({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
+    final theme =
+    viewModel.currentState.theme;
     return Scaffold(
       body: Stack(
         children: [
           // 背景画像
           Positioned.fill(
             child: Image.asset(
-              'images/home1.webp',
+              theme.background,
               fit: BoxFit.cover,
             ),
           ),
 
-          // キャラクター画像
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 180),
-              child: Image.asset(
-                'images/character.png',
-                height: 320,
-                fit: BoxFit.contain,
-              ),
-            ),
+          
+          // キャラクター
+          CharacterLayer(
+            theme: theme,
           ),
 
           // ステータスとボタンのコンテナ
