@@ -15,7 +15,7 @@ class TopView extends StatelessWidget {
           // 背景画像
           Positioned.fill(
             child: Image.asset(
-              'images/home1.webp',
+              'images/home/home1.webp',
               fit: BoxFit.cover,
             ),
           ),
