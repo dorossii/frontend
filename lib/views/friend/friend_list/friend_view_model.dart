@@ -20,7 +20,7 @@ class FriendListViewModel {
   final FriendService _service = FriendService();
 
   /// APIから取得したユーザー情報
-  FriendInfo? friendInfo;
+  List<FriendInfo> friendList = [];
 
   /// ローディング状態
   bool isLoading = false;
@@ -40,10 +40,10 @@ class FriendListViewModel {
 
     try {
       /// API通信
-      friendInfo = await _service.fetchFriendInfo();
+      friendList = await _service.fetchFriendInfo();
 
       /// 汚さレベル → 状態変換
-      currentState = LifeState.fromValue(friendInfo!.dirtLevel);
+      currentState = LifeState.fromValue(friendList.first.dirtLevel);
     } catch (e) {
       /// エラー表示
       debugPrint(e.toString());

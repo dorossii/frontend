@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 
 import '../../../models/friend_info.dart';
 import '../../constants/app_config.dart';
@@ -15,7 +16,7 @@ class FriendService {
   static const String token = 'mock-token-super-secret';
 
   /// フレンド情報取得
-  Future<FriendInfo> fetchFriendInfo() async {
+  Future<List<FriendInfo>> fetchFriendInfo() async {
     /// GET通信
     final response = await http.get(
       Uri.parse(url),
@@ -26,13 +27,17 @@ class FriendService {
     /// 通信成功
     if (response.statusCode == 200) {
       /// JSON変換
-      final Map<String, dynamic> jsonData = jsonDecode(response.body);
+      final jsonData = jsonDecode(response.body);
+
+      final List friends = jsonData['friends'];
 
       /// Modelへ変換
-      return FriendInfo.fromJson(jsonData);
+      return friends.map((e) => FriendInfo.fromJson(e)).toList();
     }
 
     /// 通信失敗
+    debugPrint('Failed to load friend info: ${response.statusCode}');
     throw Exception('フレンド情報取得失敗');
+   
   }
 }
