@@ -1,6 +1,10 @@
 import '../models/status.dart';
 import '../models/state_theme.dart';
 import '../models/character_animation_type.dart';
+import '../models/trashs.dart';
+import '../models/trash_type.dart';
+import '../models/trash_animation_type.dart';
+import '../extensions/trash_layer_type.dart';
 
 // LifeStateに応じたテーマを定義するエクステンション
 extension LifeStateExtension on LifeState {
@@ -24,7 +28,16 @@ extension LifeStateExtension on LifeState {
           darkness: 0.9,
 
           trashes: [
-            
+            TrashObject(
+              type: TrashType.rightBanana,
+              x: 50,
+              y: 400,
+              width: 50,
+              height: 50,
+              rotation: -20,
+              animation: TrashAnimationType.floating,
+              layer: TrashLayerType.front,
+            ),
           ],
         );
 
@@ -45,7 +58,108 @@ extension LifeStateExtension on LifeState {
 
           darkness: 0,
 
-          trashes: [],
+          trashes: [
+            TrashObject(
+                  type: TrashType.backTrashGray,
+                  x: 40,
+                  y: 130,
+                  width: 250,
+                  height: 250,
+                  rotation: 0,
+                  animation: TrashAnimationType.shaking,
+                  layer: TrashLayerType.back,
+                ),
+            TrashObject(
+              type: TrashType.rightBanana,
+              x: 230,
+              y: 340,
+              width: 50,
+              height: 50,
+              rotation: 0,
+              animation: TrashAnimationType.floating,
+              layer: TrashLayerType.front,
+            ),
+            TrashObject(
+              type: TrashType.leftTrashPink,
+              x: 280,
+              y: 240,
+              width: 30,
+              height: 30,
+              rotation: 0,
+              animation: TrashAnimationType.shaking,
+              layer: TrashLayerType.front,
+            ),
+            TrashObject(
+                type: TrashType.leftTrashGreen,
+                x: 140,
+                y: 300,
+                width: 45,
+                height: 45,
+                rotation: -18,
+                animation: TrashAnimationType.floating,
+                layer: TrashLayerType.back,
+              ),
+            TrashObject(
+                type: TrashType.rightTrashYellow,
+                x: 45,
+                y: 390,
+                width: 70,
+                height: 70,
+                rotation: 0,
+                animation: TrashAnimationType.shaking,
+                layer: TrashLayerType.front,
+              ),
+            TrashObject(
+                type: TrashType.leftTrashYellow,
+                x: 35,
+                y: 270,
+                width: 60,
+                height: 60,
+                rotation: 0,
+                animation: TrashAnimationType.bouncing,
+                layer: TrashLayerType.front,
+              ),
+              TrashObject(
+              type: TrashType.leftTrashBlue,
+              x: 32,
+              y: 310,
+              width: 30,
+              height: 30,
+              rotation: 0,
+              animation: TrashAnimationType.bouncing,
+              layer: TrashLayerType.front,
+            ),
+            TrashObject(
+                type: TrashType.leftMilk,
+                x: 150,
+                y: 380,
+                width: 80,
+                height: 80,
+                rotation: -160,
+                animation: TrashAnimationType.floating,
+                layer: TrashLayerType.front,
+              ),
+            TrashObject(
+                type: TrashType.leftTrashGray,
+                x: 300,
+                y: 218,
+                width: 55,
+                height: 55,
+                rotation: 0,
+                animation: TrashAnimationType.floating,
+                layer: TrashLayerType.front,
+              ),  
+            TrashObject(
+                type: TrashType.leftTrashRed,
+                x: 300,
+                y: 350,
+                width: 120,
+                height: 120,
+                rotation: 0,
+                animation: TrashAnimationType.floating,
+                layer: TrashLayerType.front,
+              ),
+          ],
         );
 
       // ========================================

@@ -1,4 +1,4 @@
-import '../models/trash_type.dart';
+import 'trash_type.dart';
 
 // ゴミの種類に応じた画像を定義するエクステンション
 extension TrashTypeExtension on TrashType {
