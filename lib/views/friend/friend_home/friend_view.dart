@@ -29,11 +29,12 @@ class FriendHomeView extends StatelessWidget {
       bottomNavigationBar: AppFooter(
         currentPage: null,
         onTap: (page) {
-          // 1. お家画面を閉じる
-          Navigator.pop(context);
-          // 2. 親（App.dart）のタブを切り替える
-          onTabSelected(page);
-        },
+  Navigator.pop(context);
+
+  if (page != PageType.friend) {
+    onTabSelected(page);
+  }
+},
       ),
       body: Stack(
         children: [

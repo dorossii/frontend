@@ -41,9 +41,11 @@ class FriendListViewModel {
     try {
       /// API通信
       friendList = await _service.fetchFriendInfo();
+      print(friendList.length);
 
       /// 汚さレベル → 状態変換
       currentState = LifeState.fromValue(friendList.first.dirtLevel);
+
     } catch (e) {
       /// エラー表示
       debugPrint(e.toString());
