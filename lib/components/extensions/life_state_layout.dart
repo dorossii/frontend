@@ -253,7 +253,28 @@ extension LifeStateExtension on LifeState {
 
           darkness: 0,
 
-          trashes: [],
+          trashes: [
+            TrashObject(
+              type: TrashType.blueBroom,
+              x: 210,
+              y: 290,
+              width: 210,
+              height: 210,
+              rotation: 5,
+              animation: TrashAnimationType.floating,
+              layer: TrashLayerType.front,
+            ),
+              TrashObject(
+                type: TrashType.redBroom,
+                x: 0,
+                y: 300,
+                width: 200,
+                height: 200,
+                rotation: 0,
+                animation: TrashAnimationType.floating,
+                layer: TrashLayerType.front,
+              ),
+          ],
         );
 
       // ========================================
