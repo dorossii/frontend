@@ -32,6 +32,10 @@ extension TrashTypeExtension on TrashType {
         return 'images/trash/trash_2.webp';
       case TrashType.backTrashGray:
         return 'images/trash/trash_14.webp';
+      case TrashType.redBroom:
+        return 'images/trash/broom_2.webp';
+      case TrashType.blueBroom:
+        return 'images/trash/broom_1.webp';
     }
   }
 }

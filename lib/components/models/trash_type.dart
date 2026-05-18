@@ -14,4 +14,6 @@ enum TrashType {
   backTrashGray,
   rightMilk,
   leftMilk,
+  redBroom,
+  blueBroom,
 }

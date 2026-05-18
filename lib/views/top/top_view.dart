@@ -6,6 +6,8 @@ import '../../components/extensions/life_state_layout.dart';
 import '../../components/widgets/character/character_layer.dart';
 import '../../components/widgets/trashs/trash_layer.dart';
 
+import '../../components/models/status.dart';
+
 class TopView extends StatefulWidget {
   final TopViewModel viewModel;
 
@@ -28,7 +30,8 @@ class _TopViewState extends State<TopView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = widget.viewModel.currentState.theme;
+    // final theme = widget.viewModel.currentState.theme;
+    final theme = LifeState.clean.theme; // デバッグ用に常にcritical状態のテーマを表示
     final user = widget.viewModel.userStatus;
 
     return Scaffold(
@@ -43,6 +46,7 @@ class _TopViewState extends State<TopView> {
 
                 // キャラの後ろのゴミ
                 TrashLayer(theme: theme, layer: TrashLayerType.back),
+
                 // キャラクター
                 CharacterLayer(theme: theme),
 
