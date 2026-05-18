@@ -23,7 +23,9 @@ extension LifeStateExtension on LifeState {
 
           darkness: 0.9,
 
-          trashes: [],
+          trashes: [
+            
+          ],
         );
 
       // ========================================
