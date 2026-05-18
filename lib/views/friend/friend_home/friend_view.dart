@@ -1,97 +1,136 @@
 import 'package:flutter/material.dart';
 import 'package:authbase_mobile/components/colors.dart';
-import 'top_view_model.dart';
-import '../../components/extensions/life_state_layout.dart';
-import '../../components/widgets/character/character_layer.dart';
+import 'friend_view_model.dart';
+// ヘッダーフッター表示のために、PageTypeをインポート
+import '../../../components/widgets/app_header.dart';
+import '../../../components/widgets/app_footer.dart';
+import '../../app.dart';
 
-class TopView extends StatefulWidget {
-  final TopViewModel viewModel;
+import '../../../components/extensions/life_state_layout.dart';
+import '../../../components/widgets/character/character_layer.dart';
 
-  const TopView({super.key, required this.viewModel});
+class FriendHomeView extends StatelessWidget {
+  final FriendHomeViewModel viewModel;
+  final Function(PageType) onTabSelected;
 
-  @override
-  State<TopView> createState() => _TopViewState();
-}
-
-class _TopViewState extends State<TopView> {
-  @override
-  void initState() {
-    super.initState();
-
-    widget.viewModel.initialize(() {
-      // API取得後UI更新
-      setState(() {});
-    });
-  }
-
+  const FriendHomeView({
+    super.key,
+    required this.viewModel,
+    required this.onTabSelected,
+  });
   @override
   Widget build(BuildContext context) {
-    final theme = widget.viewModel.currentState.theme;
-    final user = widget.viewModel.userStatus;
-
+    final theme = viewModel.currentState.theme;
+    final friend = viewModel.friendInfo;
     return Scaffold(
-      body: widget.viewModel.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Stack(
-              children: [
-                // 背景画像
-                Positioned.fill(
-                  child: Image.asset(theme.background, fit: BoxFit.cover),
+      // 共通ヘッダーを配置（Friendタブとして表示）
+      appBar: AppHeader(currentPage: PageType.friend),
+
+      bottomNavigationBar: AppFooter(
+        currentPage: null,
+        onTap: (page) {
+          Navigator.pop(context);
+
+          if (page != PageType.friend) {
+            onTabSelected(page);
+          }
+        },
+      ),
+      body: Stack(
+        children: [
+          // 背景画像
+          Positioned.fill(
+            child: Image.asset(theme.background, fit: BoxFit.cover),
+          ),
+
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 520), // キャラクターの頭上に調整
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
                 ),
+                decoration: BoxDecoration(
+                  color: AppColors.getBackgroundColor(
+                    friend.background,
+                  ), // フレンドのアイコンの色
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: const Color(0xFF2D1E16), width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.4),
+                      offset: const Offset(4, 4),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  "${friend.userName} のお家",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'textFont',
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // キャラクター画像
+          CharacterLayer(theme: theme),
 
-                // キャラクター
-                CharacterLayer(theme: theme),
-
-                // ステータスとボタンのコンテナ
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SafeArea(
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        top: 16,
-                        bottom: 16,
-                        right: 0,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: AppColors.background,
-                        border: Border(
-                          top: BorderSide(color: AppColors.sub, width: 2),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(0, -4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
+          // ステータスとボタンのコンテナ
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SafeArea(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  top: 16,
+                  bottom: 16,
+                  right: 0,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  border: Border(
+                    top: BorderSide(color: AppColors.sub, width: 2),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(0, -4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 250,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
-                            width: 250,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _buildStatusBox("汚さレベル", theme.description),
-                                const SizedBox(height: 8),
-                                _buildStatusBox(
-                                  "HP",
-                                  "${(user?.healthPoint ?? 0)/10}/100",
-                                ),
-                              ],
-                            ),
+                          _buildStatusBox("汚さレベル", theme.description),
+                          const SizedBox(height: 8),
+                          _buildStatusBox(
+                            "HP",
+                            "${friend.healthPoint / 10}/100",
                           ),
-                          const Spacer(),
-                          _buildRescueButton(),
                         ],
                       ),
                     ),
-                  ),
+                    const Spacer(),
+                    _buildRescueButton(),
+                  ],
                 ),
-              ],
+              ),
             ),
+          ),
+        ],
+      ),
     );
   }
 

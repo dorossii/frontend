@@ -15,22 +15,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     final isTop = currentPage == PageType.top;
 
     return HeaderView(
-      title: _getTitle(),
-      showBackButton: !isTop, 
+      isTop: isTop, 
     );
-  }
-
-  String _getTitle() {
-    switch (currentPage) {
-      case PageType.top:
-        return 'Top';
-      case PageType.task:
-        return 'Task';
-      case PageType.friend:
-        return 'Friend';
-      case PageType.setting:
-        return 'Setting';
-    }
   }
 
   @override
