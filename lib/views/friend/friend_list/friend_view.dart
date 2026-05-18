@@ -199,19 +199,19 @@ class _FriendListViewState extends State<FriendListView> {
           const SizedBox(width: 15),
 
           // フレンドのお家に行くボタン
-          _buildActionButton(context, name, iconColor),
+          _buildActionButton(context, dirtLevel, hpValue, name, iconColor),
         ],
       ),
     );
   }
 
-  Widget _buildActionButton(BuildContext context, String name, Color color) {
+  Widget _buildActionButton(BuildContext context,int dirtLevel, double hpValue, String name, Color color) {
     return GradientButton(
       imagePath: 'images/friend_go.png',
 
       gradient: AppColors.greenGradient,
 
-      onTap: () => widget.viewModel.onFriendTapped(context, name, color),
+      onTap: () => widget.viewModel.onFriendTapped(context, name, dirtLevel, hpValue, color),
     );
   }
 }

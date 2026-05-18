@@ -56,13 +56,15 @@ class FriendListViewModel {
     onUpdate();
   }
 
-  void onFriendTapped(BuildContext context, String name, Color color) {
+  void onFriendTapped(BuildContext context, String name,int dirtLevel, double hpValue, Color color) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => FriendHomeScreen(
           name: name, 
           themeColor: color,
+          dirtLevel: dirtLevel,
+          hpValue: hpValue,
           onTabSelected: onTabSelected, 
         ),
       ),

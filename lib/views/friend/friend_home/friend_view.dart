@@ -9,9 +9,11 @@ import '../../app.dart';
 class FriendHomeView extends StatelessWidget {
   final FriendHomeViewModel viewModel;
   final Color themeColor;
+  final int dirtLevel;
+  final double hpValue;
   final Function(PageType) onTabSelected;
 
-  const FriendHomeView({super.key, required this.viewModel, required this.themeColor, required this.onTabSelected});
+  const FriendHomeView({super.key, required this.viewModel, required this.themeColor, required this.dirtLevel, required this.hpValue, required this.onTabSelected});
 
   @override
   Widget build(BuildContext context) {
