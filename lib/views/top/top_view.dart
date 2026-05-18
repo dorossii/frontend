@@ -31,7 +31,7 @@ class _TopViewState extends State<TopView> {
   @override
   Widget build(BuildContext context) {
     // final theme = widget.viewModel.currentState.theme;
-    final theme = LifeState.normal.theme; 
+    final theme = LifeState.dirty.theme; 
     final user = widget.viewModel.userStatus;
 
     return Scaffold(
