@@ -1,6 +1,19 @@
-class FriendHomeViewModel {
-  final String friendName;
-  FriendHomeViewModel({required this.friendName});
+import '../../../components/models/status.dart';
+import '../../../models/friend_info.dart';
 
-  // ここにそのフレンドの家（ステータスや家具など）を取得するロジックを書く
+class FriendHomeViewModel {
+  final FriendInfo friendInfo;
+
+  FriendHomeViewModel({
+    required this.friendInfo,
+  });
+
+  String get friendName => friendInfo.userName;
+
+  int get dirtLevel => friendInfo.dirtLevel;
+
+  int get hp => friendInfo.healthPoint;
+
+  LifeState get currentState =>
+      LifeState.fromValue(friendInfo.dirtLevel);
 }

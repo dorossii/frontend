@@ -27,8 +27,8 @@ class FriendListViewModel {
 
   /// 初期化
   Future<void> initialize(void Function() onUpdate) async {
-      await fetchFriendInfo(onUpdate);
-    }
+    await fetchFriendInfo(onUpdate);
+  }
 
   /// APIからフレンド情報取得
   Future<void> fetchFriendInfo(void Function() onUpdate) async {
@@ -56,17 +56,13 @@ class FriendListViewModel {
     onUpdate();
   }
 
-  void onFriendTapped(BuildContext context, String name,int dirtLevel, double hpValue, Color color) {
+  void onFriendTapped(BuildContext context, FriendInfo friend) {
     Navigator.push(
       context,
+
       MaterialPageRoute(
-        builder: (context) => FriendHomeScreen(
-          name: name, 
-          themeColor: color,
-          dirtLevel: dirtLevel,
-          hpValue: hpValue,
-          onTabSelected: onTabSelected, 
-        ),
+        builder: (context) =>
+            FriendHomeScreen(friendInfo: friend, onTabSelected: onTabSelected),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'friend_view_model.dart';
 import 'package:authbase_mobile/components/colors.dart';
+import '../../../models/friend_info.dart';
 
 class FriendListView extends StatefulWidget {
   final FriendListViewModel viewModel;
@@ -98,24 +99,7 @@ class _FriendListViewState extends State<FriendListView> {
                 /// index番目のフレンド
                 final user = widget.viewModel.friendList[index];
 
-                return _buildFriendItem(
-                  context,
-
-                  /// 名前
-                  user.userName,
-
-                  /// HPバー用
-                  /// 0.0〜1.0に変換
-                  user.healthPoint / 1000,
-
-                  user.dirtLevel,
-
-                  /// アイコン背景色
-                  AppColors.getBackgroundColor(user.background),
-
-                  /// メイン画像
-                  'images/icons/${user.iconName}.png',
-                );
+                return _buildFriendItem(context, user);
               },
             ),
           ),
@@ -124,21 +108,14 @@ class _FriendListViewState extends State<FriendListView> {
     );
   }
 
-  Widget _buildFriendItem(
-    BuildContext context,
-    String name,
-    double hpValue,
-    int dirtLevel,
-    Color iconColor,
-    String mainImagePath,
-  ) {
+  Widget _buildFriendItem(BuildContext context, FriendInfo friend) {
     // 汚さレベルの値に応じて右下のキャラクター画像（ステータス画像）を決定する
     String dirtLevelImage;
-    if (dirtLevel > 2) {
+    if (friend.dirtLevel > 2) {
       dirtLevelImage = 'images/status/zombieIcon.png'; // ゾンビ
-    } else if (dirtLevel > 1) {
+    } else if (friend.dirtLevel > 1) {
       dirtLevelImage = 'images/status/human2Icon.png'; // 普通の死にかけ
-    } else if (dirtLevel > 0) {
+    } else if (friend.dirtLevel > 0) {
       dirtLevelImage = 'images/status/humanIcon.png'; // 普通
     } else {
       dirtLevelImage = 'images/status/godIcon.png'; // 神
@@ -158,8 +135,10 @@ class _FriendListViewState extends State<FriendListView> {
               // メインの丸アイコン
               CircleAvatar(
                 radius: 30,
-                backgroundImage: AssetImage(mainImagePath),
-                backgroundColor: iconColor,
+                backgroundImage: AssetImage(
+                  'images/icons/${friend.iconName}.png',
+                ),
+                backgroundColor: AppColors.getBackgroundColor(friend.background),
               ),
               // 右下のキャラクター（HP連動）
               Positioned(
@@ -184,7 +163,7 @@ class _FriendListViewState extends State<FriendListView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  friend.userName,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -192,26 +171,26 @@ class _FriendListViewState extends State<FriendListView> {
                 ),
                 const SizedBox(height: 8),
 
-                HpBar(value: hpValue),
+                HpBar(value: friend.healthPoint / 1000),
               ],
             ),
           ),
           const SizedBox(width: 15),
 
           // フレンドのお家に行くボタン
-          _buildActionButton(context, dirtLevel, hpValue, name, iconColor),
+          _buildActionButton(context, friend),
         ],
       ),
     );
   }
 
-  Widget _buildActionButton(BuildContext context,int dirtLevel, double hpValue, String name, Color color) {
+  Widget _buildActionButton(BuildContext context, FriendInfo friend) {
     return GradientButton(
       imagePath: 'images/friend_go.png',
 
       gradient: AppColors.greenGradient,
 
-      onTap: () => widget.viewModel.onFriendTapped(context, name, dirtLevel, hpValue, color),
+      onTap: () => widget.viewModel.onFriendTapped(context, friend),
     );
   }
 }
