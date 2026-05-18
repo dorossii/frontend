@@ -111,9 +111,9 @@ class _FriendListViewState extends State<FriendListView> {
   Widget _buildFriendItem(BuildContext context, FriendInfo friend) {
     // 汚さレベルの値に応じて右下のキャラクター画像（ステータス画像）を決定する
     String dirtLevelImage;
-    if (friend.dirtLevel > 2) {
+    if (friend.dirtLevel > 5) {
       dirtLevelImage = 'images/status/zombieIcon.png'; // ゾンビ
-    } else if (friend.dirtLevel > 1) {
+    } else if (friend.dirtLevel > 3) {
       dirtLevelImage = 'images/status/human2Icon.png'; // 普通の死にかけ
     } else if (friend.dirtLevel > 0) {
       dirtLevelImage = 'images/status/humanIcon.png'; // 普通

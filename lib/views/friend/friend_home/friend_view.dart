@@ -29,12 +29,12 @@ class FriendHomeView extends StatelessWidget {
       bottomNavigationBar: AppFooter(
         currentPage: null,
         onTap: (page) {
-  Navigator.pop(context);
+          Navigator.pop(context);
 
-  if (page != PageType.friend) {
-    onTabSelected(page);
-  }
-},
+          if (page != PageType.friend) {
+            onTabSelected(page);
+          }
+        },
       ),
       body: Stack(
         children: [
