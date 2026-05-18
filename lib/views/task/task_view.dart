@@ -1,11 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'dart:ffi' hide Size;
-
 import 'package:flutter/material.dart';
 import 'task_view_model.dart';
 import '../../components/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
+import '../task/task_view_model.dart';
+import 'task_view_model.dart';
 
 class TaskView extends StatefulWidget {
   final TaskViewModel viewModel;
@@ -15,11 +13,11 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskView extends State<TaskView>  {
-  int _selectedTabIndex = 100;  // 選択されているタブのインデックス
-  int _selectSortIndex = 0;     // 選択されている並び替えのインデックス
-  bool _allItemSelected = false;  // まとめて選択がされているか判定する変数
+  final viewModel = TaskViewModel();
+  int selectedTabIndex = 100;  // 選択されているタブのインデックス
+  int selectSortIndex = 0;     // 選択されている並び替えのインデックス
+  bool allItemSelected = false;  // まとめて選択がされているか判定する変数
   int tabHeight = 36;           // タブの高さ
-
 
   // タブの配列
   static const category = [
@@ -33,28 +31,15 @@ class _TaskView extends State<TaskView>  {
   ];
 
 // テストデータ -----------------------------------
-  // List<Map<int, String >> category = [
-  //   {0: "すべて", 1: "ゴミ捨て", 2: "洗濯"}
-  // ];
   List<Map<String, dynamic >> taskItems = [
-    {"tags": 0, "taskName": "皿洗いをする", "difficultyLevel": 2, "limitTime": "15:30:30", "advice": "綺麗に洗おうね", "done": false, "status": 0},
-    {"tags": 1, "taskName": "使わなくなった服を捨てる", "difficultyLevel": 5, "limitTime": "15:30:37", "advice": "断捨離断捨離ぃーー！！", "done": false, "status": 1},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "16:30:30", "advice": "ぐーるぐる", "done": false, "status": 2},
-    {"tags": 4, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "15:00:30", "advice": "ぐーるぐる", "done": false, "status": 0},
-    {"tags": 3, "taskName": "洗濯物をまわす", "difficultyLevel": 5, "limitTime": "8:30:30", "advice": "ぐーるぐる", "done": false, "status": 1},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "done": false, "status": 0},
-
-    // {
-    //   "taskId": "task_001",
-    //   "userId": "uuid-user-1",
-    //   "taskName": "部屋の掃除をする",
-    //   "status": 0,
-    //   "startDate": "2026-04-27T09:00:00Z",
-    //   "endTime": "2026-04-30T18:00:00Z"
-    // }
+    {"tags": 0, "taskName": "皿洗いをする", "difficultyLevel": 2, "limitTime": "15:30:30", "advice": "綺麗に洗おうね", "status": 0},
+    {"tags": 1, "taskName": "使わなくなった服を捨てる", "difficultyLevel": 5, "limitTime": "15:30:37", "advice": "断捨離断捨離ぃーー！！", "status": 1},
+    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "16:30:30", "advice": "ぐーるぐる", "status": 2},
+    {"tags": 4, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "15:00:30", "advice": "ぐーるぐる", "status": 0},
+    {"tags": 3, "taskName": "洗濯物をまわす", "difficultyLevel": 5, "limitTime": "8:30:30", "advice": "ぐーるぐる", "status": 1},
+    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0},
   ];
 // ----------------------------------------------
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +51,7 @@ class _TaskView extends State<TaskView>  {
         margin: EdgeInsets.all(15),
         child: Stack(
           children: [
-            // 下のコンテンツ
+            // タブ下のコンテンツ
             Container(
               margin: EdgeInsets.only(
                 top: tabHeight.toDouble(), // タブの高さ分だけ下げる
@@ -95,49 +80,6 @@ class _TaskView extends State<TaskView>  {
     );
   }
 
-  // 並び替え処理
-  void _handleSort() {
-    setState(() {
-
-      // 名前順
-      if(_selectSortIndex == 0) {
-        taskItems.sort(
-          (b, a) => a["taskName"].compareTo(b["taskName"]),
-        );
-      }
-
-      // 期限順
-      if(_selectSortIndex == 1) {
-
-        taskItems.sort((a, b) {
-          Duration durationA = _parseDuration(a["limitTime"]);
-          Duration durationB = _parseDuration(b["limitTime"]);
-
-          return durationA.compareTo(durationB);
-        });
-      }
-
-      // 難易度順
-      if(_selectSortIndex == 2) {
-        taskItems.sort(
-          (b, a) => a["difficultyLevel"].compareTo(b["difficultyLevel"]),
-        );
-      }
-
-    });
-  }
-
-  // 時間を数値に変換する処理
-  Duration _parseDuration(String time) {
-    final parts = time.split(':');
-
-    return Duration(
-      hours: int.parse(parts[0]),
-      minutes: int.parse(parts[1]),
-      seconds: int.parse(parts[2]),
-    );
-  }
-
   // 表示するタスク一覧部分
   Widget _buildTaskList() {
     
@@ -163,8 +105,8 @@ class _TaskView extends State<TaskView>  {
                         return GestureDetector(
                           onTap: () {
                             setState(() {
-                              _selectSortIndex = index;
-                              if(index == _selectSortIndex) _handleSort();
+                              selectSortIndex = index;
+                              if(index == selectSortIndex) viewModel.handleSort(taskItems, selectSortIndex);
                             });
                           },
                           child: Container(
@@ -172,7 +114,7 @@ class _TaskView extends State<TaskView>  {
                             child: Text(
                               sortCategorys[index],
                               style: TextStyle(
-                                color: _selectSortIndex == index ? AppColors.subWhiteBackground : AppColors.edgew
+                                color: selectSortIndex == index ? AppColors.subWhiteBackground : AppColors.edgew
                               ),
                             ),
                           ),
@@ -206,26 +148,15 @@ class _TaskView extends State<TaskView>  {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _allItemSelected = !_allItemSelected; //まとめてのbool
-
-                          if(_allItemSelected){
-                            // 選択を適応
-                            taskItems.forEach((item) {
-                              if(_selectedTabIndex == allTabIndex) { item["status"] = 2; }  // すべてのタブを選択している時
-                              else if(item["tags"] == _selectedTabIndex) { item["status"] = 2; }}); 
-                          } else {
-                            // 選択を解除
-                            taskItems.forEach((item) {
-                              if(_selectedTabIndex == allTabIndex) { item["status"] = 0; }  // すべてのタブを選択している時
-                              else if(item["tags"] == _selectedTabIndex) { item["status"] = 0; }});
-                            }; 
-                          }
-                        );
+                          allItemSelected = !allItemSelected;
+                          viewModel.handleAllSelect(taskItems, allItemSelected, selectedTabIndex, allTabIndex);
+                      });
                       },
                       child: Text(
                         "まとめて選択",
-                        style: TextStyle(color: Colors.white)),
-                    ),
+                        style: TextStyle(color: Colors.white)
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
@@ -234,11 +165,11 @@ class _TaskView extends State<TaskView>  {
                         children: taskItems.asMap().entries
                         .where((entry) {
                           // 「すべて」のとき
-                          if (_selectedTabIndex == allTabIndex) {
+                          if (selectedTabIndex == allTabIndex) {
                             return true;
                           }
                           // カテゴリーごとの表示
-                          return entry.value["tags"] == _selectedTabIndex;
+                          return entry.value["tags"] == selectedTabIndex;
                         })
                         .map((entry) {
                           final index = entry.key;
@@ -283,11 +214,7 @@ class _TaskView extends State<TaskView>  {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      if(task["status"] == 0 || task["status"] == 1) {
-                        task["status"] = 2;
-                      } else {
-                        task["status"] = 0;
-                      }
+                      viewModel.handleUpdateStatus(task);
                     });
                   },
                   child: Container(
@@ -455,16 +382,16 @@ class _TaskView extends State<TaskView>  {
         GestureDetector(
             onTap: () {
                 setState(() {
-                _selectedTabIndex = allTabIndex;
+                selectedTabIndex = allTabIndex;
               });
             },
             child: Container(
-              height: _selectedTabIndex == allTabIndex
+              height: selectedTabIndex == allTabIndex
                 ? tabHeight.toDouble() + 2  // 線の太さ分、高さを伸ばして被せる(線を見えないようにする)
                 : tabHeight.toDouble() - 2, // 線の太さ分、高さを縮めて下の要素の線に被らないようにする
               width: 64,
               decoration: BoxDecoration(
-                color: _selectedTabIndex == allTabIndex ? AppColors.subBackground : AppColors.subWhiteBackground,
+                color: selectedTabIndex == allTabIndex ? AppColors.subBackground : AppColors.subWhiteBackground,
                 border: Border(
                   top: BorderSide(
                     width: 2,
@@ -499,16 +426,16 @@ class _TaskView extends State<TaskView>  {
           return GestureDetector(
             onTap: () {
                 setState(() {
-                _selectedTabIndex = index;
+                selectedTabIndex = index;
               });
             },
             child: Container(
-              height: _selectedTabIndex == index 
+              height: selectedTabIndex == index 
                 ? tabHeight.toDouble() + 2  // 線の太さ分、高さを伸ばして被せる(線を見えないようにする)
                 : tabHeight.toDouble() - 2, // 線の太さ分、高さを縮めて下の要素の線に被らないようにする
               width: 64,
               decoration: BoxDecoration(
-                color: _selectedTabIndex == index ? AppColors.subBackground : AppColors.subWhiteBackground,
+                color: selectedTabIndex == index ? AppColors.subBackground : AppColors.subWhiteBackground,
                 border: Border(
                   top: BorderSide(
                     width: 2,
