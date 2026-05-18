@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
 import 'friend_view_model.dart';
 import 'package:authbase_mobile/components/colors.dart';
+import '../../../models/friend_info.dart';
 
-
-
-
-class FriendListView extends StatelessWidget {
+class FriendListView extends StatefulWidget {
   final FriendListViewModel viewModel;
 
   const FriendListView({super.key, required this.viewModel});
 
   @override
+  State<FriendListView> createState() => _FriendListViewState();
+}
+
+class _FriendListViewState extends State<FriendListView> {
+  @override
+  void initState() {
+    super.initState();
+
+    widget.viewModel.initialize(() {
+      // API取得後UI更新
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.subWhiteBackground, 
+      backgroundColor: AppColors.subWhiteBackground,
       body: Column(
         children: [
           // フレンドを追加ボタン
@@ -43,18 +56,29 @@ class FriendListView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
             child: SizedBox(
-              height: 36, 
+              height: 36,
               child: TextField(
-                style: const TextStyle(fontSize: 14), 
+                style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
                   hintText: '検索',
-                  hintStyle: const TextStyle(fontSize: 14, color: AppColors.text, fontFamily: 'textFont'),
-                  prefixIcon: const Icon(Icons.search, color: AppColors.text, size: 20),
+                  hintStyle: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.text,
+                    fontFamily: 'textFont',
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: AppColors.text,
+                    size: 20,
+                  ),
                   filled: true,
                   fillColor: AppColors.grayBackground,
-                  isDense: true, 
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12), 
-                  
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 12,
+                  ),
+
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -63,18 +87,20 @@ class FriendListView extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // フレンドリスト
           Expanded(
-            child: ListView(
+            child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                _buildFriendItem(context,"yoh", 0.1, AppColors.icon8, 'images/icons/pineTree.png'),
-                _buildFriendItem(context,"お猫様", 0.6, AppColors.icon3, 'images/icons/cafe.png'),
-                _buildFriendItem(context,"saya", 0.4, AppColors.icon4, 'images/icons/bird.png'),
-                _buildFriendItem(context,"ごろちゃん", 1.0, AppColors.icon5, 'images/icons/rocketCat.png'),
-                
-              ],
+
+              itemCount: widget.viewModel.friendList.length,
+
+              itemBuilder: (context, index) {
+                /// index番目のフレンド
+                final user = widget.viewModel.friendList[index];
+
+                return _buildFriendItem(context, user);
+              },
             ),
           ),
         ],
@@ -82,18 +108,18 @@ class FriendListView extends StatelessWidget {
     );
   }
 
-  Widget _buildFriendItem(BuildContext context, String name, double hpValue, Color iconColor, String mainImagePath) {
-      // HPの値に応じて右下のキャラクター画像（ステータス画像）を決定する
-      String statusImagePath;
-      if (hpValue > 0.9) {
-        statusImagePath = 'images/status/godIcon.png';   // 神
-      } else if (hpValue > 0.4) {
-        statusImagePath = 'images/status/humanIcon.png';   // 普通
-      } else if (hpValue > 0.3) {
-        statusImagePath = 'images/status/human2Icon.png'; // 普通の死にかけ
-      } else {
-        statusImagePath = 'images/status/zombieIcon.png';  // ゾンビ
-      }
+  Widget _buildFriendItem(BuildContext context, FriendInfo friend) {
+    // 汚さレベルの値に応じて右下のキャラクター画像（ステータス画像）を決定する
+    String dirtLevelImage;
+    if (friend.dirtLevel > 5) {
+      dirtLevelImage = 'images/status/zombieIcon.png'; // ゾンビ
+    } else if (friend.dirtLevel > 3) {
+      dirtLevelImage = 'images/status/human2Icon.png'; // 普通の死にかけ
+    } else if (friend.dirtLevel > 0) {
+      dirtLevelImage = 'images/status/humanIcon.png'; // 普通
+    } else {
+      dirtLevelImage = 'images/status/godIcon.png'; // 神
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -104,34 +130,31 @@ class FriendListView extends StatelessWidget {
         children: [
           // アイコン部分
           Stack(
-          clipBehavior: Clip.none, // キャラクターのはみ出しを許可
-          children: [
-            // メインの丸アイコン
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage(mainImagePath),
-              backgroundColor: iconColor,
-            ),
-            // 右下のキャラクター（HP連動）
-            Positioned(
-              right: -10,
-              bottom: -10,
-              child: Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+            clipBehavior: Clip.none, // キャラクターのはみ出しを許可
+            children: [
+              // メインの丸アイコン
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage(
+                  'images/icons/${friend.iconName}.png',
                 ),
-                child: ClipOval(
-                  child: Image.asset(
-                    statusImagePath,
-                    fit: BoxFit.cover,
+                backgroundColor: AppColors.getBackgroundColor(friend.background),
+              ),
+              // 右下のキャラクター（HP連動）
+              Positioned(
+                right: -10,
+                bottom: -10,
+                child: Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  child: ClipOval(
+                    child: Image.asset(dirtLevelImage, fit: BoxFit.cover),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
           const SizedBox(width: 15),
 
           // 名前とHPゲージ
@@ -139,31 +162,38 @@ class FriendListView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(
+                  friend.userName,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 8),
-                
-                HpBar(value: hpValue),
+
+                HpBar(value: friend.healthPoint / 1000),
               ],
             ),
           ),
           const SizedBox(width: 15),
 
           // フレンドのお家に行くボタン
-          _buildActionButton(context, name, iconColor),
+          _buildActionButton(context, friend),
         ],
       ),
     );
   }
 
-  Widget _buildActionButton(BuildContext context, String name, Color color) {
-  return GradientButton(
-    imagePath: 'images/friend_go.png',
-    gradient: AppColors.greenGradient,
-    onTap: () => viewModel.onFriendTapped(context, name, color),
-  );
-}
-}
+  Widget _buildActionButton(BuildContext context, FriendInfo friend) {
+    return GradientButton(
+      imagePath: 'images/friend_go.png',
 
+      gradient: AppColors.greenGradient,
+
+      onTap: () => widget.viewModel.onFriendTapped(context, friend),
+    );
+  }
+}
 
 // hpゲージの色を緑系にするためのカスタムウィジェット
 class HpBar extends StatelessWidget {

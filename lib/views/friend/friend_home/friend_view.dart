@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:authbase_mobile/components/colors.dart'; 
+import 'package:authbase_mobile/components/colors.dart';
 import 'friend_view_model.dart';
 // ヘッダーフッター表示のために、PageTypeをインポート
 import '../../../components/widgets/app_header.dart';
 import '../../../components/widgets/app_footer.dart';
 import '../../app.dart';
 
+import '../../../components/extensions/life_state_layout.dart';
+import '../../../components/widgets/character/character_layer.dart';
+
 class FriendHomeView extends StatelessWidget {
   final FriendHomeViewModel viewModel;
-  final Color themeColor;
   final Function(PageType) onTabSelected;
 
-  const FriendHomeView({super.key, required this.viewModel, required this.themeColor, required this.onTabSelected});
-
+  const FriendHomeView({
+    super.key,
+    required this.viewModel,
+    required this.onTabSelected,
+  });
   @override
   Widget build(BuildContext context) {
+    final theme = viewModel.currentState.theme;
+    final friend = viewModel.friendInfo;
     return Scaffold(
       // 共通ヘッダーを配置（Friendタブとして表示）
       appBar: AppHeader(currentPage: PageType.friend),
@@ -22,64 +29,57 @@ class FriendHomeView extends StatelessWidget {
       bottomNavigationBar: AppFooter(
         currentPage: null,
         onTap: (page) {
-          // 1. お家画面を閉じる
           Navigator.pop(context);
-          // 2. 親（App.dart）のタブを切り替える
-          onTabSelected(page);
+
+          if (page != PageType.friend) {
+            onTabSelected(page);
+          }
         },
       ),
       body: Stack(
         children: [
           // 背景画像
           Positioned.fill(
-            child: Image.asset(
-              'images/home/home1.webp',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset(theme.background, fit: BoxFit.cover),
           ),
 
-Align(
-  alignment: Alignment.bottomCenter,
-  child: Padding(
-    padding: const EdgeInsets.only(bottom: 520), // キャラクターの頭上に調整
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      decoration: BoxDecoration(
-        color: themeColor, // 木っぽい茶色
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: const Color(0xFF2D1E16), width: 3),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            offset: const Offset(4, 4),
-          ),
-        ],
-      ),
-      child: Text(
-        "${viewModel.friendName} のお家",
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'textFont',
-          letterSpacing: 1.2,
-        ),
-      ),
-    ),
-  ),
-),
-          // キャラクター画像
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 180),
-              child: Image.asset(
-                'images/character.png',
-                height: 320,
-                fit: BoxFit.contain,
+              padding: const EdgeInsets.only(bottom: 520), // キャラクターの頭上に調整
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.getBackgroundColor(
+                    friend.background,
+                  ), // フレンドのアイコンの色
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: const Color(0xFF2D1E16), width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.4),
+                      offset: const Offset(4, 4),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  "${friend.userName} のお家",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'textFont',
+                    letterSpacing: 1.2,
+                  ),
+                ),
               ),
             ),
           ),
+          // キャラクター画像
+          CharacterLayer(theme: theme),
 
           // ステータスとボタンのコンテナ
           Align(
@@ -87,10 +87,17 @@ Align(
             child: SafeArea(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 0),
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  top: 16,
+                  bottom: 16,
+                  right: 0,
+                ),
                 decoration: const BoxDecoration(
-                  color: AppColors.background, 
-                  border: Border(top: BorderSide(color: AppColors.sub, width: 2)),
+                  color: AppColors.background,
+                  border: Border(
+                    top: BorderSide(color: AppColors.sub, width: 2),
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
@@ -106,9 +113,12 @@ Align(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildStatusBox("汚さレベル", "ちょー汚すぎうける"),
+                          _buildStatusBox("汚さレベル", theme.description),
                           const SizedBox(height: 8),
-                          _buildStatusBox("HP", "30/100"),
+                          _buildStatusBox(
+                            "HP",
+                            "${friend.healthPoint / 10}/100",
+                          ),
                         ],
                       ),
                     ),
@@ -128,14 +138,19 @@ Align(
   Widget _buildStatusBox(String label, String value) {
     return SizedBox(
       width: double.infinity,
-      height: 70, 
+      height: 70,
       child: Stack(
         children: [
           // 後ろ側の図形（影パーツ）
           Positioned.fill(
             child: Padding(
               // メインのカードのサイズと揃える
-              padding: const EdgeInsets.only(top: 28, left: 6, bottom: 0, right: 0),
+              padding: const EdgeInsets.only(
+                top: 28,
+                left: 6,
+                bottom: 0,
+                right: 0,
+              ),
               child: Container(
                 decoration: BoxDecoration(
                   color: AppColors.subBackground,
@@ -168,10 +183,7 @@ Align(
   }
 
   // 手前のカード専用：ラベルとボックスを一体化させる描画
-  Widget _buildCardShape({
-    required String label,
-    required String value,
-  }) {
+  Widget _buildCardShape({required String label, required String value}) {
     final baseColor = AppColors.subBackground;
     final borderColor = AppColors.edgew;
 
@@ -232,7 +244,7 @@ Align(
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 2), 
+              padding: const EdgeInsets.only(bottom: 2),
               child: Text(
                 label,
                 style: const TextStyle(
@@ -250,86 +262,79 @@ Align(
         Positioned(
           top: 22,
           left: 0,
-          child: Container(
-            width: 2.5,
-            height: 5,
-            color: borderColor,
-          ),
+          child: Container(width: 2.5, height: 5, color: borderColor),
         ),
       ],
     );
   }
 
-// 友達救済ボタンのウィジェット
-    Widget _buildRescueButton() {
+  // 友達救済ボタンのウィジェット
+  Widget _buildRescueButton() {
     return GestureDetector(
       onTap: () {
         // ボタンがタップされたときの処理をここに書く
         print("レスキューがタップされました！");
       },
-    child: SizedBox(
-      width: 110, 
-      height: 120, 
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        clipBehavior: Clip.none, 
-        children: [
-          // 背面の土台カード
-          Container(
-            width: 110,
-            height: 100, 
-            decoration: BoxDecoration(
-              color: AppColors.darkBackground,
-              borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(5),
-              bottomLeft: Radius.circular(5),
-            ),
-              border: Border.all(
-                color: AppColors.darkEdgey, 
-                width: 3,
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end, 
-              children: [
-                const Text(
-                  "友達救済",
-                  style: TextStyle(
-                    color: AppColors.subWhiteBackground,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'textFont',
-                  ),
+      child: SizedBox(
+        width: 110,
+        height: 120,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          clipBehavior: Clip.none,
+          children: [
+            // 背面の土台カード
+            Container(
+              width: 110,
+              height: 100,
+              decoration: BoxDecoration(
+                color: AppColors.darkBackground,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  bottomLeft: Radius.circular(5),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    "レスキューボタン",
+                border: Border.all(color: AppColors.darkEdgey, width: 3),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Text(
+                    "友達救済",
                     style: TextStyle(
                       color: AppColors.subWhiteBackground,
-                      fontSize: 9,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'textFont',
                     ),
                   ),
-                ),
-              ],
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      "レスキューボタン",
+                      style: TextStyle(
+                        color: AppColors.subWhiteBackground,
+                        fontSize: 9,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'textFont',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // はみ出すボタン画像
-          Positioned(
-            top: 0, 
-            child: Image.asset(
-              'images/rescue.png',
-              width: 80, 
-              height: 80,
-              fit: BoxFit.contain,
+            // はみ出すボタン画像
+            Positioned(
+              top: 0,
+              child: Image.asset(
+                'images/rescue.png',
+                width: 80,
+                height: 80,
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    )
     );
   }
 }
