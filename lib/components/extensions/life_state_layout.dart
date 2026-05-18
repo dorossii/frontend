@@ -217,7 +217,49 @@ extension LifeStateExtension on LifeState {
 
           darkness: 0,
 
-          trashes: [],
+          trashes: [
+            TrashObject(
+              type: TrashType.leftBanana,
+              x: 230,
+              y: 340,
+              width: 50,
+              height: 50,
+              rotation: 0,
+              animation: TrashAnimationType.floating,
+              layer: TrashLayerType.front,
+            ),
+            TrashObject(
+                type: TrashType.leftTrashGray,
+                x: 280,
+                y: 240,
+                width: 30,
+                height: 30,
+                rotation: 0,
+                animation: TrashAnimationType.shaking,
+                layer: TrashLayerType.front,
+              ),
+            TrashObject(
+                  type: TrashType.leftTrashRed,
+                  x: 140,
+                  y: 300,
+                  width: 70,
+                  height: 70,
+                  rotation: -18,
+                  animation: TrashAnimationType.floating,
+                  layer: TrashLayerType.back,
+                ),
+                TrashObject(
+                type: TrashType.leftMilk,
+                x: 280,
+                y: 240,
+                width: 30,
+                height: 30,
+                rotation: 0,
+                animation: TrashAnimationType.shaking,
+                layer: TrashLayerType.front,
+              ),
+
+          ],
         );
       // ========================================
       // slightlyDirty
@@ -235,7 +277,38 @@ extension LifeStateExtension on LifeState {
 
           darkness: 0,
 
-          trashes: [],
+          trashes: [
+            TrashObject(
+              type: TrashType.leftTrashGray,
+              x: -10,
+              y: 0,
+              width: 55,
+              height: 55,
+              rotation: -180,
+              animation: TrashAnimationType.bouncing,
+              layer: TrashLayerType.front,
+            ),
+            TrashObject(
+                type: TrashType.leftTrashGreen,
+                x: 320,
+                y: 320,
+                width: 40,
+                height: 40,
+                rotation: 10,
+                animation: TrashAnimationType.bouncing,
+                layer: TrashLayerType.front,
+              ),
+            TrashObject(
+                type: TrashType.rightBanana,
+                x: 0,
+                y: 400,
+                width: 60,
+                height: 60,
+                rotation: 0,
+                animation: TrashAnimationType.bouncing,
+                layer: TrashLayerType.front,
+              ),
+          ],
         );
       // ========================================
       // CLEAN

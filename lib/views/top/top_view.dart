@@ -31,7 +31,7 @@ class _TopViewState extends State<TopView> {
   @override
   Widget build(BuildContext context) {
     // final theme = widget.viewModel.currentState.theme;
-    final theme = LifeState.clean.theme; // デバッグ用に常にcritical状態のテーマを表示
+    final theme = LifeState.slightlyDirty.theme; 
     final user = widget.viewModel.userStatus;
 
     return Scaffold(
