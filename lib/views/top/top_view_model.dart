@@ -14,7 +14,7 @@ class TopViewModel {
   /// ===================================
   final bool isDebugMode;
 
-  TopViewModel({this.isDebugMode = true});
+  TopViewModel({this.isDebugMode = false});
 
   LifeState currentState = LifeState.normal;
 
