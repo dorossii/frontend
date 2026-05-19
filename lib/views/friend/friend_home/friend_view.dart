@@ -333,7 +333,7 @@ class FriendHomeView extends StatelessWidget {
             Positioned(
               top: 0,
               child: Image.asset(
-                'images/rescue.png',
+                'images/rescue.webp',
                 width: 80,
                 height: 80,
                 fit: BoxFit.contain,
