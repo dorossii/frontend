@@ -42,8 +42,8 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
   ];
 
   return Container(
-    height: 50,
-    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    height: 80,
+    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
     decoration: BoxDecoration(
       color: const Color(0xFF9EABA4),
       borderRadius: BorderRadius.circular(5),
@@ -52,14 +52,14 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
     child: Scrollbar(
       thickness: 2, 
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         itemCount: logs.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 1),
             child: Text(
               logs[index],
-              style: const TextStyle(fontSize: 9, fontFamily: 'textFont'),
+              style: const TextStyle(fontSize: 10, fontFamily: 'textFont'),
             ),
           );
         },
@@ -110,5 +110,5 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(isTop ? 70 : 65);
+  Size get preferredSize => Size.fromHeight(isTop ? 110 : 75);
 }
