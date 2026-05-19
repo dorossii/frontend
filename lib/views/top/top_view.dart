@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:authbase_mobile/components/colors.dart';
+import '../../components/extensions/trash_layer_type.dart';
 import 'top_view_model.dart';
 import '../../components/extensions/life_state_layout.dart';
 import '../../components/widgets/character/character_layer.dart';
+import '../../components/widgets/trashs/trash_layer.dart';
 
 class TopView extends StatefulWidget {
   final TopViewModel viewModel;
@@ -39,8 +41,14 @@ class _TopViewState extends State<TopView> {
                   child: Image.asset(theme.background, fit: BoxFit.cover),
                 ),
 
+                // キャラの後ろのゴミ
+                TrashLayer(theme: theme, layer: TrashLayerType.back),
+
                 // キャラクター
                 CharacterLayer(theme: theme),
+
+                // キャラの前のゴミ
+                TrashLayer(theme: theme, layer: TrashLayerType.front),
 
                 // ステータスとボタンのコンテナ
                 Align(
@@ -78,7 +86,7 @@ class _TopViewState extends State<TopView> {
                                 const SizedBox(height: 8),
                                 _buildStatusBox(
                                   "HP",
-                                  "${(user?.healthPoint ?? 0)/10}/100",
+                                  "${(user?.healthPoint ?? 0) / 10}/100",
                                 ),
                               ],
                             ),

@@ -1,50 +1,40 @@
-// ==============================================
-// widgets/trash/trash_layer.dart
-// ==============================================
-
 import 'package:flutter/material.dart';
 
 import '../../models/state_theme.dart';
+import '../../extensions/trash_layer_type.dart';
+import '/components/models/trash_type_extension.dart';
 
-import 'trash_animation_wrapper.dart';
-import 'trash_item.dart';
 
 class TrashLayer extends StatelessWidget {
-
   final StateTheme theme;
+  final TrashLayerType layer;
 
   const TrashLayer({
     super.key,
     required this.theme,
+    required this.layer,
   });
 
   @override
   Widget build(BuildContext context) {
-
-    final size =
-        MediaQuery.of(context).size;
-
     return Stack(
-      children: [
-
-        ...theme.trashes.map((trash) {
-
-          return Positioned(
-            left: size.width * trash.x,
-            top: size.height * trash.y,
-
-            child: TrashAnimationWrapper(
-
-              animation:
-                  trash.animation,
-
-              child: TrashItem(
-                trash: trash,
+      children: theme.trashes
+          .where((trash) => trash.layer == layer)
+          .map((trash) {
+            return Positioned(
+              left: trash.x,
+              top: trash.y,
+              child: Transform.rotate(
+                angle: trash.rotation * 3.141592 / 180,
+                child: Image.asset(
+                  trash.type.image,
+                  width: trash.width,
+                  height: trash.height,
+                  fit: BoxFit.contain,
+                ),
               ),
-            ),
-          );
-        }),
-      ],
+            );
+          }).toList(),
     );
   }
 }

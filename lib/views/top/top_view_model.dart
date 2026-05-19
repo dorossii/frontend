@@ -76,7 +76,7 @@ class TopViewModel {
 
   /// デバッグ用状態切り替え
   void startDebugLoop(void Function() onUpdate) {
-    timer = Timer.periodic(const Duration(seconds: 3), (_) {
+    timer = Timer.periodic(const Duration(seconds: 5), (_) {
       /// 次の状態へ
       currentIndex++;
 

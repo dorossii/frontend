@@ -1,8 +1,9 @@
 import 'trash_animation_type.dart';
 import 'trash_type.dart';
+import '../extensions/trash_layer_type.dart';
+
 // ゴミ箱に入れるオブジェクトのクラス
 class TrashObject {
-
   /// ゴミ種類
   final TrashType type;
 
@@ -20,6 +21,9 @@ class TrashObject {
   /// アニメーション
   final TrashAnimationType animation;
 
+  // レイヤー
+  final TrashLayerType layer;
+
   const TrashObject({
     required this.type,
     required this.x,
@@ -29,7 +33,7 @@ class TrashObject {
 
     this.rotation = 0,
 
-    this.animation =
-        TrashAnimationType.none,
+    this.animation = TrashAnimationType.none,
+    this.layer = TrashLayerType.front,
   });
 }

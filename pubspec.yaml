@@ -77,6 +77,7 @@ flutter:
     - images/footer/
     - images/home/
     - images/chara/
+    - images/trash/
   #   - images/a_dot_ham.jpeg
 
   fonts:

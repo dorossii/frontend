@@ -8,6 +8,8 @@ import '../../app.dart';
 
 import '../../../components/extensions/life_state_layout.dart';
 import '../../../components/widgets/character/character_layer.dart';
+import '../../../components/widgets/trashs/trash_layer.dart';
+import '../../../components/extensions/trash_layer_type.dart';
 
 class FriendHomeView extends StatelessWidget {
   final FriendHomeViewModel viewModel;
@@ -42,6 +44,7 @@ class FriendHomeView extends StatelessWidget {
           Positioned.fill(
             child: Image.asset(theme.background, fit: BoxFit.cover),
           ),
+          
 
           Align(
             alignment: Alignment.bottomCenter,
@@ -78,8 +81,12 @@ class FriendHomeView extends StatelessWidget {
               ),
             ),
           ),
+          // ゴミ
+          TrashLayer(theme: theme, layer: TrashLayerType.back),
           // キャラクター画像
           CharacterLayer(theme: theme),
+
+          TrashLayer(theme: theme, layer: TrashLayerType.front),
 
           // ステータスとボタンのコンテナ
           Align(

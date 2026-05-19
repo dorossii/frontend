@@ -4,7 +4,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../extensions/trash_type_extension.dart';
+import '../../models/trash_type_extension.dart';
 import '../../models/trashs.dart';
 
 class TrashItem extends StatelessWidget {
