@@ -29,32 +29,9 @@ class _FriendListViewState extends State<FriendListView> {
       backgroundColor: AppColors.subWhiteBackground,
       body: Column(
         children: [
-          // フレンドを追加ボタン
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0, top: 8.0),
-              child: TextButton.icon(
-                onPressed: () {
-                  // 追加処理
-                },
-                icon: Image.asset('images/friend+.png', width: 18, height: 18),
-                label: const Text(
-                  "フレンドを追加",
-                  style: TextStyle(
-                    color: Color(0xFF002D2C),
-                    fontSize: 13,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'textFont',
-                  ),
-                ),
-              ),
-            ),
-          ),
-
           // 検索バー
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+            padding: const EdgeInsets.only(top: 16, left: 20, right: 20),
             child: SizedBox(
               height: 36,
               child: TextField(
@@ -88,6 +65,38 @@ class _FriendListViewState extends State<FriendListView> {
             ),
           ),
 
+          // フレンドを追加ボタン
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: TextButton.icon(
+                onPressed: () {
+                  // 追加処理
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: AppColors.grayBackground, 
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14), 
+                  ),
+                ),
+                icon: Image.asset('images/friend+.png', width: 18, height: 18),
+                label: const Text(
+                  "フレンドを追加",
+                  style: TextStyle(
+                    color: AppColors.text,
+                    fontSize: 13,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'textFont',
+                  ),
+                ),
+              ),
+            ),
+          ),
           // フレンドリスト
           Expanded(
             child: ListView.builder(
@@ -138,7 +147,9 @@ class _FriendListViewState extends State<FriendListView> {
                 backgroundImage: AssetImage(
                   'images/icons/${friend.iconName}.png',
                 ),
-                backgroundColor: AppColors.getBackgroundColor(friend.background),
+                backgroundColor: AppColors.getBackgroundColor(
+                  friend.background,
+                ),
               ),
               // 右下のキャラクター（HP連動）
               Positioned(
