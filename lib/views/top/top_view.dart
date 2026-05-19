@@ -86,7 +86,7 @@ class _TopViewState extends State<TopView> {
                                 const SizedBox(height: 8),
                                 _buildStatusBox(
                                   "HP",
-                                  "${(user?.healthPoint ?? 0) / 10}/100",
+                                  "${((user?.healthPoint ?? 0) / 10).floor()}/100",
                                 ),
                               ],
                             ),

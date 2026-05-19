@@ -124,7 +124,7 @@ class FriendHomeView extends StatelessWidget {
                           const SizedBox(height: 8),
                           _buildStatusBox(
                             "HP",
-                            "${friend.healthPoint / 10}/100",
+                            "${((friend.healthPoint) / 10).floor()}/100",
                           ),
                         ],
                       ),
