@@ -295,8 +295,8 @@ extension LifeStateExtension on LifeState {
             ),
             TrashObject(
               type: TrashType.leftBanana,
-              x: 250,
-              y: 360,
+              x: 240,
+              y: 380,
               width: 50,
               height: 50,
               rotation: 0,
