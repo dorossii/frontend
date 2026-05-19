@@ -274,7 +274,7 @@ class _TaskView extends State<TaskView>  {
                                     height: 16,
                                     width: 16,
                                     child: Image.asset(
-                                      '/Users/saya/Desktop/dorossii/frontend/images/difficultyLevel.png',
+                                      'images/difficultyLevel.png',
                                       fit: BoxFit.cover,
                                     ),
                                   ),
