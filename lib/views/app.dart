@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '/views/login/login_screen.dart';
 import '/views/top/top_screen.dart';
@@ -6,19 +7,14 @@ import '/views/task/task_screen.dart';
 import 'friend/friend_list/friend_screen.dart';
 import '/views/setting/setting_screen.dart';
 
-
 import '/services/auth_manager.dart';
 
 import '../components/widgets/app_header.dart';
 import '../components/widgets/app_footer.dart';
 
+import '../components/extensions/user_view_model.dart';
 
-enum PageType {
-  top,
-  task,
-  friend,
-  setting,
-}
+enum PageType { top, task, friend, setting }
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -38,54 +34,56 @@ class _AppState extends State<App> {
       case PageType.task:
         return const TaskScreen();
       case PageType.friend:
-        return FriendListScreen(onTabSelected: (page) {
+        return FriendListScreen(
+          onTabSelected: (page) {
             setState(() {
               _currentPage = page;
             });
-          },);
+          },
+        );
       case PageType.setting:
         return SettingScreen(
-            // ログアウト処理
-      onLogoutPressed: () async {
+          // ログアウト処理
+          onLogoutPressed: () async {
+            // トークン削除
+            await AuthManager.logout();
 
-        // トークン削除
-        await AuthManager.logout();
+            // contextがまだ有効か確認
+            if (!context.mounted) return;
 
-        // contextがまだ有効か確認
-        if (!context.mounted) return;
-
-        // ログイン画面へ戻る
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
-          ),
-          (route) => false,
-          );
-        },
-      );
+            // ログイン画面へ戻る
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              (route) => false,
+            );
+          },
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppHeader(
-          currentPage: _currentPage,
-        ),
+    return ChangeNotifierProvider(
+      create: (_) => UserViewModel()..initialize(),
 
-        // 中身だけ変わる
-        body: _getScreen(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
 
-        bottomNavigationBar: AppFooter(
-          currentPage: _currentPage,
-          onTap: (page) {
-            setState(() {
-              _currentPage = page;
-            });
-          },
+        home: Scaffold(
+          appBar: AppHeader(currentPage: _currentPage),
+
+          // 中身だけ変わる
+          body: _getScreen(),
+
+          bottomNavigationBar: AppFooter(
+            currentPage: _currentPage,
+            onTap: (page) {
+              setState(() {
+                _currentPage = page;
+              });
+            },
+          ),
         ),
       ),
     );

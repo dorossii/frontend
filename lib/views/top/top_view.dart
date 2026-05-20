@@ -1,38 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:authbase_mobile/components/colors.dart';
-import '../../components/extensions/trash_layer_type.dart';
-import 'top_view_model.dart';
 import '../../components/extensions/life_state_layout.dart';
+import '../../components/extensions/trash_layer_type.dart';
+import '../../components/extensions/user_view_model.dart';
 import '../../components/widgets/character/character_layer.dart';
 import '../../components/widgets/trashs/trash_layer.dart';
 
-class TopView extends StatefulWidget {
-  final TopViewModel viewModel;
 
-  const TopView({super.key, required this.viewModel});
-
-  @override
-  State<TopView> createState() => _TopViewState();
-}
-
-class _TopViewState extends State<TopView> {
-  @override
-  void initState() {
-    super.initState();
-
-    widget.viewModel.initialize(() {
-      // API取得後UI更新
-      setState(() {});
-    });
-  }
+class TopView extends StatelessWidget {
+  const TopView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = widget.viewModel.currentState.theme;
-    final user = widget.viewModel.userStatus;
+
+    final vm = context.watch<UserViewModel>();
+
+    final theme = vm.currentState.theme;
+    final user = vm.userStatus;
 
     return Scaffold(
-      body: widget.viewModel.isLoading
+      body: vm.isLoading
           ? const Center(child: CircularProgressIndicator())
           : Stack(
               children: [
