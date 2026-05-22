@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../task/splash/task_splash_1.dart';
+import '../task/splash/splash_screen.dart';
 
 class SettingsView extends StatelessWidget {
   final VoidCallback onLogoutPressed;
@@ -22,7 +22,7 @@ class SettingsView extends StatelessWidget {
             // ここにボタンを押した時に呼ばれるコードを書く
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => TaskSplash1()),
+              MaterialPageRoute(builder: (context) => SplashScreen()),
             );
           },
         ),
