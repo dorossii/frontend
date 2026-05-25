@@ -28,7 +28,7 @@ class _TaskView extends State<TaskView>  {
 
   int selectedTabIndex = 100;  // 選択されているタブのインデックス
   int selectSortIndex = 0;     // 選択されている並び替えのインデックス
-  int selectedCount = 0;
+  int selectedCount = 0;       // 選択されているアイテムの数
   bool allItemSelected = false;  // まとめて選択がされているか判定する変数
   int tabHeight = 36;           // タブの高さ
 
@@ -178,6 +178,7 @@ class _TaskView extends State<TaskView>  {
                   onTap: () {
                     setState(() {
                       allItemSelected = !allItemSelected;
+                      if(!allItemSelected)selectedCount = 0;
                       widget.viewModel.handleAllSelect(taskItems, allItemSelected, selectedTabIndex, allTabIndex);
                   });
                   },
