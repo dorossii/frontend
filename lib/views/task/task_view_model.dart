@@ -1,4 +1,12 @@
+import 'package:authbase_mobile/models/task_info.dart';
+import 'package:flutter/rendering.dart';
+
 class TaskViewModel {
+  final TaskInfo taskInfo;
+
+  TaskViewModel({
+    required this.taskInfo
+  });
 
   // 並び替え処理 --------------------
   void handleSort(
@@ -47,28 +55,40 @@ class TaskViewModel {
     List<Map<String, dynamic>> taskItems,
     bool allItemSelected,
     selectedTabIndex,
-    allTabIndex
+    allTabIndex,
   ) {
-    if(allItemSelected){
-      // 選択を適応
-      taskItems.forEach((item) {
-        if(selectedTabIndex == allTabIndex) { item["status"] = 2; }  // すべてのタブを選択している時
-        else if(item["tags"] == selectedTabIndex) { item["status"] = 2; }}); 
-    } else {
-      // 選択を解除
-      taskItems.forEach((item) {
-        if(selectedTabIndex == allTabIndex) { item["status"] = 0; }  // すべてのタブを選択している時
-        else if(item["tags"] == selectedTabIndex) { item["status"] = 0; }});
-      }
-    }
+    taskItems.forEach((item) {
 
+      // 終了済みは対象外
+      if (item["status"] != 0) return;
+
+      // 表示中タブのアイテムだけ対象
+      if (selectedTabIndex == allTabIndex || item["tags"] == selectedTabIndex) {
+        item["selected"] = allItemSelected;
+      }
+    });
+  }
 
     // ステータスを変化する処理 -------------------
     void handleUpdateStatus (task){
-      if(task["status"] == 0 || task["status"] == 1) {
-        task["status"] = 2;
-      } else {
-        task["status"] = 0;
+
+      // 選択中と選択件数を更新する処理
+      if(task["status"] == 0){
+        if(task["selected"]){
+          task["selected"] = false;
+        } else {
+          task["selected"] = true;
+        }
       }
+      // if(task["status"] == 1){
+      //   task["selected"] = false;
+      // }
+      // if(task["status"] == 0 || task["status"] == 1) {
+      //   task["status"] = 2;
+      // } else {
+      //   task["status"] = 0;
+      // }
     }
+
+  void initialize(Null Function() param0) {}
   }
