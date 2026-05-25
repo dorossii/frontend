@@ -1,3 +1,4 @@
+import 'package:authbase_mobile/views/app.dart';
 import 'package:flutter/material.dart';
 import 'task_view_model.dart';
 import '../../components/colors.dart';
@@ -7,15 +8,27 @@ import 'task_view_model.dart';
 
 class TaskView extends StatefulWidget {
   final TaskViewModel viewModel;
-  const TaskView({super.key, required this.viewModel});
+
+  const TaskView({super.key, required this.viewModel, required Function(PageType) onTabSelected});
+
   @override
   _TaskView createState() => _TaskView();
 }
 
 class _TaskView extends State<TaskView>  {
-  final viewModel = TaskViewModel();
+  @override
+  void initState() {
+    super.initState();
+
+    widget.viewModel.initialize(() {
+      // API取得後UI更新
+      setState(() {});
+    });
+  }
+
   int selectedTabIndex = 100;  // 選択されているタブのインデックス
   int selectSortIndex = 0;     // 選択されている並び替えのインデックス
+  int selectedCount = 0;
   bool allItemSelected = false;  // まとめて選択がされているか判定する変数
   int tabHeight = 36;           // タブの高さ
 
@@ -23,7 +36,7 @@ class _TaskView extends State<TaskView>  {
   static const category = [
     "掃除", "洗濯", "料理", "ゴミ捨て"
   ];
-  int allTabIndex = 100;    // すべてのタブを選択する際のindex
+  int allTabIndex = 100;      // すべてのタブを選択する際のindex
 
   // 並び替えの配列
   static const sortCategorys = [
@@ -32,12 +45,16 @@ class _TaskView extends State<TaskView>  {
 
 // テストデータ -----------------------------------
   List<Map<String, dynamic >> taskItems = [
-    {"tags": 0, "taskName": "皿洗いをする", "difficultyLevel": 2, "limitTime": "15:30:30", "advice": "綺麗に洗おうね", "status": 0},
-    {"tags": 1, "taskName": "使わなくなった服を捨てる", "difficultyLevel": 5, "limitTime": "15:30:37", "advice": "断捨離断捨離ぃーー！！", "status": 1},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "16:30:30", "advice": "ぐーるぐる", "status": 2},
-    {"tags": 4, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "15:00:30", "advice": "ぐーるぐる", "status": 0},
-    {"tags": 3, "taskName": "洗濯物をまわす", "difficultyLevel": 5, "limitTime": "8:30:30", "advice": "ぐーるぐる", "status": 1},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0},
+    {"tags": 0, "taskName": "皿洗いをする", "difficultyLevel": 2, "limitTime": "15:30:30", "advice": "綺麗に洗おうね", "status": 0, "selected": false},
+    {"tags": 1, "taskName": "使わなくなった服を捨てる", "difficultyLevel": 5, "limitTime": "15:30:37", "advice": "断捨離断捨離ぃーー！！", "status": 1, "selected": false},
+    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "16:30:30", "advice": "ぐーるぐる", "status": 2, "selected": false},
+    {"tags": 4, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "15:00:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
+    {"tags": 3, "taskName": "洗濯物をまわす", "difficultyLevel": 5, "limitTime": "8:30:30", "advice": "ぐーるぐる", "status": 1, "selected": false},
+    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
+    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
+    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
+    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
+    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
   ];
 // ----------------------------------------------
 
@@ -46,35 +63,47 @@ class _TaskView extends State<TaskView>  {
 
     return Scaffold(
       backgroundColor: AppColors.subWhiteBackground,
-
-      body: Container(
-        margin: EdgeInsets.all(15),
+      body: DefaultTextStyle(
+        style: TextStyle(
+          fontFamily: 'textFont',
+        ),
         child: Stack(
           children: [
-            // タブ下のコンテンツ
             Container(
-              margin: EdgeInsets.only(
-                top: tabHeight.toDouble(), // タブの高さ分だけ下げる
+              margin: EdgeInsets.all(15),
+              child: Stack(
+                children: [
+                  // タブ下のコンテンツ
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: tabHeight.toDouble(), // タブの高さ分だけ下げる
+                    ),
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.subBackground,
+                      border: Border.all(
+                        color: AppColors.edgew,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child: _buildTaskList(),
+                  ),
+              
+                  // タブ
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    child: _buildTabButton(),
+                  ),
+                ],
               ),
-              height: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.subBackground,
-                border: Border.all(
-                  color: AppColors.edgew,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(5)
-              ),
-              child: _buildTaskList(),
             ),
-        
-            // タブ
-            Positioned(
-              left: 0,
-              right: 0,
-              child: _buildTabButton(),
-            ),
-          ],
+            
+            if (allItemSelected || selectedCount != 0)
+            _buildConfirmSelection(),
+
+          ]
         ),
       ),
     );
@@ -94,7 +123,7 @@ class _TaskView extends State<TaskView>  {
                 fontSize: 10,
                 color: AppColors.edgew,
               ),
-
+        
               // 並び替え欄
               child: Row(
                 children: [
@@ -106,7 +135,7 @@ class _TaskView extends State<TaskView>  {
                       onTap: () {
                         setState(() {
                           selectSortIndex = index;
-                          if(index == selectSortIndex) viewModel.handleSort(taskItems, selectSortIndex);
+                          if(index == selectSortIndex) widget.viewModel.handleSort(taskItems, selectSortIndex);
                         });
                       },
                       child: Container(
@@ -149,7 +178,7 @@ class _TaskView extends State<TaskView>  {
                   onTap: () {
                     setState(() {
                       allItemSelected = !allItemSelected;
-                      viewModel.handleAllSelect(taskItems, allItemSelected, selectedTabIndex, allTabIndex);
+                      widget.viewModel.handleAllSelect(taskItems, allItemSelected, selectedTabIndex, allTabIndex);
                   });
                   },
                   child: Text(
@@ -174,7 +203,7 @@ class _TaskView extends State<TaskView>  {
                   .map((entry) {
                     final index = entry.key;
                     final task = entry.value;
-  
+          
                     return _buildListItem(task, index);
                   }).toList(),
                 ),
@@ -208,13 +237,15 @@ class _TaskView extends State<TaskView>  {
       child: DefaultTextStyle(
         style: TextStyle(
           color: AppColors.subWhiteBackground,
+          fontFamily: 'textFont',
         ),
         child: Row(
           children: [
             GestureDetector(
               onTap: () {
                 setState(() {
-                  viewModel.handleUpdateStatus(task);
+                  widget.viewModel.handleUpdateStatus(task);
+                  task["selected"]? selectedCount++ : selectedCount-- ;
                 });
               },
               child: Container(
@@ -222,15 +253,20 @@ class _TaskView extends State<TaskView>  {
                 width: 24,
                 margin: EdgeInsets.only(right: 12),
                 decoration: BoxDecoration(
-                  color: AppColors.subWhiteBackground,
+                  // color: AppColors.subWhiteBackground,
+                  color: task["selected"]?Color.fromRGBO(255, 219, 77, 1) : AppColors.subWhiteBackground,
                   borderRadius: BorderRadius.circular(100),
+                  border: Border.all(
+                    width: 4,
+                    color: task["selected"]?Color.fromRGBO(255, 219, 77, 1) : AppColors.subWhiteBackground,
+                  )
                 ),
-                child:task["status"] == 2
+                child: task["status"] == 1 || task["status"] == 2 || task["selected"]
                 ? SizedBox(
                     child: Image.asset(
                       height: 20,
                         width: 20,
-                      'images/check.png',
+                      'images/task/check.webp',
                       fit: BoxFit.contain,
                     ),
                   )
@@ -274,7 +310,7 @@ class _TaskView extends State<TaskView>  {
                                     height: 16,
                                     width: 16,
                                     child: Image.asset(
-                                      'images/difficultyLevel.png',
+                                      'images/task/difficultyLevel.webp',
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -327,47 +363,48 @@ class _TaskView extends State<TaskView>  {
 
   // 承認待ちのウィジェット
   Widget _buildApprovalView() {
-    return Row(
-      children: [
-        DottedBorder(
-          color: AppColors.subWhiteBackground,
-          strokeWidth: 1.5,
-          dashPattern: [4, 6],
-          customPath: (size) {
-            return Path()
-              ..moveTo(0, 0)
-              ..lineTo(0, size.height);
-          },
-          child: SizedBox(
-            width: 1,
-            height: 48,
-            // height: double.infinity,
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          DottedBorder(
+            color: AppColors.subWhiteBackground,
+            strokeWidth: 1.5,
+            dashPattern: [4, 3],
+            customPath: (size) {
+              return Path()
+                ..moveTo(0, 0)
+                ..lineTo(0, size.height);
+            },
+            child: SizedBox(
+              width: 1,
+              height: double.infinity,
+            ),
           ),
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 8),
-          child: Column(
-            children: [
-              SizedBox(
-                child: Image.asset(
+
+          Container(
+            margin: EdgeInsets.only(left: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'images/task/approvalCamera.webp',
                   height: 24,
                   width: 24,
-                  'images/approvalCamera.png',
                   fit: BoxFit.contain,
                 ),
-              ),
-              Text(
-                "承認待機中",
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Color.fromRGBO(255, 219, 77, 1)
+
+                Text(
+                  "承認待機中",
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Color.fromRGBO(255, 219, 77, 1),
+                  ),
                 ),
-              ),
-              
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -466,6 +503,125 @@ class _TaskView extends State<TaskView>  {
           );
         }),
       ],
+    );
+  }
+
+  
+
+  // 選択中のアイテム数を表示
+  Widget _buildConfirmSelection() {
+    return Positioned(
+        bottom: 8,
+        left: 12,
+        right: 12,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(223, 230, 222, 1),
+            border: Border.all(
+              width: 2,
+              color: AppColors.edgew,
+            ),
+            borderRadius: BorderRadius.circular(5)
+          ),
+          child: DefaultTextStyle(
+            style: TextStyle(
+              fontSize: 12,
+              color: AppColors.edgew,
+              fontFamily: 'textFont',
+              fontWeight: FontWeight.w600,
+            ),
+            child: Container(
+              padding: EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 24,
+                            width: 24,
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 219, 77, 1),
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                width: 4,
+                                color: Color.fromRGBO(255, 219, 77, 1),
+                              )
+                            ),
+                            child: 
+                            SizedBox(
+                                child: Image.asset(
+                                  height: 20,
+                                    width: 20,
+                                  'images/task/check.webp',
+                                  fit: BoxFit.contain,
+                                ),
+                              )
+                          ),
+                          Text(
+                            "選択中",
+                          ),
+                        ]
+                      ),
+                      Text(
+                        "終了済みは除外されています",
+                        style: TextStyle(
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 12),
+                  Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: AppColors.edgew,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    child: Text(
+                      '選択を解除',
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 219, 77, 1),
+                    ),
+                    child: DottedBorder(
+                      color: AppColors.subWhiteBackground,
+                      strokeWidth: 1.5,
+                      dashPattern: [4, 3],
+                      customPath: (size) {
+                        return Path()
+                          // 上線
+                          ..moveTo(0, 0)
+                          ..lineTo(size.width, 0)
+                    
+                          // 下線
+                          ..moveTo(0, size.height)
+                          ..lineTo(size.width, size.height);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 2),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '選択を確定する ＞',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
     );
   }
 }

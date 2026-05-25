@@ -1,3 +1,4 @@
+import 'package:authbase_mobile/models/task_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,14 @@ class _AppState extends State<App> {
       case PageType.top:
         return const TopScreen();
       case PageType.task:
-        return const TaskScreen();
+        return TaskScreen(
+          taskInfo: TaskInfo(taskId: '', userId: '', taskName: '', tags: 0, difficultyLevel: 0, status: 0, startDate: '', endTime: '', imageId: '', advice: ''),
+          onTabSelected: (page) {
+            setState(() {
+              _currentPage = page;
+            });
+          },
+        );
       case PageType.friend:
         return FriendListScreen(
           onTabSelected: (page) {

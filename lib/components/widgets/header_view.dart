@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:authbase_mobile/components/colors.dart';
 import 'package:provider/provider.dart';
-import '../../views/top/top_view_model.dart';
 import '../extensions/life_state_layout.dart';
 import '../../../components/extensions/dirtLevelIcon.dart';
 import '../extensions/user_view_model.dart';
