@@ -210,7 +210,6 @@ class _TaskView extends State<TaskView>  {
                 ),
               ),
             ),
-            Container(),
           ],
         ),
       ),
