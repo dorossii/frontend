@@ -80,6 +80,7 @@ flutter:
     - images/chara/
     - images/trash/
     - images/task/
+    - images/splash/
   #   - images/a_dot_ham.jpeg
 
   fonts:
