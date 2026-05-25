@@ -1,3 +1,4 @@
+import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
 import 'package:flutter/material.dart';
 import 'task_view_model.dart';
@@ -45,16 +46,11 @@ class _TaskView extends State<TaskView>  {
 
 // テストデータ -----------------------------------
   List<Map<String, dynamic >> taskItems = [
-    {"tags": 0, "taskName": "皿洗いをする", "difficultyLevel": 2, "limitTime": "15:30:30", "advice": "綺麗に洗おうね", "status": 0, "selected": false},
-    {"tags": 1, "taskName": "使わなくなった服を捨てる", "difficultyLevel": 5, "limitTime": "15:30:37", "advice": "断捨離断捨離ぃーー！！", "status": 1, "selected": false},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "16:30:30", "advice": "ぐーるぐる", "status": 2, "selected": false},
-    {"tags": 4, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "15:00:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
-    {"tags": 3, "taskName": "洗濯物をまわす", "difficultyLevel": 5, "limitTime": "8:30:30", "advice": "ぐーるぐる", "status": 1, "selected": false},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
-    {"tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "2:32:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
+    {"taskId": "task_001","tags": 0, "taskName": "皿洗いをする", "difficultyLevel": 2, "limitTime": "15:30:30", "advice": "綺麗に洗おうね", "status": 0, "selected": false},
+    {"taskId": "task_002","tags": 1, "taskName": "使わなくなった服を捨てる", "difficultyLevel": 5, "limitTime": "15:30:37", "advice": "断捨離断捨離ぃーー！！", "status": 1, "selected": false},
+    {"taskId": "task_003","tags": 2, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "16:30:30", "advice": "ぐーるぐる", "status": 2, "selected": false},
+    {"taskId": "task_004","tags": 4, "taskName": "洗濯物をまわす", "difficultyLevel": 4, "limitTime": "15:00:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
+    {"taskId": "task_005","tags": 3, "taskName": "洗濯物をまわす", "difficultyLevel": 5, "limitTime": "8:30:30", "advice": "ぐーるぐる", "status": 0, "selected": false},
   ];
 // ----------------------------------------------
 
@@ -598,30 +594,42 @@ class _TaskView extends State<TaskView>  {
                     ),
                   ),
                   SizedBox(width: 12),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 219, 77, 1),
-                    ),
-                    child: DottedBorder(
-                      color: AppColors.subWhiteBackground,
-                      strokeWidth: 1.5,
-                      dashPattern: [4, 3],
-                      customPath: (size) {
-                        return Path()
-                          // 上線
-                          ..moveTo(0, 0)
-                          ..lineTo(size.width, 0)
-                    
-                          // 下線
-                          ..moveTo(0, size.height)
-                          ..lineTo(size.width, size.height);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 2),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '選択を確定する ＞',
+                  GestureDetector(
+                    onTap: () async {
+                      /// タスク更新
+                      await TaskService().updateTaskStatus(
+                        taskId: 3,
+                        status: 'complete',
+                      );
+                      setState(() {
+                        
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 219, 77, 1),
+                      ),
+                      child: DottedBorder(
+                        color: AppColors.subWhiteBackground,
+                        strokeWidth: 1.5,
+                        dashPattern: [4, 3],
+                        customPath: (size) {
+                          return Path()
+                            // 上線
+                            ..moveTo(0, 0)
+                            ..lineTo(size.width, 0)
+                      
+                            // 下線
+                            ..moveTo(0, size.height)
+                            ..lineTo(size.width, size.height);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 2),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '選択を確定する ＞',
+                          ),
                         ),
                       ),
                     ),
