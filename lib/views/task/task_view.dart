@@ -218,145 +218,153 @@ class _TaskView extends State<TaskView>  {
 
   // リストのアイテム
   Widget _buildListItem(Map<String, dynamic> task, int index) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 4 / 5,
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      margin: EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        // color: AppColors.edgew,
-        color: task["status"] == 2 ? AppColors.edgew.withOpacity(0.3) : AppColors.edgew,
-        borderRadius: BorderRadius.circular(2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black38,
-            offset: Offset(0, 3),
-            blurRadius: 5,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
-      child: DefaultTextStyle(
-        style: TextStyle(
-          color: AppColors.subWhiteBackground,
-          fontFamily: 'textFont',
-        ),
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  widget.viewModel.handleUpdateStatus(task);
-                  task["selected"]? selectedCount++ : selectedCount-- ;
-                });
-              },
-              child: Container(
-                height: 24,
-                width: 24,
-                margin: EdgeInsets.only(right: 12),
-                decoration: BoxDecoration(
-                  // color: AppColors.subWhiteBackground,
-                  color: task["selected"]?Color.fromRGBO(255, 219, 77, 1) : AppColors.subWhiteBackground,
-                  borderRadius: BorderRadius.circular(100),
-                  border: Border.all(
-                    width: 4,
-                    color: task["selected"]?Color.fromRGBO(255, 219, 77, 1) : AppColors.subWhiteBackground,
-                  )
-                ),
-                child: task["status"] == 1 || task["status"] == 2 || task["selected"]
-                ? SizedBox(
-                    child: Image.asset(
-                      height: 20,
-                        width: 20,
-                      'images/task/check.webp',
-                      fit: BoxFit.contain,
-                    ),
-                  )
-                : null,
-              ),
+    return InkWell(
+
+      // タスク詳細を表示
+      onTap: () async {
+        _showModalBottomSheet();
+      },
+
+      child: Container(
+        width: MediaQuery.of(context).size.width * 4 / 5,
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        margin: EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          // color: AppColors.edgew,
+          color: task["status"] == 2 ? AppColors.edgew.withOpacity(0.3) : AppColors.edgew,
+          borderRadius: BorderRadius.circular(2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black38,
+              offset: Offset(0, 3),
+              blurRadius: 5,
+              spreadRadius: 1,
             ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(top: 8, bottom: 4),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Text(
-                          task["taskName"],
-                          style: TextStyle(
-                            fontSize: 14
-                          ),
-                        ),
-                
-                        if (task["status"] == 2)
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            top: 10,
-                            child: Container(
-                              height: 2,
-                              color: Colors.black45,
+          ],
+        ),
+        child: DefaultTextStyle(
+          style: TextStyle(
+            color: AppColors.subWhiteBackground,
+            fontFamily: 'textFont',
+          ),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    widget.viewModel.handleUpdateStatus(task);
+                    task["selected"]? selectedCount++ : selectedCount-- ;
+                  });
+                },
+                child: Container(
+                  height: 24,
+                  width: 24,
+                  margin: EdgeInsets.only(right: 12),
+                  decoration: BoxDecoration(
+                    // color: AppColors.subWhiteBackground,
+                    color: task["selected"]?Color.fromRGBO(255, 219, 77, 1) : AppColors.subWhiteBackground,
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(
+                      width: 4,
+                      color: task["selected"]?Color.fromRGBO(255, 219, 77, 1) : AppColors.subWhiteBackground,
+                    )
+                  ),
+                  child: task["status"] == 1 || task["status"] == 2 || task["selected"]
+                  ? SizedBox(
+                      child: Image.asset(
+                        height: 20,
+                          width: 20,
+                        'images/task/check.webp',
+                        fit: BoxFit.contain,
+                      ),
+                    )
+                  : null,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(top: 8, bottom: 4),
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          Text(
+                            task["taskName"],
+                            style: TextStyle(
+                              fontSize: 14
                             ),
                           ),
-                      ],
-                    ),
-                    Stack(
-                      children: [
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                for (int i = 0; i < (task["difficultyLevel"] as int); i++)
-                                  SizedBox(
-                                    height: 16,
-                                    width: 16,
-                                    child: Image.asset(
-                                      'images/task/difficultyLevel.webp',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            Spacer(),
-                            Container(
-                              margin: EdgeInsets.only(right: 8),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "残り時間：",
-                                    style: TextStyle(
-                                      fontSize: 12
-                                    ),
-                                  ),
-                                  Text(
-                                    task["limitTime"],
-                                    style: TextStyle(
-                                      fontSize: 10
-                                    ),
-                                  ),
-                                ],
+                  
+                          if (task["status"] == 2)
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              top: 10,
+                              child: Container(
+                                height: 2,
+                                color: Colors.black45,
                               ),
                             ),
-                          ],
-                        ),
-                        if (task["status"] == 2)
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            top: 10,
-                            child: Container(
-                              height: 2,
-                              color: Colors.black45,
-                            ),
+                        ],
+                      ),
+                      Stack(
+                        children: [
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  for (int i = 0; i < (task["difficultyLevel"] as int); i++)
+                                    SizedBox(
+                                      height: 16,
+                                      width: 16,
+                                      child: Image.asset(
+                                        'images/task/difficultyLevel.webp',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              Spacer(),
+                              Container(
+                                margin: EdgeInsets.only(right: 8),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "残り時間：",
+                                      style: TextStyle(
+                                        fontSize: 12
+                                      ),
+                                    ),
+                                    Text(
+                                      task["limitTime"],
+                                      style: TextStyle(
+                                        fontSize: 10
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                      ],
-                    ),
-                  ],
+                          if (task["status"] == 2)
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              top: 10,
+                              child: Container(
+                                height: 2,
+                                color: Colors.black45,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            if(task["status"] == 1) _buildApprovalView(), 
-          ],
+              if(task["status"] == 1) _buildApprovalView(), 
+            ],
+          ),
         ),
       ),
     );
@@ -623,6 +631,28 @@ class _TaskView extends State<TaskView>  {
             ),
           ),
         ),
+    );
+  }
+
+  // 未完
+  void _showModalBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 150,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text('おはよう'),
+                Text('こんにちは'),
+                Text('こんばんは'),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
