@@ -19,5 +19,7 @@ class MockApiResponse {
     // Friend
     // フレンドリストの取得
     static const String friendListEndpoint = '/app/friend';
+    // タスクリストの取得
+    static const String taskListEndpoint = '/app/user/task';
 
 }
