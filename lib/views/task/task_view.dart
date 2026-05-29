@@ -651,12 +651,6 @@ class _TaskView extends State<TaskView>  {
   return showDialog(
     context: context,
     builder: (context) {
-
-      // 選択済みのタスク名を取ってきて格納
-      final selectedTaskNames = taskItems
-        .where((item) => item["selected"])
-        .map((item) => item["taskName"])
-        .toList();
       
       return StatefulBuilder(
         builder: (context, setModalState) {
