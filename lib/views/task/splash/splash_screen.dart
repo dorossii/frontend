@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../../components/colors.dart';
-import '../../app.dart';
+import '../../mock/mock_top_view.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -108,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const App()),
+        MaterialPageRoute(builder: (_) => const MockTopView()),
       );
     });
   }

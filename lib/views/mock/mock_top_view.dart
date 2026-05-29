@@ -5,22 +5,34 @@ import 'package:authbase_mobile/components/colors.dart';
 import '../../components/extensions/life_state_layout.dart';
 import '../../components/extensions/trash_layer_type.dart';
 import '../../components/extensions/user_view_model.dart';
+import '../../components/models/status.dart';
+import '../../components/widgets/app_footer.dart';
+import '../../components/widgets/app_header.dart';
 import '../../components/widgets/character/character_layer.dart';
 import '../../components/widgets/trashs/trash_layer.dart';
+import '../app.dart';
 
 
-class TopView extends StatelessWidget {
-  const TopView({super.key});
+class MockTopView extends StatelessWidget {
+  const MockTopView({super.key});
 
   @override
   Widget build(BuildContext context) {
 
     final vm = context.watch<UserViewModel>();
 
-    final theme = vm.currentState.theme;
+    final theme =  LifeState.danger.theme;
     final user = vm.userStatus;
 
     return Scaffold(
+      appBar: AppHeader(currentPage: PageType.top),
+
+      bottomNavigationBar: AppFooter(
+        currentPage: PageType.top,
+        onTap: (page) {
+          Navigator.pop(context);
+        },
+      ),
       body: vm.isLoading
           ? const Center(child: CircularProgressIndicator())
           : Stack(
