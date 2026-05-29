@@ -1,5 +1,6 @@
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
+import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'task_view_model.dart';
 import '../../components/colors.dart';
@@ -31,6 +32,7 @@ class _TaskView extends State<TaskView>  {
   int selectSortIndex = 0;     // 選択されている並び替えのインデックス
   int selectedCount = 0;       // 選択されているアイテムの数
   bool allItemSelected = false;  // まとめて選択がされているか判定する変数
+  List<String>selectedTaskId = [];  // 選択されたアイテムのID
   int tabHeight = 36;           // タブの高さ
 
   // タブの配列
@@ -218,7 +220,7 @@ class _TaskView extends State<TaskView>  {
 
       // タスク詳細を表示
       onTap: () async {
-        _showModalBottomSheet();
+        // _showModalBottomSheet();
       },
 
       child: Container(
@@ -248,8 +250,10 @@ class _TaskView extends State<TaskView>  {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    widget.viewModel.handleUpdateStatus(task);
+                    widget.viewModel.handleUpdateStatus(task);  // 選択を確定するボタン表示
                     task["selected"]? selectedCount++ : selectedCount-- ;
+
+                    selectedTaskId.add(task["taskId"]);
                   });
                 },
                 child: Container(
@@ -596,14 +600,13 @@ class _TaskView extends State<TaskView>  {
                   SizedBox(width: 12),
                   GestureDetector(
                     onTap: () async {
-                      /// タスク更新
+                      // タスク更新
                       await TaskService().updateTaskStatus(
                         taskId: 3,
                         status: 'complete',
                       );
-                      setState(() {
-                        
-                      });
+                      // 完了確認モーダルを開く
+                      await _buildCompleteModal();
                     },
                     child: Container(
                       padding: EdgeInsets.all(5),
@@ -642,25 +645,148 @@ class _TaskView extends State<TaskView>  {
     );
   }
 
-  // 未完
-  void _showModalBottomSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 150,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text('おはよう'),
-                Text('こんにちは'),
-                Text('こんばんは'),
+  // タスク完了選択時のモーダル
+  Future<bool?> _buildCompleteModal() async {
+
+  return showDialog(
+    context: context,
+    builder: (context) {
+
+      // 選択済みのタスク名を取ってきて格納
+      final selectedTaskNames = taskItems
+        .where((item) => item["selected"])
+        .map((item) => item["taskName"])
+        .toList();
+      
+      return StatefulBuilder(
+        builder: (context, setModalState) {
+          return DefaultTextStyle(
+            style: TextStyle(
+              fontFamily: 'textFont',
+              color: AppColors.text,
+            ),
+            child: AlertDialog(
+              actionsAlignment: MainAxisAlignment.center,
+              backgroundColor: AppColors.subWhiteBackground,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              contentPadding: EdgeInsets.only(
+                top: 4,
+              ),
+
+              title: Center(
+                child: Text(
+                  // 一件のみ選択した場合はタスク名を表示
+                  (selectedTaskId.length == 1)
+                      ? taskItems.firstWhere(
+                          (task) => task["taskId"] == selectedTaskId[0],
+                        )["taskName"]
+                      : "まとめて選択",
+                  style: TextStyle(
+                    fontFamily: 'textFont',
+                    color: AppColors.text,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "タスクを完了しますか？",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'textFont',
+                      color: AppColors.text,
+                      fontSize: 12,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                ],
+              ),
+
+              actions: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Container(
+                  height: 32,
+                  width: 104,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColors.subBackground,
+                    borderRadius: BorderRadius.circular(3)
+                  ),
+                  
+                  child: Text(
+                    "キャンセル",
+                    style: TextStyle(
+                      fontFamily: 'textFont',
+                      fontSize: 16,
+                    ),
+                  ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SplashScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 32,
+                    width: 104,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 219, 77, 1),
+                      borderRadius: BorderRadius.circular(3)
+                    ),
+
+                    child: Text(
+                      "完了",
+                      style: TextStyle(
+                        fontFamily: 'textFont',
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        );
-      },
-    );
-  }
+          );
+        },
+      );
+    },
+  );
+}
+
+  // 未完
+  // void _showModalBottomSheet() {
+  //   showModalBottomSheet<void>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         height: 150,
+  //         child: Center(
+  //           child: Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: const [
+  //               Text('おはよう'),
+  //               Text('こんにちは'),
+  //               Text('こんばんは'),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }
