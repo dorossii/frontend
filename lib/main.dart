@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'components/extensions/user_view_model.dart';
 import 'models/user_info.dart';
 import 'views/login/login_screen.dart';
 import 'views/app.dart';
@@ -13,7 +15,14 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserViewModel()..initialize()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

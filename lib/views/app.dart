@@ -1,6 +1,5 @@
 import 'package:authbase_mobile/models/task_info.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '/views/login/login_screen.dart';
 import '/views/top/top_screen.dart';
@@ -13,7 +12,6 @@ import '/services/auth_manager.dart';
 import '../components/widgets/app_header.dart';
 import '../components/widgets/app_footer.dart';
 
-import '../components/extensions/user_view_model.dart';
 
 enum PageType { top, task, friend, setting }
 
@@ -34,7 +32,18 @@ class _AppState extends State<App> {
         return const TopScreen();
       case PageType.task:
         return TaskScreen(
-          taskInfo: TaskInfo(taskId: '', userId: '', taskName: '', tags: 0, difficultyLevel: 0, status: 0, startDate: '', endTime: '', imageId: '', advice: ''),
+          taskInfo: TaskInfo(
+            taskId: '',
+            userId: '',
+            taskName: '',
+            tags: 0,
+            difficultyLevel: 0,
+            status: 0,
+            startDate: '',
+            endTime: '',
+            imageId: '',
+            advice: '',
+          ),
           onTabSelected: (page) {
             setState(() {
               _currentPage = page;
@@ -71,28 +80,18 @@ class _AppState extends State<App> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserViewModel()..initialize(),
-
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-
-        home: Scaffold(
-          appBar: AppHeader(currentPage: _currentPage),
-
-          // 中身だけ変わる
-          body: _getScreen(),
-
-          bottomNavigationBar: AppFooter(
-            currentPage: _currentPage,
-            onTap: (page) {
-              setState(() {
-                _currentPage = page;
-              });
-            },
-          ),
-        ),
+    return Scaffold(
+      appBar: AppHeader(currentPage: _currentPage),
+      body: _getScreen(),
+      bottomNavigationBar: AppFooter(
+        currentPage: _currentPage,
+        onTap: (page) {
+          setState(() {
+            _currentPage = page;
+          });
+        },
       ),
     );
   }
