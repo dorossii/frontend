@@ -6,16 +6,15 @@ import '../../components/extensions/life_state_layout.dart';
 import '../../components/extensions/trash_layer_type.dart';
 import '../../components/extensions/user_view_model.dart';
 import '../../components/widgets/character/character_layer.dart';
-import '../../components/widgets/rescue/rescue_view.dart';
+import '../component/rescue/rescue_view.dart';
 import '../../components/widgets/trashs/trash_layer.dart';
-
+import '../component/rescue/rescue_view_model.dart';
 
 class TopView extends StatelessWidget {
   const TopView({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final vm = context.watch<UserViewModel>();
 
     final theme = vm.currentState.theme;
@@ -82,7 +81,8 @@ class TopView extends StatelessWidget {
                             ),
                           ),
                           const Spacer(),
-                          _buildRescueButton(),
+
+                          _buildRescueButton(context),
                         ],
                       ),
                     ),
@@ -228,26 +228,20 @@ class TopView extends StatelessWidget {
   }
 
   // 友達救済ボタンのウィジェット
-  Widget _buildRescueButton() {
+  Widget _buildRescueButton(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-    try {
-      print("レスキューがタップされました！");
+        final friends = await RescueViewModel().getFriends();
 
-      // GET通信でフレンド取得
-      final friends = await RescueApi.fetchFriends();
+        final selected = await RescueView.showRescueFriendDialog(
+          context,
+          friends,
+        );
 
-      // ダイアログ表示（複数選択）
-      final selected = await RescueView.showRescueFriendDialog(
-        context,
-        friends,
-      );
-
-      // 結果
-      print("選ばれたフレンド: $selected");
-    } catch (e) {
-      print("エラー: $e");
-    }
+        if (selected != null) {
+          print(selected);
+        }
+      },
 
       child: SizedBox(
         width: 110,

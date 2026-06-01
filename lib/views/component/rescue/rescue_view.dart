@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../models/friend_rescue.dart';
 
 // レスキューのポップアップを表示するクラス
-
 class RescueView {
   static Future<List<RescueFriend>?> showRescueFriendDialog(
     BuildContext context,

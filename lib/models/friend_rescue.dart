@@ -1,9 +1,9 @@
 // レスキューが必要なフレンドのモデル
 class RescueFriend {
-  final String id;
-  final String name;  
-  final String icon;
-  final String background;
+  final String id;          // フレンドのID
+  final String name;        // フレンドの名前
+  final String icon;        // フレンドのアイコンURL
+  final String background;  // フレンドの背景URL
   RescueFriend({
     required this.id,
     required this.name,
