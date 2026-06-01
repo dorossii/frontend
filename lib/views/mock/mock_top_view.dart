@@ -21,7 +21,7 @@ class MockTopView extends StatelessWidget {
 
     final vm = context.watch<UserViewModel>();
 
-    final theme =  LifeState.danger.theme;
+    final theme = LifeState.dirty.theme;
     final user = vm.userStatus;
 
     return Scaffold(
