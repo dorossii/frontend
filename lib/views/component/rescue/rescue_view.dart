@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../components/colors.dart';
 import '../../../models/friend_rescue.dart';
 
 // レスキューのポップアップを表示するクラス
@@ -15,7 +16,27 @@ class RescueView {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text("誰をレスキューしますか？"),
+              title: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "誰をレスキューしますか？",
+                      style: TextStyle(
+                        fontFamily: 'textFont',
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.text,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.close, color: AppColors.text),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
               content: SizedBox(
                 width: double.maxFinite,
                 child: ListView(
@@ -24,7 +45,25 @@ class RescueView {
                     final isSelected = selected.contains(friend.id);
 
                     return CheckboxListTile(
-                      title: Text(friend.name),
+                      secondary: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: AssetImage(
+                          'images/icons/${friend.icon}.png',
+                        ),
+                        backgroundColor: AppColors.getBackgroundColor(
+                          friend.background,
+                        ),
+                      ),
+
+                      title: Text(
+                        friend.name,
+                        style: const TextStyle(
+                          fontFamily: 'textFont',
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.text,
+                          fontSize: 14,
+                        ),
+                      ),
                       value: isSelected,
                       onChanged: (value) {
                         setState(() {
@@ -40,10 +79,6 @@ class RescueView {
                 ),
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("キャンセル"),
-                ),
                 ElevatedButton(
                   onPressed: () {
                     final result = rescueFriends
@@ -52,7 +87,15 @@ class RescueView {
 
                     Navigator.pop(context, result);
                   },
-                  child: const Text("決定"),
+                  child: const Text(
+                    "レスキュー実行",
+                    style: TextStyle(
+                      fontFamily: 'textFont',
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.text,
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
               ],
             );
