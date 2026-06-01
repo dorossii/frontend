@@ -13,7 +13,7 @@ class RescueFriend {
 
   factory RescueFriend.fromJson(Map<String, dynamic> json) {
     return RescueFriend(
-      id: json['id'] ?? '',
+      id: json['user_id'] ?? '',
       name: json['name'] ?? '',
       icon: json['icon'] ?? '',
       background: json['background'] ?? '',
@@ -22,7 +22,7 @@ class RescueFriend {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'user_id': id,
       'name': name,
       'icon': icon,
       'background': background,

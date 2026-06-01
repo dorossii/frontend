@@ -15,7 +15,7 @@ class RescueView {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text("助けるフレンドを選択"),
+              title: const Text("誰をレスキューしますか？"),
               content: SizedBox(
                 width: double.maxFinite,
                 child: ListView(
