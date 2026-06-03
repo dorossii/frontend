@@ -19,7 +19,7 @@ class RescueView {
               backgroundColor: AppColors.subWhiteBackground,
               titlePadding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(color: AppColors.edgew, width: 3),
               ),
               title: Container(
@@ -34,100 +34,156 @@ class RescueView {
                     bottom: BorderSide(color: AppColors.edgew, width: 2),
                   ),
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
                   ),
                 ),
-                child: Row(
-                  children: [
-                    const Expanded(
-                      child: Text(
-                        "誰をレスキューしますか？",
-                        style: TextStyle(
-                          fontFamily: 'textFont',
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
-                          fontSize: 14,
+                child: SizedBox(
+                  height: 28,
+                  child: Stack(
+                    children: [
+                      const Center(
+                        child: Text(
+                          "誰をレスキューしますか？",
+                          style: TextStyle(
+                            fontFamily: 'textFont',
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.text,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      icon: const Icon(Icons.close, color: AppColors.text),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4, right: 4),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            icon: const Icon(
+                              Icons.close,
+                              color: AppColors.text,
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               content: SizedBox(
                 width: double.maxFinite,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: rescueFriends.map((friend) {
-                    final isSelected = selected.contains(friend.id);
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
 
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
+                  children: [
+                    Image.asset(
+                      'images/chara/zonbi.webp',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.contain,
+                    ),
 
-                      leading: Checkbox(
-                        value: isSelected,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == true) {
-                              selected.add(friend.id);
-                            } else {
-                              selected.remove(friend.id);
-                            }
-                          });
-                        },
+                    const SizedBox(height: 6),
+
+                    Flexible(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: rescueFriends.map((friend) {
+                          final isSelected = selected.contains(friend.id);
+
+                          return ListTile(
+                            contentPadding: EdgeInsets.zero,
+
+                            leading: Checkbox(
+                              value: isSelected,
+                              activeColor: AppColors.btnBackground,
+                              checkColor: AppColors.subWhiteBackground,
+
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value == true) {
+                                    selected.add(friend.id);
+                                  } else {
+                                    selected.remove(friend.id);
+                                  }
+                                });
+                              },
+                            ),
+                            title: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 14,
+                                  backgroundImage: AssetImage(
+                                    'images/icons/${friend.icon}.png',
+                                  ),
+                                  backgroundColor: AppColors.getBackgroundColor(
+                                    friend.background,
+                                  ),
+                                ),
+
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    friend.name,
+                                    style: const TextStyle(
+                                      fontFamily: 'textFont',
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.text,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
-                      title: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage(
-                              'images/icons/${friend.icon}.png',
-                            ),
-                            backgroundColor: AppColors.getBackgroundColor(
-                              friend.background,
-                            ),
-                          ),
-
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              friend.name,
-                              style: const TextStyle(
-                                fontFamily: 'textFont',
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.text,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                    ),
+                  ],
                 ),
               ),
+              actionsAlignment: MainAxisAlignment.center,
               actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    final result = rescueFriends
-                        .where((f) => selected.contains(f.id))
-                        .toList();
+                Center(
+                  child: SizedBox(
+                    width: 150,
+                    height: 45,
 
-                    Navigator.pop(context, result);
-                  },
-                  child: const Text(
-                    "レスキュー実行",
-                    style: TextStyle(
-                      fontFamily: 'textFont',
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.text,
-                      fontSize: 14,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.sub,
+
+                        foregroundColor: AppColors.text,
+
+                        elevation: 8,
+
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: const BorderSide(
+                            color: AppColors.edgew,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+
+                      onPressed: () {
+                        final result = rescueFriends
+                            .where((f) => selected.contains(f.id))
+                            .toList();
+
+                        Navigator.pop(context, result);
+                      },
+
+                      child: const Text(
+                        "レスキュー実行",
+                        style: TextStyle(
+                          fontFamily: 'textFont',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                   ),
                 ),
