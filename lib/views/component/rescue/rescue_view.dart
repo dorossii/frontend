@@ -67,36 +67,47 @@ class RescueView {
                   children: rescueFriends.map((friend) {
                     final isSelected = selected.contains(friend.id);
 
-                    return CheckboxListTile(
-                      secondary: CircleAvatar(
-                        radius: 20,
-                        backgroundImage: AssetImage(
-                          'images/icons/${friend.icon}.png',
-                        ),
-                        backgroundColor: AppColors.getBackgroundColor(
-                          friend.background,
-                        ),
-                      ),
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
 
-                      title: Text(
-                        friend.name,
-                        style: const TextStyle(
-                          fontFamily: 'textFont',
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
-                          fontSize: 14,
-                        ),
+                      leading: Checkbox(
+                        value: isSelected,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == true) {
+                              selected.add(friend.id);
+                            } else {
+                              selected.remove(friend.id);
+                            }
+                          });
+                        },
                       ),
-                      value: isSelected,
-                      onChanged: (value) {
-                        setState(() {
-                          if (value == true) {
-                            selected.add(friend.id);
-                          } else {
-                            selected.remove(friend.id);
-                          }
-                        });
-                      },
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundImage: AssetImage(
+                              'images/icons/${friend.icon}.png',
+                            ),
+                            backgroundColor: AppColors.getBackgroundColor(
+                              friend.background,
+                            ),
+                          ),
+
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              friend.name,
+                              style: const TextStyle(
+                                fontFamily: 'textFont',
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.text,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }).toList(),
                 ),
