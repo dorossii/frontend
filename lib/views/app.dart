@@ -34,7 +34,7 @@ class _AppState extends State<App> {
         return const TopScreen();
       case PageType.task:
         return TaskScreen(
-          taskInfo: TaskInfo(taskId: '', userId: '', taskName: '', tags: 0, difficultyLevel: 0, status: 0, startDate: '', endTime: '', imageId: '', advice: ''),
+          taskInfo: TaskInfo(taskId: '', userId: '', taskName: '', tags: 0, level: 0,description: "", status: 0, startDate: '', endTime: '', imageId: '', message: ''),
           onTabSelected: (page) {
             setState(() {
               _currentPage = page;

@@ -43,7 +43,7 @@ class TaskService {
   /// タスク情報更新
   Future<void> updateTaskStatus({
     required int taskId,
-    required String status,
+    // required String status,
     // required String jwtToken,
   }) async {
     /// PUT
