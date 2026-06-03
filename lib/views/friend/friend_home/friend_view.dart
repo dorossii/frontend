@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:authbase_mobile/components/colors.dart';
+import '../../component/rescue/rescue_view.dart';
+import '../../component/rescue/rescue_view_model.dart';
 import 'friend_view_model.dart';
 // ヘッダーフッター表示のために、PageTypeをインポート
 import '../../../components/widgets/app_header.dart';
@@ -130,7 +132,7 @@ class FriendHomeView extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    _buildRescueButton(),
+                    _buildRescueButton(context),
                   ],
                 ),
               ),
@@ -276,11 +278,19 @@ class FriendHomeView extends StatelessWidget {
   }
 
   // 友達救済ボタンのウィジェット
-  Widget _buildRescueButton() {
+  Widget _buildRescueButton(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // ボタンがタップされたときの処理をここに書く
-        print("レスキューがタップされました！");
+     onTap: () async {
+        final friends = await RescueViewModel().getFriends();
+
+        final selected = await RescueView.showRescueFriendDialog(
+          context,
+          friends,
+        );
+
+        if (selected != null) {
+          print(selected);
+        }
       },
       child: SizedBox(
         width: 110,
