@@ -29,7 +29,13 @@ class TaskService {
       /// JSON変換
       final jsonData = jsonDecode(response.body);
 
-      final List tasks = jsonData['tasks'];
+      print(jsonData);
+      print(jsonData.runtimeType);
+
+      // print("レスポンス: $jsonData");
+
+      // final List tasks = jsonData['tasks'];
+      final List<dynamic> tasks = jsonData;
 
       /// Modelへ変換
       return tasks.map((e) => TaskInfo.fromJson(e)).toList();
@@ -42,7 +48,7 @@ class TaskService {
 
   /// タスク情報更新
   Future<void> updateTaskStatus({
-    required int taskId,
+    required String taskId,
     // required String status,
     // required String jwtToken,
   }) async {

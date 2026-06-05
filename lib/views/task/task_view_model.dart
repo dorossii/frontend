@@ -1,13 +1,56 @@
 import 'package:authbase_mobile/models/task_info.dart';
+import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:flutter/rendering.dart';
 
 class TaskViewModel {
   final TaskInfo taskInfo;
 
+  // コンストラクタで受け取る
   TaskViewModel({required this.taskInfo});
 
+  /// API通信クラス
+  final TaskService _service = TaskService();
+
+  /// APIから取得したタスク情報
+  List<TaskInfo> taskList = [];
+
+  /// ローディング状態
+  bool isLoading = false;
+
+  /// 初期化
+  Future<void> initialize(void Function() onUpdate) async {
+    await fetcTaskInfo(onUpdate);
+  }
+
+  /// APIからフレンド情報取得
+  Future<void> fetcTaskInfo(void Function() onUpdate) async {
+    /// ローディング開始
+    isLoading = true;
+
+    /// UI更新
+    onUpdate();
+
+    try {
+      /// API通信
+      taskList = await _service.fetchTaskInfo();
+
+      print(taskList.length);
+
+    } catch (e, stackTrace) {
+      debugPrint(e.toString());
+      debugPrint(stackTrace.toString());
+    }
+
+    /// ローディング終了
+    isLoading = false;
+
+    /// UI更新
+    onUpdate();
+  }
+
+
   // 並び替え処理 --------------------
-  void handleSort(List<Map<String, dynamic>> taskItems, int selectSortIndex) {
+  void handleSort(taskItems, int selectSortIndex) {
     // 名前順
     if (selectSortIndex == 0) {
       taskItems.sort((b, a) => a["taskName"].compareTo(b["taskName"]));
@@ -44,7 +87,7 @@ class TaskViewModel {
 
   // まとめて選択の処理 -------------------
   int handleAllSelect(
-    List<Map<String, dynamic>> taskItems,
+    taskItems,
     bool allItemSelected,
     int selectedTabIndex,
     int allTabIndex,
@@ -70,7 +113,7 @@ class TaskViewModel {
   }
 
   int handleDeselect(
-    List<Map<String, dynamic>> taskItems,
+    taskItems,
     bool allItemSelected,
     selectedCount,
   ) {
@@ -86,13 +129,13 @@ class TaskViewModel {
   }
 
   // ステータスを変化する処理 -------------------
-  void handleUpdateStatus(task) {
+  void handleUpdateStatus(task, index, taskSelectedBool) {
     // 選択中と選択件数を更新する処理
-    if (task["status"] == 0) {
-      if (task["selected"]) {
-        task["selected"] = false;
+    if (task.status == 0) {
+      if (taskSelectedBool[index]) {
+        taskSelectedBool[index] = false;
       } else {
-        task["selected"] = true;
+        taskSelectedBool[index] = true;
       }
     }
     // if(task["status"] == 1){
@@ -104,6 +147,4 @@ class TaskViewModel {
     //   task["status"] = 0;
     // }
   }
-
-  void initialize(Null Function() param0) {}
 }

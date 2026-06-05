@@ -1,3 +1,4 @@
+import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
 import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
@@ -18,7 +19,7 @@ class TaskView extends StatefulWidget {
   });
 
   @override
-  _TaskView createState() => _TaskView();
+  State<TaskView> createState() => _TaskView();
 }
 
 class _TaskView extends State<TaskView> {
@@ -28,7 +29,17 @@ class _TaskView extends State<TaskView> {
 
     widget.viewModel.initialize(() {
       // API取得後UI更新
-      setState(() {});
+      setState(() {
+
+        if (taskSelectedBool.isEmpty &&
+            widget.viewModel.taskList.isNotEmpty) {
+
+          taskSelectedBool = List.filled(
+            widget.viewModel.taskList.length,
+            false,
+          );
+        }
+      });
     });
   }
 
@@ -39,6 +50,8 @@ class _TaskView extends State<TaskView> {
   List<String> selectedTaskId = []; // 選択されたアイテムのID
   int tabHeight = 36; // タブの高さ
 
+  List<bool> taskSelectedBool = [];
+
   // タブの配列
   static const category = ["掃除", "洗濯", "料理", "ゴミ捨て"];
   int allTabIndex = 100; // すべてのタブを選択する際のindex
@@ -47,63 +60,66 @@ class _TaskView extends State<TaskView> {
   static const sortCategorys = ["タイトル順", "期限順", "ポイント順"];
 
   // テストデータ -----------------------------------
-  List<Map<String, dynamic>> taskItems = [
-    {
-      "taskId": "task_001",
-      "tags": 0,
-      "taskName": "皿洗いをする",
-      "level": 2,
-      "limitTime": "15:30:30",
-      "advice": "綺麗に洗おうね",
-      "status": 0,
-      "selected": false,
-      "massage": "message",
-    },
-    {
-      "taskId": "task_002",
-      "tags": 1,
-      "taskName": "使わなくなった服を捨てる",
-      "level": 5,
-      "limitTime": "15:30:37",
-      "advice": "断捨離断捨離ぃーー！！",
-      "status": 1,
-      "selected": false,
-      "massage": "message",
-    },
-    {
-      "taskId": "task_003",
-      "tags": 2,
-      "taskName": "洗濯物をまわす",
-      "level": 4,
-      "limitTime": "16:30:30",
-      "advice": "ぐーるぐる",
-      "status": 2,
-      "selected": false,
-      "massage": "message",
-    },
-    {
-      "taskId": "task_004",
-      "tags": 4,
-      "taskName": "洗濯物をまわす",
-      "level": 4,
-      "limitTime": "15:00:30",
-      "advice": "ぐーるぐる",
-      "status": 0,
-      "selected": false,
-      "massage": "message",
-    },
-    {
-      "taskId": "task_005",
-      "tags": 3,
-      "taskName": "洗濯物をまわす",
-      "level": 5,
-      "limitTime": "8:30:30",
-      "advice": "ぐーるぐる",
-      "status": 0,
-      "selected": false,
-      "massage": "message",
-    },
-  ];
+  // List<TaskInfo> taskItems = widget.viewModel.taskList;
+  // List<Map<String, dynamic>> taskItems = [
+  //   {
+  //     "taskId": "task_001",
+  //     "tags": 0,
+  //     "taskName": "皿洗いをする",
+  //     "level": 2,
+  //     "limitTime": "15:30:30",
+  //     "advice": "綺麗に洗おうね",
+  //     "status": 0,
+  //     "selected": false,
+  //     "massage": "message",
+  //   },
+  //   {
+  //     "taskId": "task_002",
+  //     "tags": 1,
+  //     "taskName": "使わなくなった服を捨てる",
+  //     "level": 5,
+  //     "limitTime": "15:30:37",
+  //     "advice": "断捨離断捨離ぃーー！！",
+  //     "status": 1,
+  //     "selected": false,
+  //     "massage": "message",
+  //   },
+  //   {
+  //     "taskId": "task_003",
+  //     "tags": 2,
+  //     "taskName": "洗濯物をまわす",
+  //     "level": 4,
+  //     "limitTime": "16:30:30",
+  //     "advice": "ぐーるぐる",
+  //     "status": 2,
+  //     "selected": false,
+  //     "massage": "message",
+  //   },
+  //   {
+  //     "taskId": "task_004",
+  //     "tags": 4,
+  //     "taskName": "洗濯物をまわす",
+  //     "level": 4,
+  //     "limitTime": "15:00:30",
+  //     "advice": "ぐーるぐる",
+  //     "status": 0,
+  //     "selected": false,
+  //     "massage": "message",
+  //   },
+  //   {
+  //     "taskId": "task_005",
+  //     "tags": 3,
+  //     "taskName": "洗濯物をまわす",
+  //     "level": 5,
+  //     "limitTime": "8:30:30",
+  //     "advice": "ぐーるぐる",
+  //     "status": 0,
+  //     "selected": false,
+  //     "massage": "message",
+  //   },
+  // ];
+
+
   // ----------------------------------------------
 
   @override
@@ -165,11 +181,12 @@ class _TaskView extends State<TaskView> {
                       onTap: () {
                         setState(() {
                           selectSortIndex = index;
-                          if (index == selectSortIndex)
+                          if (index == selectSortIndex) {
                             widget.viewModel.handleSort(
-                              taskItems,
+                              widget.viewModel.taskList,
                               selectSortIndex,
                             );
+                          }
                         });
                       },
                       child: Container(
@@ -212,7 +229,7 @@ class _TaskView extends State<TaskView> {
                       allItemSelected = !allItemSelected;
                       // if (!allItemSelected) selectedCount = 0;
                       selectedCount = widget.viewModel.handleAllSelect(
-                        taskItems,
+                        widget.viewModel.taskList,
                         allItemSelected,
                         selectedTabIndex,
                         allTabIndex,
@@ -229,7 +246,7 @@ class _TaskView extends State<TaskView> {
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  children: taskItems
+                  children: widget.viewModel.taskList
                       .asMap()
                       .entries
                       .where((entry) {
@@ -238,7 +255,7 @@ class _TaskView extends State<TaskView> {
                           return true;
                         }
                         // カテゴリーごとの表示
-                        return entry.value["tags"] == selectedTabIndex;
+                        return entry.value.tag == selectedTabIndex;
                       })
                       .map((entry) {
                         final index = entry.key;
@@ -257,7 +274,7 @@ class _TaskView extends State<TaskView> {
   }
 
   // リストのアイテム
-  Widget _buildListItem(Map<String, dynamic> task, int index) {
+  Widget _buildListItem(task, int index) {
     return InkWell(
       // タスク詳細を表示
       onTap: () async {
@@ -270,7 +287,7 @@ class _TaskView extends State<TaskView> {
         margin: EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           // color: AppColors.edgew,
-          color: task["status"] == 2
+          color: task.status == 2
               ? AppColors.edgew.withOpacity(0.3)
               : AppColors.edgew,
           borderRadius: BorderRadius.circular(2),
@@ -293,8 +310,9 @@ class _TaskView extends State<TaskView> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    widget.viewModel.handleUpdateStatus(task); // 選択を確定するボタン表示
-                    task["selected"] ? selectedCount++ : selectedCount--;
+                    widget.viewModel.handleUpdateStatus(task, index, taskSelectedBool); // 選択を確定するボタン表示
+                    print("${index}: ${taskSelectedBool[index]}");
+                    taskSelectedBool[index] ? selectedCount++ : selectedCount--;
                     print("⌚️ selectedCount:${selectedCount}");
                     if (selectedCount == 0) allItemSelected = false;
                   });
@@ -305,21 +323,21 @@ class _TaskView extends State<TaskView> {
                   margin: EdgeInsets.only(right: 12),
                   decoration: BoxDecoration(
                     // color: AppColors.subWhiteBackground,
-                    color: task["selected"]
+                    color: taskSelectedBool[index]
                         ? Color.fromRGBO(255, 219, 77, 1)
                         : AppColors.subWhiteBackground,
                     borderRadius: BorderRadius.circular(100),
                     border: Border.all(
                       width: 4,
-                      color: task["selected"]
+                      color: taskSelectedBool[index]
                           ? Color.fromRGBO(255, 219, 77, 1)
                           : AppColors.subWhiteBackground,
                     ),
                   ),
                   child:
-                      task["status"] == 1 ||
-                          task["status"] == 2 ||
-                          task["selected"]
+                      task.status == 1 ||
+                          task.status == 2 ||
+                          taskSelectedBool[index]
                       ? SizedBox(
                           child: Image.asset(
                             height: 20,
@@ -339,11 +357,11 @@ class _TaskView extends State<TaskView> {
                       Stack(
                         children: [
                           Text(
-                            task["taskName"],
+                            task.taskName,
                             style: TextStyle(fontSize: 14),
                           ),
 
-                          if (task["status"] == 2)
+                          if (task.status == 2)
                             Positioned(
                               left: 0,
                               right: 0,
@@ -363,7 +381,7 @@ class _TaskView extends State<TaskView> {
                                 children: [
                                   for (
                                     int i = 0;
-                                    i < (task["level"] as int);
+                                    i < (task.level as int);
                                     i++
                                   )
                                     SizedBox(
@@ -385,16 +403,17 @@ class _TaskView extends State<TaskView> {
                                       "残り時間：",
                                       style: TextStyle(fontSize: 12),
                                     ),
-                                    Text(
-                                      task["limitTime"],
-                                      style: TextStyle(fontSize: 10),
-                                    ),
+                                    // ToDO
+                                    // Text(
+                                    //   task["limitTime"],
+                                    //   style: TextStyle(fontSize: 10),
+                                    // ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                          if (task["status"] == 2)
+                          if (task.status == 2)
                             Positioned(
                               left: 0,
                               right: 0,
@@ -410,7 +429,7 @@ class _TaskView extends State<TaskView> {
                   ),
                 ),
               ),
-              if (task["status"] == 1) _buildApprovalView(),
+              if (task.status == 1) _buildApprovalView(),
             ],
           ),
         ),
@@ -596,7 +615,7 @@ class _TaskView extends State<TaskView> {
                       // task["selected"] ? selectedCount++ : selectedCount--;
                       allItemSelected = false;
                       selectedCount = widget.viewModel.handleDeselect(
-                        taskItems,
+                        widget.viewModel.taskList,
                         allItemSelected,
                         selectedCount,
                       );
@@ -642,12 +661,12 @@ class _TaskView extends State<TaskView> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              taskItems.forEach((task) {
-                                if (task["selected"] == true) {
-                                  selectedTaskId.add(task["taskId"]);
-                                }
-                              });
-                              _buildCompleteModal();
+                              // taskItems.forEach((task) {
+                              //   if (task["selected"] == true) {
+                              //     selectedTaskId.add(task["taskId"]);
+                              //   }
+                              // });
+                              // _buildCompleteModal();
                             });
                           },
                           child: Text('選択を確定する ＞'),
@@ -685,9 +704,9 @@ class _TaskView extends State<TaskView> {
                   child: Text(
                     // 一件のみ選択した場合はタスク名を表示
                     (selectedTaskId.length == 1)
-                        ? taskItems.firstWhere(
-                            (task) => task["taskId"] == selectedTaskId[0],
-                          )["taskName"]
+                        ? widget.viewModel.taskList.firstWhere(
+                            (task) => task.taskId == selectedTaskId[0],
+                          ).taskName
                         : "まとめて選択",
                     style: TextStyle(
                       fontFamily: 'textFont',
@@ -737,7 +756,7 @@ class _TaskView extends State<TaskView> {
                   InkWell(
                     onTap: () async {
                       // タスク更新
-                      await TaskService().updateTaskStatus(taskId: 3);
+                      await TaskService().updateTaskStatus(taskId: "task_001");
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => SplashScreen()),
                       );
