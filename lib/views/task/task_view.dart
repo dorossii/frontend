@@ -661,12 +661,12 @@ class _TaskView extends State<TaskView> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              // taskItems.forEach((task) {
-                              //   if (task["selected"] == true) {
-                              //     selectedTaskId.add(task["taskId"]);
-                              //   }
-                              // });
-                              // _buildCompleteModal();
+                              widget.viewModel.taskList.asMap().forEach((int index, task) {
+                                if(taskSelectedBool[index] == true) {
+                                  selectedTaskId.add(task.taskId);
+                                }
+                              });
+                              _buildCompleteModal();
                             });
                           },
                           child: Text('選択を確定する ＞'),
