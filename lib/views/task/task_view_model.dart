@@ -86,46 +86,72 @@ class TaskViewModel {
   }
 
   // まとめて選択の処理 -------------------
-  int handleAllSelect(
-    taskItems,
-    bool allItemSelected,
-    int selectedTabIndex,
-    int allTabIndex,
-    int selectedContent,
+  // int handleAllSelect(
+  //   taskItems,
+  //   bool allItemSelected,
+  //   int selectedTabIndex,
+  //   int allTabIndex,
+  //   int selectedContent,
+  // ) {
+  //   int count = 0;
+
+  //   for (final item in taskItems) {
+  //     if (item["status"] != 0) continue;
+
+  //     // 選択中のステータスをtrueにする
+  //     if (selectedTabIndex == allTabIndex || item["tags"] == selectedTabIndex) {
+  //       item["selected"] = allItemSelected;
+
+  //       // まとめて選択をしている時に選択アイテム数を格納
+  //       if (allItemSelected) {
+  //         count++;
+  //       }
+  //     }
+  //   }
+
+  //   return count;
+  // }
+  
+
+  // 選択解除
+  void handleDeselect(
+    List<bool> taskSelectedBool,
   ) {
-    int count = 0;
-
-    for (final item in taskItems) {
-      if (item["status"] != 0) continue;
-
-      // 選択中のステータスをtrueにする
-      if (selectedTabIndex == allTabIndex || item["tags"] == selectedTabIndex) {
-        item["selected"] = allItemSelected;
-
-        // まとめて選択をしている時に選択アイテム数を格納
-        if (allItemSelected) {
-          count++;
-        }
-      }
+    for (int i = 0; i < taskSelectedBool.length; i++) {
+      taskSelectedBool[i] = false;
     }
-
-    return count;
   }
 
-  int handleDeselect(
-    taskItems,
-    bool allItemSelected,
-    selectedCount,
-  ) {
-    int count = selectedCount;
+  // 時間を取得
+  String handleGetLimit(int endTime) {
 
-    allItemSelected = false;
-    taskItems.forEach((item) {
-      item["selected"] = false;
-      count = 0;
-    });
+    // 秒単位で現在時間を取得する(Unixタイムスタンプ)
+    final int nowTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    print("📌nowTime: $nowTime");
 
-    return count;
+    // 
+    // int limitNum = endTime - nowTime;
+    int limitNum = nowTime - endTime;
+    print("🔋limitNum: $limitNum");
+
+    int day = limitNum ~/ (60 * 60 * 24);
+    
+
+    // if (limitNum >= 60 * 60 * 24) {
+    //     return '${limitNum.toString()}日前';
+    //   } else if (limitNum >= 60 * 60) {
+    //     return '${limitNum.toString()}時間前';
+    //   } else if (limitNum >= 60) {
+    //     return '${limitNum.toString()}分前';
+    //   } else {
+    //     return '$limitNum秒前';
+    //   } 86400
+
+
+
+    String limitTime = DateTime.fromMillisecondsSinceEpoch(limitNum * 1000).toLocal().toString();
+
+    return limitTime;
   }
 
   // ステータスを変化する処理 -------------------

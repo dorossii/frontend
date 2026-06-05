@@ -227,14 +227,12 @@ class _TaskView extends State<TaskView> {
                   onTap: () {
                     setState(() {
                       allItemSelected = !allItemSelected;
-                      // if (!allItemSelected) selectedCount = 0;
-                      selectedCount = widget.viewModel.handleAllSelect(
-                        widget.viewModel.taskList,
-                        allItemSelected,
-                        selectedTabIndex,
-                        allTabIndex,
-                        selectedCount,
-                      );
+                      for (int i = 0; i < taskSelectedBool.length; i++) {
+                        if(widget.viewModel.taskList[i].status == 0 && taskSelectedBool[i] == false) {
+                          taskSelectedBool[i] = true;
+                          selectedCount++;
+                        }
+                      }
                       print("⌚️ selectedCount:${selectedCount}");
                       print("⭕️ allItemSelected:${allItemSelected}");
                     });
@@ -614,10 +612,9 @@ class _TaskView extends State<TaskView> {
                     setState(() {
                       // task["selected"] ? selectedCount++ : selectedCount--;
                       allItemSelected = false;
-                      selectedCount = widget.viewModel.handleDeselect(
-                        widget.viewModel.taskList,
-                        allItemSelected,
-                        selectedCount,
+                      selectedCount = 0;
+                      widget.viewModel.handleDeselect(
+                        taskSelectedBool
                       );
                       print("⌚️ selectedCount:${selectedCount}");
                     });
