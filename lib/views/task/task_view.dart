@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
@@ -23,6 +25,8 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskView extends State<TaskView> {
+  Timer? _timer;
+  
   @override
   void initState() {
     super.initState();
@@ -40,8 +44,24 @@ class _TaskView extends State<TaskView> {
           );
         }
       });
+
+      _timer = Timer.periodic(
+      const Duration(minutes: 1),
+      (_) {
+        if (mounted) {
+          setState(() {});
+        }
+      },
+    );
     });
   }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
 
   int selectedTabIndex = 100; // 選択されているタブのインデックス
   int selectSortIndex = 0; // 選択されている並び替えのインデックス
@@ -227,14 +247,12 @@ class _TaskView extends State<TaskView> {
                   onTap: () {
                     setState(() {
                       allItemSelected = !allItemSelected;
-                      for (int i = 0; i < taskSelectedBool.length; i++) {
-                        if(widget.viewModel.taskList[i].status == 0 && taskSelectedBool[i] == false) {
-                          taskSelectedBool[i] = true;
-                          selectedCount++;
-                        }
-                      }
-                      print("⌚️ selectedCount:${selectedCount}");
-                      print("⭕️ allItemSelected:${allItemSelected}");
+
+                      widget.viewModel.handleSelectAll(
+                        taskSelectedBool,
+                        widget.viewModel.taskList,
+                        (count) => selectedCount += count,
+                      );
                     });
                   },
                   child: Text("まとめて選択", style: TextStyle(color: Colors.white)),
@@ -309,9 +327,7 @@ class _TaskView extends State<TaskView> {
                 onTap: () {
                   setState(() {
                     widget.viewModel.handleUpdateStatus(task, index, taskSelectedBool); // 選択を確定するボタン表示
-                    print("${index}: ${taskSelectedBool[index]}");
                     taskSelectedBool[index] ? selectedCount++ : selectedCount--;
-                    print("⌚️ selectedCount:${selectedCount}");
                     if (selectedCount == 0) allItemSelected = false;
                   });
                 },
@@ -357,6 +373,7 @@ class _TaskView extends State<TaskView> {
                           Text(
                             task.taskName,
                             style: TextStyle(fontSize: 14),
+                            overflow: TextOverflow.ellipsis,
                           ),
 
                           if (task.status == 2)
@@ -402,10 +419,11 @@ class _TaskView extends State<TaskView> {
                                       style: TextStyle(fontSize: 12),
                                     ),
                                     // ToDO
-                                    // Text(
-                                    //   task["limitTime"],
-                                    //   style: TextStyle(fontSize: 10),
-                                    // ),
+                                    Text(
+                                      widget.viewModel.handleGetLimit(task.endTime),
+                                      // "",
+                                      style: TextStyle(fontSize: 10),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -610,13 +628,9 @@ class _TaskView extends State<TaskView> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      // task["selected"] ? selectedCount++ : selectedCount--;
                       allItemSelected = false;
                       selectedCount = 0;
-                      widget.viewModel.handleDeselect(
-                        taskSelectedBool
-                      );
-                      print("⌚️ selectedCount:${selectedCount}");
+                      widget.viewModel.handleDeselect( taskSelectedBool );
                     });
                   },
                   child: Container(

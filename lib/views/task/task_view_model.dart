@@ -34,8 +34,6 @@ class TaskViewModel {
       /// API通信
       taskList = await _service.fetchTaskInfo();
 
-      print(taskList.length);
-
     } catch (e, stackTrace) {
       debugPrint(e.toString());
       debugPrint(stackTrace.toString());
@@ -86,36 +84,26 @@ class TaskViewModel {
   }
 
   // まとめて選択の処理 -------------------
-  // int handleAllSelect(
-  //   taskItems,
-  //   bool allItemSelected,
-  //   int selectedTabIndex,
-  //   int allTabIndex,
-  //   int selectedContent,
-  // ) {
-  //   int count = 0;
+  void handleSelectAll(
+    List<bool> taskSelectedBool,
+    List<TaskInfo> taskList,
+    Function(int) updateSelectedCount,
+  ) {
+    int count = 0;
 
-  //   for (final item in taskItems) {
-  //     if (item["status"] != 0) continue;
+    for (int i = 0; i < taskSelectedBool.length; i++) {
+      if (taskList[i].status == 0 && !taskSelectedBool[i]) {
+        taskSelectedBool[i] = true;
+        count++;
+      }
+    }
 
-  //     // 選択中のステータスをtrueにする
-  //     if (selectedTabIndex == allTabIndex || item["tags"] == selectedTabIndex) {
-  //       item["selected"] = allItemSelected;
-
-  //       // まとめて選択をしている時に選択アイテム数を格納
-  //       if (allItemSelected) {
-  //         count++;
-  //       }
-  //     }
-  //   }
-
-  //   return count;
-  // }
-  
+    updateSelectedCount(count);
+  }
 
   // 選択解除
   void handleDeselect(
-    List<bool> taskSelectedBool,
+    List<bool> taskSelectedBool
   ) {
     for (int i = 0; i < taskSelectedBool.length; i++) {
       taskSelectedBool[i] = false;
@@ -129,27 +117,40 @@ class TaskViewModel {
     final int nowTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     print("📌nowTime: $nowTime");
 
-    // 
-    // int limitNum = endTime - nowTime;
-    int limitNum = nowTime - endTime;
+    
+    int limitNum = endTime - nowTime;
+    // int limitNum = nowTime - endTime;
+
     print("🔋limitNum: $limitNum");
 
     int day = limitNum ~/ (60 * 60 * 24);
-    
+    print("📅 d： $day");
+    int hour = limitNum % (60 * 60 * 24) ~/ (60 * 60);
+    print("📅 h: $hour");
+    int min = limitNum % (60 * 60 * 24) % (60 * 60) ~/ 60;
+    print("📅 m: $min");
 
-    // if (limitNum >= 60 * 60 * 24) {
-    //     return '${limitNum.toString()}日前';
-    //   } else if (limitNum >= 60 * 60) {
-    //     return '${limitNum.toString()}時間前';
-    //   } else if (limitNum >= 60) {
-    //     return '${limitNum.toString()}分前';
-    //   } else {
-    //     return '$limitNum秒前';
-    //   } 86400
+    String limitTime = "";
 
+    // if(day > 0) {
+    //   limitTime += "${day.toString()}日";
+    // }
+    // if(hour > 0) {
+    //   limitTime += "${hour.toString()}時間";
+    // }
+    // if(min > 0) {
+    //   limitTime += "${min.toString()}分";
+    // }
 
-
-    String limitTime = DateTime.fromMillisecondsSinceEpoch(limitNum * 1000).toLocal().toString();
+    if(day > 0) {
+      limitTime += "${day.toString()}日";
+      // limitTime += "${hour.toString()}時間";
+    } else if(hour > 0) {
+      limitTime += "${hour.toString()}時間";
+      // limitTime += "${min.toString()}分";
+    } else {
+      limitTime += "${min.toString()}分";
+    }
 
     return limitTime;
   }
