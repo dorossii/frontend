@@ -29,9 +29,6 @@ class TaskService {
       /// JSON変換
       final jsonData = jsonDecode(response.body);
 
-      print(jsonData);
-      print(jsonData.runtimeType);
-
       // print("レスポンス: $jsonData");
 
       // final List tasks = jsonData['tasks'];

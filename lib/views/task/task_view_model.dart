@@ -48,26 +48,23 @@ class TaskViewModel {
 
 
   // 並び替え処理 --------------------
-  void handleSort(taskItems, int selectSortIndex) {
+  void handleSort(List<TaskInfo> taskItems, int selectSortIndex) {
     // 名前順
     if (selectSortIndex == 0) {
-      taskItems.sort((b, a) => a["taskName"].compareTo(b["taskName"]));
+      taskItems.sort((b, a) => a.taskName.compareTo(b.taskName));
     }
 
     // 期限順
     if (selectSortIndex == 1) {
-      taskItems.sort((a, b) {
-        Duration durationA = parseDuration(a["limitTime"]);
-        Duration durationB = parseDuration(b["limitTime"]);
-
-        return durationA.compareTo(durationB);
-      });
+      taskItems.sort(
+        (a, b) => a.level.compareTo(b.endTime)
+      );
     }
 
     // 難易度順
     if (selectSortIndex == 2) {
       taskItems.sort(
-        (b, a) => a["difficultyLevel"].compareTo(b["difficultyLevel"]),
+        (b, a) => a.level.compareTo(b.level),
       );
     }
   }
@@ -115,13 +112,9 @@ class TaskViewModel {
 
     // 秒単位で現在時間を取得する(Unixタイムスタンプ)
     final int nowTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    print("📌nowTime: $nowTime");
-
     
     int limitNum = endTime - nowTime;
     // int limitNum = nowTime - endTime;
-
-    print("🔋limitNum: $limitNum");
 
     int day = limitNum ~/ (60 * 60 * 24);
     int hour = limitNum % (60 * 60 * 24) ~/ (60 * 60);

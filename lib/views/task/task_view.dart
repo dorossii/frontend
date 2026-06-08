@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
+import 'package:authbase_mobile/views/task/selected_bar/completeModal.dart';
 import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'task_view_model.dart';
@@ -10,6 +11,7 @@ import '../../components/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import '../task/task_view_model.dart';
 import 'task_view_model.dart';
+import 'selected_bar/confirm_selection_bar.dart';
 
 class TaskView extends StatefulWidget {
   final TaskViewModel viewModel;
@@ -26,7 +28,7 @@ class TaskView extends StatefulWidget {
 
 class _TaskView extends State<TaskView> {
   Timer? _timer;
-  
+
   @override
   void initState() {
     super.initState();
@@ -34,10 +36,7 @@ class _TaskView extends State<TaskView> {
     widget.viewModel.initialize(() {
       // API取得後UI更新
       setState(() {
-
-        if (taskSelectedBool.isEmpty &&
-            widget.viewModel.taskList.isNotEmpty) {
-
+        if (taskSelectedBool.isEmpty && widget.viewModel.taskList.isNotEmpty) {
           taskSelectedBool = List.filled(
             widget.viewModel.taskList.length,
             false,
@@ -45,14 +44,11 @@ class _TaskView extends State<TaskView> {
         }
       });
 
-      _timer = Timer.periodic(
-      const Duration(minutes: 1),
-      (_) {
+      _timer = Timer.periodic(const Duration(minutes: 1), (_) {
         if (mounted) {
           setState(() {});
         }
-      },
-    );
+      });
     });
   }
 
@@ -61,7 +57,6 @@ class _TaskView extends State<TaskView> {
     _timer?.cancel();
     super.dispose();
   }
-
 
   int selectedTabIndex = 100; // 選択されているタブのインデックス
   int selectSortIndex = 0; // 選択されている並び替えのインデックス
@@ -113,7 +108,64 @@ class _TaskView extends State<TaskView> {
               ),
             ),
 
-            if (allItemSelected || selectedCount != 0) _buildConfirmSelection(),
+            // タスク選択時の確認バー
+            if (allItemSelected || selectedCount != 0)
+              Positioned(
+                bottom: 8,
+                left: 0,
+                right: 0,
+                child: ConfirmSelectionBar(
+                  // 選択解除処理
+                  onDeselect: () {
+                    setState(() {
+                      allItemSelected = false; // まとめて選択を解除
+                      selectedCount = 0; // 選択したアイテム数をリセット
+                      widget.viewModel.handleDeselect(
+                        taskSelectedBool,
+                      ); // すべてのタスクの選択解除
+                    });
+                  },
+                  // 選択確定処理
+                  onConfirm: () {
+                    // 選択したタスクIDを格納する
+                    widget.viewModel.taskList.asMap().forEach((
+                      int index,
+                      task,
+                    ) {
+                      if (taskSelectedBool[index] == true) {
+                        selectedTaskId.add(task.taskId);
+                      }
+                    });
+                    // _buildCompleteModal();  // 確定確認のモーダルを開く
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CompleteDialog(
+                          // 一件のみ選択した場合はタスク名を表示
+                          title: (selectedTaskId.length == 1)
+                              ? widget.viewModel.taskList
+                                    .firstWhere(
+                                      (task) =>
+                                          task.taskId == selectedTaskId[0],
+                                    )
+                                    .taskName
+                              : "まとめて選択",
+                          onUpDate: () async {
+                            await TaskService().updateTaskStatus(
+                              taskId: "task_001",
+                            );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => SplashScreen(),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
           ],
         ),
       ),
@@ -265,7 +317,11 @@ class _TaskView extends State<TaskView> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    widget.viewModel.handleUpdateStatus(task, index, taskSelectedBool); // 選択を確定するボタン表示
+                    widget.viewModel.handleUpdateStatus(
+                      task,
+                      index,
+                      taskSelectedBool,
+                    ); // 選択を確定するボタン表示
                     taskSelectedBool[index] ? selectedCount++ : selectedCount--;
                     if (selectedCount == 0) allItemSelected = false;
                   });
@@ -333,11 +389,7 @@ class _TaskView extends State<TaskView> {
                             children: [
                               Row(
                                 children: [
-                                  for (
-                                    int i = 0;
-                                    i < (task.level as int);
-                                    i++
-                                  )
+                                  for (int i = 0; i < (task.level as int); i++)
                                     SizedBox(
                                       height: 16,
                                       width: 16,
@@ -359,7 +411,9 @@ class _TaskView extends State<TaskView> {
                                     ),
                                     // ToDO
                                     Text(
-                                      widget.viewModel.handleGetLimit(task.endTime),
+                                      widget.viewModel.handleGetLimit(
+                                        task.endTime,
+                                      ),
                                       // "",
                                       style: TextStyle(fontSize: 10),
                                     ),
@@ -505,242 +559,6 @@ class _TaskView extends State<TaskView> {
           );
         }),
       ],
-    );
-  }
-
-  // 選択後の確定確認ウィジェット
-  Widget _buildConfirmSelection() {
-    return Positioned(
-      bottom: 8,
-      left: 0,
-      right: 0,
-      child: Container(
-        
-        margin: EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(223, 230, 222, 1),
-          border: Border.all(width: 2, color: AppColors.edgew),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: DefaultTextStyle(
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.edgew,
-            fontFamily: 'textFont',
-            fontWeight: FontWeight.w600,
-          ),
-
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 24,
-                          width: 24,
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(255, 219, 77, 1),
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(
-                              width: 4,
-                              color: Color.fromRGBO(255, 219, 77, 1),
-                            ),
-                          ),
-                          child: SizedBox(
-                            child: Image.asset(
-                              height: 20,
-                              width: 20,
-                              'images/task/check.webp',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        Text("選択中"),
-                      ],
-                    ),
-                    Text("終了済みは除外されています", style: TextStyle(fontSize: 10)),
-                  ],
-                ),
-
-                SizedBox(width: 4),
-
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      allItemSelected = false;
-                      selectedCount = 0;
-                      widget.viewModel.handleDeselect( taskSelectedBool );
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.edgew, width: 1),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    child: Text('選択を解除'),
-                  ),
-                ),
-
-                SizedBox(width: 8),
-
-                GestureDetector(
-                  onTap: () async {
-                    // 完了確認モーダルを開く
-                    await _buildCompleteModal();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 219, 77, 1),
-                    ),
-                    child: DottedBorder(
-                      color: AppColors.subWhiteBackground,
-                      strokeWidth: 1.5,
-                      dashPattern: [4, 3],
-                      customPath: (size) {
-                        return Path()
-                          // 上線
-                          ..moveTo(0, 0)
-                          ..lineTo(size.width, 0)
-                          // 下線
-                          ..moveTo(0, size.height)
-                          ..lineTo(size.width, size.height);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 2),
-                        alignment: Alignment.center,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              widget.viewModel.taskList.asMap().forEach((int index, task) {
-                                if(taskSelectedBool[index] == true) {
-                                  selectedTaskId.add(task.taskId);
-                                }
-                              });
-                              _buildCompleteModal();
-                            });
-                          },
-                          child: Text('選択を確定する ＞'),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // タスク完了選択時のモーダル
-  Future<bool?> _buildCompleteModal() async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return DefaultTextStyle(
-              style: TextStyle(fontFamily: 'textFont', color: AppColors.text),
-              child: AlertDialog(
-                actionsAlignment: MainAxisAlignment.center,
-                backgroundColor: AppColors.subWhiteBackground,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                contentPadding: EdgeInsets.only(top: 4),
-
-                title: Center(
-                  child: Text(
-                    // 一件のみ選択した場合はタスク名を表示
-                    (selectedTaskId.length == 1)
-                        ? widget.viewModel.taskList.firstWhere(
-                            (task) => task.taskId == selectedTaskId[0],
-                          ).taskName
-                        : "まとめて選択",
-                    style: TextStyle(
-                      fontFamily: 'textFont',
-                      color: AppColors.text,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "タスクを完了しますか？",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'textFont',
-                        color: AppColors.text,
-                        fontSize: 12,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                  ],
-                ),
-
-                actions: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context, false);
-                    },
-                    child: Container(
-                      height: 32,
-                      width: 104,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: AppColors.subBackground,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-
-                      child: Text(
-                        "キャンセル",
-                        style: TextStyle(fontFamily: 'textFont', fontSize: 16),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  InkWell(
-                    onTap: () async {
-                      // タスク更新
-                      await TaskService().updateTaskStatus(taskId: "task_001");
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SplashScreen()),
-                      );
-                    },
-                    child: Container(
-                      height: 32,
-                      width: 104,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 219, 77, 1),
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-
-                      child: Text(
-                        "完了",
-                        style: TextStyle(fontFamily: 'textFont', fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
     );
   }
 
