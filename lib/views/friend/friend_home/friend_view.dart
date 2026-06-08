@@ -27,6 +27,7 @@ class FriendHomeView extends StatelessWidget {
     final theme = viewModel.currentState.theme;
     final friend = viewModel.friendInfo;
     return Scaffold(
+      backgroundColor: AppColors.background,
       // 共通ヘッダーを配置（Friendタブとして表示）
       appBar: AppHeader(currentPage: PageType.friend),
 
