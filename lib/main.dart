@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 
 import 'models/user_info.dart';
 import 'views/login/login_screen.dart';
-import 'views/app.dart';
 import 'package:authbase_mobile/services/deep_link_service.dart';
 import 'package:authbase_mobile/services/auth_manager.dart';
+
+import 'views/splash/login/login_splash_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -90,7 +91,7 @@ class _MyAppState extends State<MyApp> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => const App(),
+        builder: (_) => LoginSplashScreen(),
       ),
       (_) => false,
     );
@@ -125,7 +126,7 @@ class _MyAppState extends State<MyApp> {
 
       final userInfo = snapshot.data!;
 
-      return const App();
+      return const LoginSplashScreen();
     },
   );
 

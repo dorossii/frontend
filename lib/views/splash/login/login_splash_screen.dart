@@ -56,7 +56,7 @@ late String currentMessage;
 
   /// 3秒後ホームへ
   void _goNext() {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
 
       Navigator.pushReplacement(
