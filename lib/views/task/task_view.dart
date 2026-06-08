@@ -1,16 +1,13 @@
 import 'dart:async';
-
-import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
+import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
 import 'package:authbase_mobile/views/task/selected_bar/completeModal.dart';
 import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'task_view_model.dart';
 import '../../components/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
-import '../task/task_view_model.dart';
-import 'task_view_model.dart';
 import 'selected_bar/confirm_selection_bar.dart';
 
 class TaskView extends StatefulWidget {
@@ -136,7 +133,7 @@ class _TaskView extends State<TaskView> {
                         selectedTaskId.add(task.taskId);
                       }
                     });
-                    // _buildCompleteModal();  // 確定確認のモーダルを開く
+                    // 確定確認のモーダルを開く
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -150,15 +147,22 @@ class _TaskView extends State<TaskView> {
                                     )
                                     .taskName
                               : "まとめて選択",
+                          // 完了時の処理
                           onUpDate: () async {
+
+                            // テストデータ ----------------------
                             await TaskService().updateTaskStatus(
                               taskId: "task_001",
                             );
+                            // ---------------------------------
+
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => SplashScreen(),
+                                // builder: (context) => SplashScreen(),
+                                builder: (context) => CompletionedScreen(),
                               ),
                             );
+
                           },
                         );
                       },
