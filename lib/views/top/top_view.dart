@@ -21,6 +21,7 @@ class TopView extends StatelessWidget {
     final user = vm.userStatus;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: vm.isLoading
           ? const Center(child: CircularProgressIndicator())
           : Stack(

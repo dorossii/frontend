@@ -108,7 +108,7 @@ class LoginView extends StatelessWidget {
                                   height: 24,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 3,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.background),
                                   ),
                                 )
                               // ログイン
