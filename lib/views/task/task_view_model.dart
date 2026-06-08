@@ -124,14 +124,12 @@ class TaskViewModel {
     print("🔋limitNum: $limitNum");
 
     int day = limitNum ~/ (60 * 60 * 24);
-    print("📅 d： $day");
     int hour = limitNum % (60 * 60 * 24) ~/ (60 * 60);
-    print("📅 h: $hour");
     int min = limitNum % (60 * 60 * 24) % (60 * 60) ~/ 60;
-    print("📅 m: $min");
 
     String limitTime = "";
 
+    // 時間を全部表示
     // if(day > 0) {
     //   limitTime += "${day.toString()}日";
     // }
@@ -142,6 +140,7 @@ class TaskViewModel {
     //   limitTime += "${min.toString()}分";
     // }
 
+    // コメント部分：時間を最大二つ表示
     if(day > 0) {
       limitTime += "${day.toString()}日";
       // limitTime += "${hour.toString()}時間";

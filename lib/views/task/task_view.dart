@@ -79,67 +79,6 @@ class _TaskView extends State<TaskView> {
   // 並び替えの配列
   static const sortCategorys = ["タイトル順", "期限順", "ポイント順"];
 
-  // テストデータ -----------------------------------
-  // List<TaskInfo> taskItems = widget.viewModel.taskList;
-  // List<Map<String, dynamic>> taskItems = [
-  //   {
-  //     "taskId": "task_001",
-  //     "tags": 0,
-  //     "taskName": "皿洗いをする",
-  //     "level": 2,
-  //     "limitTime": "15:30:30",
-  //     "advice": "綺麗に洗おうね",
-  //     "status": 0,
-  //     "selected": false,
-  //     "massage": "message",
-  //   },
-  //   {
-  //     "taskId": "task_002",
-  //     "tags": 1,
-  //     "taskName": "使わなくなった服を捨てる",
-  //     "level": 5,
-  //     "limitTime": "15:30:37",
-  //     "advice": "断捨離断捨離ぃーー！！",
-  //     "status": 1,
-  //     "selected": false,
-  //     "massage": "message",
-  //   },
-  //   {
-  //     "taskId": "task_003",
-  //     "tags": 2,
-  //     "taskName": "洗濯物をまわす",
-  //     "level": 4,
-  //     "limitTime": "16:30:30",
-  //     "advice": "ぐーるぐる",
-  //     "status": 2,
-  //     "selected": false,
-  //     "massage": "message",
-  //   },
-  //   {
-  //     "taskId": "task_004",
-  //     "tags": 4,
-  //     "taskName": "洗濯物をまわす",
-  //     "level": 4,
-  //     "limitTime": "15:00:30",
-  //     "advice": "ぐーるぐる",
-  //     "status": 0,
-  //     "selected": false,
-  //     "massage": "message",
-  //   },
-  //   {
-  //     "taskId": "task_005",
-  //     "tags": 3,
-  //     "taskName": "洗濯物をまわす",
-  //     "level": 5,
-  //     "limitTime": "8:30:30",
-  //     "advice": "ぐーるぐる",
-  //     "status": 0,
-  //     "selected": false,
-  //     "massage": "message",
-  //   },
-  // ];
-
-
   // ----------------------------------------------
 
   @override
@@ -569,13 +508,15 @@ class _TaskView extends State<TaskView> {
     );
   }
 
-  // 選択中のアイテム数を表示
+  // 選択後の確定確認ウィジェット
   Widget _buildConfirmSelection() {
     return Positioned(
       bottom: 8,
-      left: 12,
-      right: 12,
+      left: 0,
+      right: 0,
       child: Container(
+        
+        margin: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           color: Color.fromRGBO(223, 230, 222, 1),
           border: Border.all(width: 2, color: AppColors.edgew),
@@ -583,14 +524,17 @@ class _TaskView extends State<TaskView> {
         ),
         child: DefaultTextStyle(
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             color: AppColors.edgew,
             fontFamily: 'textFont',
             fontWeight: FontWeight.w600,
           ),
+
           child: Container(
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.symmetric(vertical: 12),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -624,7 +568,9 @@ class _TaskView extends State<TaskView> {
                     Text("終了済みは除外されています", style: TextStyle(fontSize: 10)),
                   ],
                 ),
-                SizedBox(width: 12),
+
+                SizedBox(width: 4),
+
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -642,7 +588,9 @@ class _TaskView extends State<TaskView> {
                     child: Text('選択を解除'),
                   ),
                 ),
-                SizedBox(width: 12),
+
+                SizedBox(width: 8),
+
                 GestureDetector(
                   onTap: () async {
                     // 完了確認モーダルを開く
