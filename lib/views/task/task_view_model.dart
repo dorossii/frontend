@@ -113,25 +113,13 @@ class TaskViewModel {
     // 秒単位で現在時間を取得する(Unixタイムスタンプ)
     final int nowTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     
-    int limitNum = endTime - nowTime;
-    // int limitNum = nowTime - endTime;
+    int limitNum = nowTime - endTime;
 
     int day = limitNum ~/ (60 * 60 * 24);
     int hour = limitNum % (60 * 60 * 24) ~/ (60 * 60);
     int min = limitNum % (60 * 60 * 24) % (60 * 60) ~/ 60;
 
     String limitTime = "";
-
-    // 時間を全部表示
-    // if(day > 0) {
-    //   limitTime += "${day.toString()}日";
-    // }
-    // if(hour > 0) {
-    //   limitTime += "${hour.toString()}時間";
-    // }
-    // if(min > 0) {
-    //   limitTime += "${min.toString()}分";
-    // }
 
     // コメント部分：時間を最大二つ表示
     if(day > 0) {
