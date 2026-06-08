@@ -10,7 +10,7 @@ import '../../constants/app_config.dart';
 class TaskService {
   /// API URL
   static const String url =
-      MockApiResponse.baseUrl + MockApiResponse.friendListEndpoint;
+      MockApiResponse.baseUrl + MockApiResponse.taskListEndpoint;
   
   /// 認証トークン
   static const String token = 'mock-token-super-secret';
@@ -29,7 +29,10 @@ class TaskService {
       /// JSON変換
       final jsonData = jsonDecode(response.body);
 
-      final List tasks = jsonData['tasks'];
+      // print("レスポンス: $jsonData");
+
+      // final List tasks = jsonData['tasks'];
+      final List<dynamic> tasks = jsonData;
 
       /// Modelへ変換
       return tasks.map((e) => TaskInfo.fromJson(e)).toList();
@@ -40,4 +43,29 @@ class TaskService {
     throw Exception('タスク情報取得失敗');
   }
 
+  /// タスク情報更新
+  Future<void> updateTaskStatus({
+    required String taskId,
+    // required String status,
+    // required String jwtToken,
+  }) async {
+    /// PUT
+    final response = await http.put(
+      Uri.parse('$url/$taskId'),
+      headers: {'accept': 'application/json', 'Authorization': token},
+    );
+  
+    /// 成功
+    if (response.statusCode == 200) {
+      debugPrint('更新成功');
+      return;
+    }
+
+    /// 失敗
+    debugPrint('更新失敗: ${response.statusCode}');
+    debugPrint(response.body);
+
+    throw Exception('タスク更新失敗');
+
+  }
 }
