@@ -1,5 +1,4 @@
 import 'package:authbase_mobile/components/Colors.dart';
-import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +58,7 @@ class _TakePictureView extends State<TakePictureView> {
                   child: Text("皿洗いをする", style: TextStyle(fontSize: 20)),
                 ),
                 Positioned(
-                  top: -10,
+                  top: -20,
                   left: -20,
                   child: Transform.rotate(
                     angle: -0.2,
