@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
 import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
@@ -160,7 +158,7 @@ class _TaskView extends State<TaskView> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 // builder: (context) => SplashScreen(),
-                                builder: (context) => CompletionedScreen(),
+                                builder: (context) => CompletionedScreen(confirmType: 1, viewModel: widget.viewModel, selectedTaskId: selectedTaskId),
                               ),
                             );
 

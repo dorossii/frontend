@@ -46,7 +46,6 @@ class TaskViewModel {
     onUpdate();
   }
 
-
   // 並び替え処理 --------------------
   void handleSort(List<TaskInfo> taskItems, int selectSortIndex) {
     // 名前順

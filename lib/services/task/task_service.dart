@@ -68,4 +68,30 @@ class TaskService {
     throw Exception('タスク更新失敗');
 
   }
+
+  Future<List<TaskInfo>> getFriendPending() async {
+    /// GET通信
+    final response = await http.get(
+      Uri.parse('${MockApiResponse.baseUrl}/app/user/tasks/pending'),
+
+      headers: {'accept': 'application/json', 'Authorization': token},
+    );
+    /// 通信成功
+    if (response.statusCode == 200) {
+      /// JSON変換
+      final jsonData = jsonDecode(response.body);
+
+      // print("🫂レスポンス: $jsonData");
+
+      // final List tasks = jsonData['tasks'];
+      final List<dynamic> tasks = jsonData;
+
+      /// Modelへ変換
+      return tasks.map((e) => TaskInfo.fromJson(e)).toList();
+    }
+
+    /// 通信失敗
+    debugPrint('Failed to load friend info: ${response.statusCode}');
+    throw Exception('タスク情報取得失敗');
+  }
 }

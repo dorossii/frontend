@@ -1,13 +1,18 @@
 import 'package:authbase_mobile/components/Colors.dart';
+import 'package:authbase_mobile/models/task_info.dart';
+import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class TakePictureView extends StatefulWidget {
-  // final TaskViewModel viewModel;
+  final TaskViewModel viewModel;
+  final List<String> selectedTaskId;
+  
 
   const TakePictureView({
     super.key,
-    // required this.viewModel
+    required this.viewModel,
+    required this.selectedTaskId,
   });
 
   @override
@@ -15,14 +20,22 @@ class TakePictureView extends StatefulWidget {
 }
 
 class _TakePictureView extends State<TakePictureView> {
+  late TaskInfo lavelTask;
+
   @override
   void initState() {
     super.initState();
 
-    // widget.viewModel.initialize(() {
-    //   // API取得後UI更新
-    //   setState(() {});
-    // });
+    // タスクの名前を取得
+    // Todo：送られてきた選択済みの配列の一番最初の要素を取ってるので、選ばれたIDを選択するようにする処理に変更が必要
+    lavelTask = widget.viewModel.taskList.firstWhere(
+      (t) => t.taskId == widget.selectedTaskId[0],
+    );
+
+    widget.viewModel.initialize(() {
+      // API取得後UI更新
+      setState(() {});
+    });
   }
 
   // 完了したタスクの写真を撮る画面
@@ -50,12 +63,15 @@ class _TakePictureView extends State<TakePictureView> {
                         color: Colors.grey.shade400,
                         spreadRadius: 1,
                         blurRadius: 2,
-                        offset: Offset(1, 3),
+                        offset: Offset(0, 3),
                       ),
                     ],
                     color: AppColors.subWhiteBackground,
                   ),
-                  child: Text("皿洗いをする", style: TextStyle(fontSize: 20)),
+                  child: Text(
+                    lavelTask.taskName,
+                     style: TextStyle(fontSize: 20)
+                    ),
                 ),
                 Positioned(
                   top: -20,
@@ -112,7 +128,7 @@ class _TakePictureView extends State<TakePictureView> {
                   color: Colors.grey.shade400,
                   spreadRadius: 1,
                   blurRadius: 2,
-                  offset: Offset(1, 3),
+                  offset: Offset(0, 3),
                 ),
               ],
             ),
@@ -136,7 +152,7 @@ class _TakePictureView extends State<TakePictureView> {
                   color: Colors.grey.shade400,
                   spreadRadius: 1,
                   blurRadius: 2,
-                  offset: Offset(1, 3),
+                  offset: Offset(0, 3),
                 ),
               ],
             ),

@@ -1,14 +1,21 @@
+import 'dart:ui';
+
 import 'package:authbase_mobile/components/Colors.dart';
+import 'package:authbase_mobile/models/friend_info.dart';
+import 'package:authbase_mobile/models/task_info.dart';
+import 'package:authbase_mobile/services/friend/friend_service.dart';
+import 'package:authbase_mobile/services/task/task_service.dart';
+import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class FriendPictureView extends StatefulWidget {
-  // final TaskViewModel viewModel;
+  final TaskViewModel viewModel;
 
   const FriendPictureView({
     super.key,
-    // required this.viewModel
+    required this.viewModel
   });
 
   @override
@@ -16,14 +23,47 @@ class FriendPictureView extends StatefulWidget {
 }
 
 class _FriendPictureView extends State<FriendPictureView> {
+  List<TaskInfo> friendTask = [];
+  List<FriendInfo> friendUser = [];
+
+  // フレンドの名前を取得
+  String get friendUserName {
+    final user = friendUser.firstWhere(
+      (u) => u.userId == "u00001",
+      orElse: () => FriendInfo(userId: '', userName: '', background: '', dirtLevel: 0, healthPoint: 0, iconName: ''),
+    );
+
+    return user.userId.isEmpty ? '' : user.userName;
+  }
+  
+  // フレンドの承認待ちタスクを読み込み
+  Future<void> loadData() async {
+    final result = await TaskService().getFriendPending();
+    setState(() {
+      friendTask = result;
+    });
+  }
+
+  // フレンド一覧を取得(ユーザー名取得のため)
+  Future<void> loadFriends() async {
+    final result = await FriendService().fetchFriendInfo();
+
+    setState(() {
+      friendUser = result;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    loadData();
+    loadFriends();
+    // TaskService().getFriendPending();
 
-    // widget.viewModel.initialize(() {
-    //   // API取得後UI更新
-    //   setState(() {});
-    // });
+    widget.viewModel.initialize(() {
+      // API取得後UI更新
+      setState(() {});
+    });
   }
 
   // 完了したタスクの写真を撮る画面
@@ -56,7 +96,10 @@ class _FriendPictureView extends State<FriendPictureView> {
                     ],
                     color: AppColors.subWhiteBackground,
                   ),
-                  child: Text("皿洗いをする", style: TextStyle(fontSize: 20)),
+                  child: Text(
+                    friendTask.isNotEmpty ? friendTask[0].taskName : '',
+                    style: TextStyle(fontSize: 20)
+                  ),
                 ),
                 Positioned(
                   top: -20,
@@ -99,7 +142,9 @@ class _FriendPictureView extends State<FriendPictureView> {
           ),
           Container(
             margin: EdgeInsets.only(top: 28, bottom: 16),
-            child: Text("ごろちゃんのタスクを確認しよう！", style: TextStyle(fontSize: 18)),
+            child: Text(
+              "$friendUserNameのタスクを確認しよう！", 
+              style: TextStyle(fontSize: 18)),
           ),
           Container(
             height: 415,
@@ -171,27 +216,36 @@ class _FriendPictureView extends State<FriendPictureView> {
                   ),
                 ),
                 SizedBox(width: 48),
-                Container(
-                  width: 112,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.background,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade400,
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: Offset(0, 3),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SplashScreen(),
                       ),
-                    ],
-                  ),
-                  child: Text(
-                    "完了",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.subWhiteBackground,
+                    );
+                  },
+                  child: Container(
+                    width: 112,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade400,
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      "完了",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: AppColors.subWhiteBackground,
+                      ),
                     ),
                   ),
                 ),
