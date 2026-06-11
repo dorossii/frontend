@@ -38,7 +38,7 @@ class FriendRescueService {
   }
 }
 // フレンドのレスキューするかを登録する
-Future<bool> postUuidList(List<String> uuids) async {
+Future<bool> registerRescueFriends(List<String> uuids) async {
   /// API URL
   const String postUrl =
       MockApiResponse.baseUrl + MockApiResponse.registerRescueFriendEndpoint;
