@@ -169,11 +169,13 @@ class RescueView {
                       ),
 
                       onPressed: () {
-                        final result = rescueFriends
+                        // 選択された友達のオブジェクト（RescueFriend）のリストを作る
+                        final resultList = rescueFriends
                             .where((f) => selected.contains(f.id))
                             .toList();
 
-                        Navigator.pop(context, result);
+                        //  元の設計通り、オブジェクトのリストを返して閉じる（これで型エラーが消えます）
+                        Navigator.pop(context, resultList);
                       },
 
                       child: const Text(

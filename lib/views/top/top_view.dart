@@ -1,3 +1,4 @@
+import 'package:authbase_mobile/models/friend_rescue.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +7,7 @@ import '../../components/extensions/life_state_layout.dart';
 import '../../components/extensions/trash_layer_type.dart';
 import '../../components/extensions/user_view_model.dart';
 import '../../components/widgets/character/character_layer.dart';
+import '../../services/friend/friend_rescue_service.dart';
 import '../component/rescue/rescue_view.dart';
 import '../../components/widgets/trashs/trash_layer.dart';
 import '../component/rescue/rescue_view_model.dart';
@@ -232,15 +234,40 @@ class TopView extends StatelessWidget {
   Widget _buildRescueButton(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final friends = await RescueViewModel().getFriends();
+        // ダイアログを開き、閉じられたときにUUIDのリストを受け取る
+        final List<RescueFriend>? selectedUuids =
+            await RescueView.showRescueFriendDialog(
+              context,
+              await RescueViewModel().getFriends(),
+            );
 
-        final selected = await RescueView.showRescueFriendDialog(
-          context,
-          friends,
-        );
+        // キャンセルされた（データが空）なら何もしない
+        if (selectedUuids == null || selectedUuids.isEmpty) return;
+        if (!context.mounted) return;
 
-        if (selected != null) {
-          print(selected);
+        try {
+          // 親画面の文脈でPOSTを実行し、結果に応じてスナックバーを表示
+          final List<String> uuidList = selectedUuids
+              .map((f) => f.id.toString())
+              .toList();
+          final bool isSuccess = await registerRescueFriends(uuidList);
+
+          if (!context.mounted) return;
+
+          if (isSuccess) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('送信が完了しました！')));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('送信に失敗しました（サーバーエラー）。')),
+            );
+          }
+        } catch (e) {
+          if (!context.mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('通信中にエラーが発生しました: $e')));
         }
       },
 
