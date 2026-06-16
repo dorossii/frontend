@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
 import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
 import 'package:authbase_mobile/views/task/selected_bar/completeModal.dart';
@@ -8,6 +7,7 @@ import 'task_view_model.dart';
 import '../../components/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'selected_bar/confirm_selection_bar.dart';
+import 'dart:math';
 
 class TaskView extends StatefulWidget {
   final TaskViewModel viewModel;
@@ -148,17 +148,24 @@ class _TaskView extends State<TaskView> {
                               : "まとめて選択",
                           // 完了時の処理
                           onUpDate: () async {
+                            // タスク更新処理
+                            final data = await widget.viewModel.handleUpdateTask(selectedTaskId, "", widget.viewModel);
+                            final random = Random();
+                            // 最小値 min、最大値 max の場合 (最大値を含む)
+                            int min = 2;
+                            int max = 4;
+                            int rangeValue = min + random.nextInt(max - min + 1);
 
-                            // テストデータ ----------------------
-                            await TaskService().updateTaskStatus(
-                              taskId: "task_001",
-                            );
-                            // ---------------------------------
-
+                            // 画面遷移
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                // builder: (context) => SplashScreen(),
-                                builder: (context) => CompletionedScreen(confirmType: 1, viewModel: widget.viewModel, selectedTaskId: selectedTaskId),
+                                builder: (context) => CompletionedScreen(
+                                  viewModel: widget.viewModel,
+                                  selectedTaskId: selectedTaskId,
+                                  confirmType: data['requireImage']
+                                    ? 1
+                                    : rangeValue,
+                                ),
                               ),
                             );
 

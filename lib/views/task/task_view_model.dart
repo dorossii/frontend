@@ -1,5 +1,7 @@
 import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
+import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class TaskViewModel {
@@ -46,7 +48,9 @@ class TaskViewModel {
     onUpdate();
   }
 
-  // 並び替え処理 --------------------
+/// task_view ------------------------------
+
+  // 並び替え処理 
   void handleSort(List<TaskInfo> taskItems, int selectSortIndex) {
     // 名前順
     if (selectSortIndex == 0) {
@@ -79,7 +83,7 @@ class TaskViewModel {
     );
   }
 
-  // まとめて選択の処理 -------------------
+  // まとめて選択の処理
   void handleSelectAll(
     List<bool> taskSelectedBool,
     List<TaskInfo> taskList,
@@ -134,7 +138,7 @@ class TaskViewModel {
     return limitTime;
   }
 
-  // ステータスを変化する処理 -------------------
+  // ステータスを変化する処理 
   void handleUpdateStatus(task, index, taskSelectedBool) {
     // 選択中と選択件数を更新する処理
     if (task.status == 0) {
@@ -153,4 +157,33 @@ class TaskViewModel {
     //   task["status"] = 0;
     // }
   }
+
+
+/// タスクを更新する処理 ------------------------------
+
+  // タスク更新(完了/未完了)
+  Future<Map<String, dynamic>> handleUpdateTask(
+    List<String> selectedTaskId,
+    String message,
+    TaskViewModel viewModel,
+  ) async {
+
+    Map<String, dynamic> data = {
+      "isChanged": false,
+      "requireImage": false,
+    };
+
+    if(selectedTaskId.length == 1) {
+      // タスク更新のPUT処理
+      data = await TaskService().updateTaskStatus(
+        taskId: selectedTaskId,
+        message: "",
+      );
+    } else {
+      // Todo:タスク複数の場合
+    }
+
+    return data;
+  }
+
 }

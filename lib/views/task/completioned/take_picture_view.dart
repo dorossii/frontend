@@ -8,7 +8,6 @@ class TakePictureView extends StatefulWidget {
   final TaskViewModel viewModel;
   final List<String> selectedTaskId;
   
-
   const TakePictureView({
     super.key,
     required this.viewModel,

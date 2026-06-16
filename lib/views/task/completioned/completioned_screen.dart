@@ -23,7 +23,6 @@ class CompletionedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int confirmType = 4;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -44,13 +43,13 @@ class CompletionedScreen extends StatelessWidget {
 
     switch(confirmType) {
       case 1:
-        return TakePictureView(viewModel: viewModel, selectedTaskId: selectedTaskId,);
+        return TakePictureView(viewModel: viewModel, selectedTaskId: selectedTaskId);
       case 2:
         return FriendPictureView(viewModel: viewModel,);
       case 3:
         return CreateMessageView();
       case 4:
-        return FriendMessageView();
+        return FriendMessageView(viewModel: viewModel);
       default:
       return SizedBox();
     }

@@ -1,14 +1,17 @@
 import 'package:authbase_mobile/components/Colors.dart';
+import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
+import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class FriendMessageView extends StatefulWidget {
-  // final TaskViewModel viewModel;
+  final TaskViewModel viewModel;
+  
 
   const FriendMessageView({
     super.key,
-    // required this.viewModel
+    required this.viewModel
   });
 
   @override
@@ -20,10 +23,10 @@ class _FriendMessageView extends State<FriendMessageView> {
   void initState() {
     super.initState();
 
-    // widget.viewModel.initialize(() {
-    //   // API取得後UI更新
-    //   setState(() {});
-    // });
+    widget.viewModel.initialize(() {
+      // API取得後UI更新
+      setState(() {});
+    });
   }
 
   // 完了したタスクの写真を撮る画面
@@ -151,27 +154,36 @@ class _FriendMessageView extends State<FriendMessageView> {
                       );
                     });
                   },
-                  child: Container(
-                    height: 40,
-                    width: 128,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.background,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade400,
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(0, 2),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SplashScreen(),
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      "確定",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.subWhiteBackground,
+                      );
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 128,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade400,
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        "確定",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.subWhiteBackground,
+                        ),
                       ),
                     ),
                   ),

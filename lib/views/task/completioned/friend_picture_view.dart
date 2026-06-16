@@ -25,16 +25,6 @@ class FriendPictureView extends StatefulWidget {
 class _FriendPictureView extends State<FriendPictureView> {
   List<TaskInfo> friendTask = [];
   List<FriendInfo> friendUser = [];
-
-  // フレンドの名前を取得
-  String get friendUserName {
-    final user = friendUser.firstWhere(
-      (u) => u.userId == "u00001",
-      orElse: () => FriendInfo(userId: '', userName: '', background: '', dirtLevel: 0, healthPoint: 0, iconName: ''),
-    );
-
-    return user.userId.isEmpty ? '' : user.userName;
-  }
   
   // フレンドの承認待ちタスクを読み込み
   Future<void> loadData() async {
@@ -51,6 +41,16 @@ class _FriendPictureView extends State<FriendPictureView> {
     setState(() {
       friendUser = result;
     });
+  }
+
+  // フレンドの名前を取得
+  String get friendUserName {
+    final user = friendUser.firstWhere(
+      (u) => u.userId == "u00001",
+      orElse: () => FriendInfo(userId: '', userName: '', background: '', dirtLevel: 0, healthPoint: 0, iconName: ''),
+    );
+
+    return user.userId.isEmpty ? '' : user.userName;
   }
 
   @override
@@ -261,6 +261,7 @@ class _FriendPictureView extends State<FriendPictureView> {
     );
   }
 
+  // ダイアログ
   Future<void> _buildShowDialog() async {
     await showDialog(
       context: context,
