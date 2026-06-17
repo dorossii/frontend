@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class TaskService {
   /// API URL
   static const String url =
       MockApiResponse.baseUrl + MockApiResponse.taskListEndpoint;
-  
+
   /// 認証トークン
   static const String token = 'mock-token-super-secret';
 
@@ -43,45 +44,65 @@ class TaskService {
 
   /// タスク情報更新
   Future<Map<String, dynamic>> updateTaskStatus({
-    required List<String> taskId,
+    required List<String> selectedTaskId,
     required String message,
   }) async {
-    /// PUT
-    final response = await http.put(
-      
-      (taskId.length == 1)
-      ? Uri.parse('$url/${taskId.first}')  // 単体で更新
-      : Uri.parse('{$MockApiResponse.baseUrl}/app/user/tasks/complete'),  // まとめて更新
 
-      headers: {'accept': 'application/json', 'Authorization': token},
-      // Todo: 複数の場合は配列c(taskId)
-      body: {
-        "status": "complete",
-        "message": message,
-      }
-    );
-  
+    // selectedTaskId = [
+    //   "task_001",
+    //   "task_002",
+    //   "task_003"
+    // ];
+
+    final http.Response response;
+
+    if(selectedTaskId.length == 1) {
+      // 単体で更新
+      response = await http.put(
+        Uri.parse('$url/${selectedTaskId.first}'),
+        headers: {'accept': 'application/json', 'Authorization': token},
+        body: {"status": "complete", "message": message},
+      );
+    } else {
+      // まとめて更新
+      response = await http.post(
+        Uri.parse('${MockApiResponse.baseUrl}/app/user/tasks/complete'),
+        headers: {'accept': 'application/json', 'Authorization': token},
+        body: jsonEncode(selectedTaskId),
+      );
+    }
+
     /// 成功
     if (response.statusCode == 200) {
       // Todo: 何も返ってこないからテストデータでしのいでる
-      // final data = jsonDecode(response.body);
+      // var data = jsonDecode(response.body);
       final Map<String, dynamic> data = {
         "isChanged": true,
         "requireImage": false,
       };
-      
+
+      if(selectedTaskId.length > 1) {
+        final random = Random();
+        int min = 0;
+        int max = selectedTaskId.length - 1;
+        int rangeValue = min + random.nextInt(max - min + 1);
+
+        debugPrint("®️ $rangeValue");
+
+        // data = data[selectedTaskId[rangeValue]];
+      }
+
       debugPrint('更新成功');
       debugPrint('✏️ data: $data');
 
       return data;
+    } else {
+      /// 失敗
+      debugPrint('更新失敗: ${response.statusCode}');
+      debugPrint(response.body);
     }
 
-    /// 失敗
-    debugPrint('更新失敗: ${response.statusCode}');
-    debugPrint(response.body);
-
     throw Exception('タスク更新失敗');
-
   }
 
   /// フレンド一覧を取得
@@ -92,6 +113,7 @@ class TaskService {
 
       headers: {'accept': 'application/json', 'Authorization': token},
     );
+
     /// 通信成功
     if (response.statusCode == 200) {
       /// JSON変換
@@ -111,11 +133,10 @@ class TaskService {
 
   /// メッセージ送信処理
   Future<void> sendMessage({
-    required String taskId,
+    required String selectedTaskId,
     required String friendId,
     required String message,
   }) async {
-
     // 送信するデータ（マップ型）
     final Map<String, dynamic> requestData = {
       'friendId': friendId,
@@ -123,11 +144,11 @@ class TaskService {
     };
 
     final response = await http.post(
-      Uri.parse('$url/$taskId/message'),
+      Uri.parse('$url/$selectedTaskId/message'),
       headers: {'accept': 'application/json', 'Authorization': token},
       body: jsonEncode(requestData),
     );
-  
+
     /// 成功
     if (response.statusCode == 200) {
       debugPrint('メッセージ送信成功');

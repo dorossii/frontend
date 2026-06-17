@@ -173,17 +173,16 @@ class TaskViewModel {
       "requireImage": false,
     };
 
-    if(selectedTaskId.length == 1) {
+    if(selectedTaskId.isNotEmpty) {
       // タスク更新のPUT処理
       data = await TaskService().updateTaskStatus(
-        taskId: selectedTaskId,
-        message: "",
+        selectedTaskId: selectedTaskId,
+        message: message
       );
     } else {
-      // Todo:タスク複数の場合
+      debugPrint('❌ 選択されたタスクIDが見つかりません');
     }
 
     return data;
   }
-
 }
