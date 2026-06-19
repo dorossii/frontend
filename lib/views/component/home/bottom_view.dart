@@ -20,62 +20,51 @@ class BottomView extends StatelessWidget {
     final theme = vm.currentState.theme;
     final user = vm.userStatus;
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: vm.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Stack(
-              children: [
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SafeArea(
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        top: 16,
-                        bottom: 16,
-                        right: 0,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: AppColors.background,
-                        border: Border(
-                          top: BorderSide(color: AppColors.sub, width: 2),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(0, -4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _buildStatusBox("汚さレベル", theme.description),
-                                const SizedBox(height: 8),
-                                _buildStatusBox(
-                                  "HP",
-                                  "${((user?.healthPoint ?? 0) / 10).floor()}/100",
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Spacer(),
-
-                          _buildRescueButton(context),
-                        ],
-                      ),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SafeArea(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.only(
+            left: 16,
+            top: 16,
+            bottom: 16,
+            right: 0,
+          ),
+          decoration: const BoxDecoration(
+            color: AppColors.background,
+            border: Border(top: BorderSide(color: AppColors.sub, width: 2)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, -4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 250,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildStatusBox("汚さレベル", theme.description),
+                    const SizedBox(height: 8),
+                    _buildStatusBox(
+                      "HP",
+                      "${((user?.healthPoint ?? 0) / 10).floor()}/100",
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const Spacer(),
+
+              _buildRescueButton(context),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
