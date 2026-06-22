@@ -49,8 +49,8 @@ class FriendHomeView extends StatelessWidget {
 
           Positioned(
             top: 20,
-            left: 16,
-            right: 16,
+            left: 24,
+            right: 24,
 
             child: Stack(
               children: [
@@ -67,23 +67,63 @@ class FriendHomeView extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
 
                       children: [
-                        Image.asset(
-                          'images/home/back.png',
-                          width: 42,
-                          height: 42,
+                        // 画像＋丸背景
+                        Container(
+                          width: 52,
+                          height: 52,
+                          decoration: BoxDecoration(
+                            color: AppColors.subWhiteBackground.withOpacity(
+                              0.9,
+                            ),
+                            shape: BoxShape.circle,
+
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.edgew.withOpacity(0.25),
+                                blurRadius: 6,
+                                offset: const Offset(2, 3),
+                              ),
+                            ],
+                          ),
+
+                          child: Center(
+                            child: Image.asset(
+                              'images/home/back.png',
+                              width: 28,
+                              height: 28,
+                            ),
+                          ),
                         ),
 
                         const SizedBox(height: 4),
 
-                        const Text(
-                          '戻る',
+                        Stack(
+                          children: [
+                            // 縁（白）
+                            Text(
+                              '戻る',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'textFont',
+                                foreground: Paint()
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 1.5
+                                  ..color = AppColors.subWhiteBackground,
+                              ),
+                            ),
 
-                          style: TextStyle(
-                            color: AppColors.subWhiteBackground,
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'textFont',
-                          ),
+                            // 中（緑）
+                            const Text(
+                              '戻る',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'textFont',
+                                color: AppColors.text, // 緑
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -102,18 +142,6 @@ class FriendHomeView extends StatelessWidget {
                       color: AppColors.getBackgroundColor(friend.background),
 
                       borderRadius: BorderRadius.circular(4),
-
-                      border: Border.all(
-                        color: const Color(0xFF2D1E16),
-                        width: 3,
-                      ),
-
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.4),
-                          offset: const Offset(4, 4),
-                        ),
-                      ],
                     ),
 
                     child: Text(
