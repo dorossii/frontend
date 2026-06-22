@@ -46,43 +46,95 @@ class FriendHomeView extends StatelessWidget {
           Positioned.fill(
             child: Image.asset(theme.background, fit: BoxFit.cover),
           ),
-          
 
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 520), // キャラクターの頭上に調整
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.getBackgroundColor(
-                    friend.background,
-                  ), // フレンドのアイコンの色
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: const Color(0xFF2D1E16), width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.4),
-                      offset: const Offset(4, 4),
+          Positioned(
+            top: 20,
+            left: 16,
+            right: 16,
+
+            child: Stack(
+              children: [
+                // 左上戻る
+                Align(
+                  alignment: Alignment.topLeft,
+
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+
+                      children: [
+                        Image.asset(
+                          'images/home/back.png',
+                          width: 42,
+                          height: 42,
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        const Text(
+                          '戻る',
+
+                          style: TextStyle(
+                            color: AppColors.subWhiteBackground,
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'textFont',
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Text(
-                  "${friend.userName} のお家",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'textFont',
-                    letterSpacing: 1.2,
                   ),
                 ),
-              ),
+
+                // 真ん中タイトル
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
+
+                    decoration: BoxDecoration(
+                      color: AppColors.getBackgroundColor(friend.background),
+
+                      borderRadius: BorderRadius.circular(4),
+
+                      border: Border.all(
+                        color: const Color(0xFF2D1E16),
+                        width: 3,
+                      ),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.4),
+                          offset: const Offset(4, 4),
+                        ),
+                      ],
+                    ),
+
+                    child: Text(
+                      '${friend.userName} のお家',
+
+                      style: const TextStyle(
+                        color: Colors.white,
+
+                        fontSize: 18,
+
+                        fontWeight: FontWeight.bold,
+
+                        fontFamily: 'textFont',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+
           // ゴミ
           TrashLayer(theme: theme, layer: TrashLayerType.back),
           // キャラクター画像
@@ -91,7 +143,7 @@ class FriendHomeView extends StatelessWidget {
           TrashLayer(theme: theme, layer: TrashLayerType.front),
 
           // ステータスとボタンのコンテナ
-          BottomView()
+          BottomView(),
         ],
       ),
     );
