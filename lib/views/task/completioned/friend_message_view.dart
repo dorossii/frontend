@@ -1,4 +1,5 @@
 import 'package:authbase_mobile/components/Colors.dart';
+import 'package:authbase_mobile/models/friend_info.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
@@ -7,11 +8,12 @@ import 'package:flutter/material.dart';
 
 class FriendMessageView extends StatefulWidget {
   final TaskViewModel viewModel;
-  
+  final FriendInfo friendData;
 
   const FriendMessageView({
     super.key,
-    required this.viewModel
+    required this.viewModel,
+    required this.friendData,
   });
 
   @override
@@ -19,14 +21,22 @@ class FriendMessageView extends StatefulWidget {
 }
 
 class _FriendMessageView extends State<FriendMessageView> {
+  late TextEditingController _controller;
+
   @override
   void initState() {
     super.initState();
-
+    _controller = TextEditingController();
     widget.viewModel.initialize(() {
       // API取得後UI更新
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   // 完了したタスクの写真を撮る画面
@@ -46,7 +56,7 @@ class _FriendMessageView extends State<FriendMessageView> {
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 20),
                 child: Text(
-                  "ごろちゃん向けて、メッセージを送ろう！",
+                  "${widget.friendData.userName}向けて、メッセージを送ろう！",
                   style: TextStyle(fontSize: 16),
                 ),
               ),
@@ -156,11 +166,13 @@ class _FriendMessageView extends State<FriendMessageView> {
                   },
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SplashScreen(),
-                        ),
-                      );
+                      // メッセージ送信処理
+                      TaskService().sendMessage(sendUserId: widget.friendData.userId, userType: "friend", message: _controller.text);
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => SplashScreen(),
+                      //   ),
+                      // );
                     },
                     child: Container(
                       height: 40,

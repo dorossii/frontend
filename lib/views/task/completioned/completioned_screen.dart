@@ -1,5 +1,8 @@
 import 'package:authbase_mobile/components/Colors.dart';
 import 'package:authbase_mobile/components/widgets/app_header.dart';
+import 'package:authbase_mobile/models/friend_info.dart';
+import 'package:authbase_mobile/models/user_status.dart';
+import 'package:authbase_mobile/services/user/user_service.dart';
 import 'package:authbase_mobile/views/app.dart';
 import 'package:authbase_mobile/views/task/completioned/create_message_view.dart';
 import 'package:authbase_mobile/views/task/completioned/friend_message_view.dart';
@@ -41,15 +44,40 @@ class CompletionedScreen extends StatelessWidget {
   // ignore: strict_top_level_inference
   Widget _buildContent(confirmType) {
 
+    confirmType = 2;
+
     switch(confirmType) {
       case 1:
         return TakePictureView(viewModel: viewModel, selectedTaskId: selectedTaskId);
       case 2:
-        return FriendPictureView(viewModel: viewModel,);
+        return FriendPictureView(viewModel: viewModel);
       case 3:
-        return CreateMessageView();
+        //　未来の自分に向けてメッセージを送る画面
+        return FutureBuilder<UserStatus>(
+          // ユーザー情報取得
+          future: UserService().fetchUserStatus(),
+          builder: (context, snapshot) {
+            // まだデータの取得が終わっていない間は、ローディング画面を表示する
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return CreateMessageView(
+              viewModel: viewModel,
+              userStatus: snapshot.data!,
+            );
+          }
+        );
+        // return CreateMessageView(viewModel: viewModel, userInfo: UserInfo,);
       case 4:
-        return FriendMessageView(viewModel: viewModel);
+        return FutureBuilder<FriendInfo>(
+          future: viewModel.findFriend(),
+          builder: (context, snapshot) {
+            return FriendMessageView(
+              viewModel: viewModel,
+              friendData: snapshot.data!,
+            );
+          },
+        );
       default:
       return SizedBox();
     }

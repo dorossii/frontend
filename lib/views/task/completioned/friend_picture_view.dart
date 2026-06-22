@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:authbase_mobile/components/Colors.dart';
 import 'package:authbase_mobile/models/friend_info.dart';
 import 'package:authbase_mobile/models/task_info.dart';
-import 'package:authbase_mobile/services/friend/friend_service.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
@@ -13,57 +10,37 @@ import 'package:flutter/material.dart';
 class FriendPictureView extends StatefulWidget {
   final TaskViewModel viewModel;
 
-  const FriendPictureView({
-    super.key,
-    required this.viewModel
-  });
+  const FriendPictureView({super.key, required this.viewModel});
 
   @override
   State<FriendPictureView> createState() => _FriendPictureView();
 }
 
 class _FriendPictureView extends State<FriendPictureView> {
-  List<TaskInfo> friendTask = [];
-  List<FriendInfo> friendUser = [];
-  
-  // フレンドの承認待ちタスクを読み込み
-  Future<void> loadData() async {
-    final result = await TaskService().getFriendPending();
-    setState(() {
-      friendTask = result;
-    });
-  }
-
-  // フレンド一覧を取得(ユーザー名取得のため)
-  Future<void> loadFriends() async {
-    final result = await FriendService().fetchFriendInfo();
-
-    setState(() {
-      friendUser = result;
-    });
-  }
-
-  // フレンドの名前を取得
-  String get friendUserName {
-    final user = friendUser.firstWhere(
-      (u) => u.userId == "u00001",
-      orElse: () => FriendInfo(userId: '', userName: '', background: '', dirtLevel: 0, healthPoint: 0, iconName: ''),
-    );
-
-    return user.userId.isEmpty ? '' : user.userName;
-  }
+  late TextEditingController _controller;
+  TaskInfo? pendingData;
+  FriendInfo? selectedFriend;
 
   @override
   void initState() {
     super.initState();
-    loadData();
-    loadFriends();
-    // TaskService().getFriendPending();
+    _controller = TextEditingController();
+    widget.viewModel.initialize(() async {
+      final (task, friend) = await widget.viewModel.getFriendPicture();
 
-    widget.viewModel.initialize(() {
-      // API取得後UI更新
-      setState(() {});
+      if (!mounted) return;
+
+      setState(() {
+        pendingData = task;
+        selectedFriend = friend;
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   // 完了したタスクの写真を撮る画面
@@ -97,8 +74,9 @@ class _FriendPictureView extends State<FriendPictureView> {
                     color: AppColors.subWhiteBackground,
                   ),
                   child: Text(
-                    friendTask.isNotEmpty ? friendTask[0].taskName : '',
-                    style: TextStyle(fontSize: 20)
+                    // pendingData.isEmpty ? pendingData[0].taskName : '',
+                    (pendingData != null) ? pendingData!.taskName : '',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
                 Positioned(
@@ -143,8 +121,9 @@ class _FriendPictureView extends State<FriendPictureView> {
           Container(
             margin: EdgeInsets.only(top: 28, bottom: 16),
             child: Text(
-              "$friendUserNameのタスクを確認しよう！", 
-              style: TextStyle(fontSize: 18)),
+              "${selectedFriend?.userName ?? ""}のタスクを確認しよう！",
+              style: TextStyle(fontSize: 18),
+            ),
           ),
           Container(
             height: 415,
@@ -170,11 +149,11 @@ class _FriendPictureView extends State<FriendPictureView> {
                 color: AppColors.subWhiteBackground,
               ),
               child: Image.asset(
+                // pendingData!.imageId,
                 'images/task/test_picture.png',
                 fit: BoxFit.fill,
               ),
             ),
-
           ),
           Container(
             margin: EdgeInsets.only(top: 8),
@@ -219,9 +198,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SplashScreen(),
-                      ),
+                      MaterialPageRoute(builder: (context) => SplashScreen()),
                     );
                   },
                   child: Container(
@@ -270,7 +247,7 @@ class _FriendPictureView extends State<FriendPictureView> {
           child: Container(
             decoration: BoxDecoration(
               color: AppColors.subWhiteBackground,
-              borderRadius: BorderRadius.circular(5)
+              borderRadius: BorderRadius.circular(5),
             ),
             padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: Column(
@@ -278,12 +255,13 @@ class _FriendPictureView extends State<FriendPictureView> {
               children: [
                 Text(
                   "なぜ、できていないと感じましたか？",
-                  style: TextStyle(fontSize: 16, fontFamily: 'textFont',),
+                  style: TextStyle(fontSize: 16, fontFamily: 'textFont'),
                 ),
                 SizedBox(
                   // 入力欄横幅
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: TextField(
+                    controller: _controller,
                     decoration: InputDecoration(
                       suffixIcon: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -303,7 +281,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                           Navigator.of(context).pop();
                         },
                         child: Container(
-                          alignment:  Alignment.center,
+                          alignment: Alignment.center,
                           height: 32,
                           width: 104,
                           decoration: BoxDecoration(
@@ -317,22 +295,33 @@ class _FriendPictureView extends State<FriendPictureView> {
                         ),
                       ),
                       SizedBox(width: 32),
-                      Container(
-                        alignment:  Alignment.center,
-                        height: 32,
-                        width: 104,
-                        decoration: BoxDecoration(
-                          color: AppColors.sub,
-                          borderRadius: BorderRadius.circular(3),
+                      GestureDetector(
+                        onTap: () => {
+                          TaskService().sendMessage(sendUserId: selectedFriend!.userId, userType: 'friend', message: _controller.text),
+                          // 画面遷移
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => SplashScreen(),
+                            ),
+                          ),
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 32,
+                          width: 104,
+                          decoration: BoxDecoration(
+                            color: AppColors.sub,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          child: Text(
+                            "送信",
+                            style: TextStyle(fontFamily: 'textFont'),
+                          ),
                         ),
-                        child: Text(
-                          "送信",
-                          style: TextStyle(fontFamily: 'textFont'),
-                        ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -1,14 +1,19 @@
 import 'package:authbase_mobile/components/Colors.dart';
+import 'package:authbase_mobile/models/user_status.dart';
+import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
+import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class CreateMessageView extends StatefulWidget {
-  // final TaskViewModel viewModel;
+  final TaskViewModel viewModel;
+  final UserStatus userStatus;
 
   const CreateMessageView({
     super.key,
-    // required this.viewModel
+    required this.viewModel,
+    required this.userStatus,
   });
 
   @override
@@ -16,14 +21,22 @@ class CreateMessageView extends StatefulWidget {
 }
 
 class _CreateMessageView extends State<CreateMessageView> {
+  late TextEditingController _controller;
+
   @override
   void initState() {
     super.initState();
+    _controller = TextEditingController();
+    widget.viewModel.initialize(() {
+      // API取得後UI更新
+      setState(() {});
+    });
+  }
 
-    // widget.viewModel.initialize(() {
-    //   // API取得後UI更新
-    //   setState(() {});
-    // });
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   // 完了したタスクの写真を撮る画面
@@ -115,6 +128,7 @@ class _CreateMessageView extends State<CreateMessageView> {
                   ),
                   width: MediaQuery.of(context).size.width,
                   child: TextField(
+                    controller: _controller,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -151,27 +165,39 @@ class _CreateMessageView extends State<CreateMessageView> {
                       );
                     });
                   },
-                  child: Container(
-                    height: 40,
-                    width: 128,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.background,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade400,
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(0, 2),
+                  child: GestureDetector(
+                    onTap: () => {
+                      // メッセージ送信処理
+                      TaskService().sendMessage(sendUserId: widget.userStatus.userId, userType: "user", message: _controller.text),
+                      // 画面遷移
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SplashScreen(),
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      "確定",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.subWhiteBackground,
+                      ),
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 128,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade400,
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        "確定",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.subWhiteBackground,
+                        ),
                       ),
                     ),
                   ),

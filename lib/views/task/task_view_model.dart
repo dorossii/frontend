@@ -1,6 +1,8 @@
+import 'dart:math';
+import 'package:authbase_mobile/models/friend_info.dart';
 import 'package:authbase_mobile/models/task_info.dart';
+import 'package:authbase_mobile/services/friend/friend_service.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
-import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -60,7 +62,7 @@ class TaskViewModel {
     // 期限順
     if (selectSortIndex == 1) {
       taskItems.sort(
-        (a, b) => a.level.compareTo(b.endTime)
+        (b, a) => a.endTime.compareTo(b.endTime)
       );
     }
 
@@ -85,16 +87,28 @@ class TaskViewModel {
 
   // まとめて選択の処理
   void handleSelectAll(
+    int selectedTabIndex,
     List<bool> taskSelectedBool,
     List<TaskInfo> taskList,
     Function(int) updateSelectedCount,
   ) {
     int count = 0;
 
-    for (int i = 0; i < taskSelectedBool.length; i++) {
-      if (taskList[i].status == 0 && !taskSelectedBool[i]) {
-        taskSelectedBool[i] = true;
-        count++;
+    if (selectedTabIndex == 100) {
+      for (int i = 0; i < taskSelectedBool.length; i++) {
+        if (taskList[i].status == 0 && !taskSelectedBool[i]) {
+          taskSelectedBool[i] = true;
+          count++;
+        }
+      }
+    } else {
+      for (int i = 0; i < taskSelectedBool.length; i++) {
+        if(taskList[i].tag == selectedTabIndex) {
+          if (taskList[i].status == 0 && !taskSelectedBool[i]) {
+            taskSelectedBool[i] = true;
+            count++;
+          }
+        }
       }
     }
 
@@ -184,5 +198,48 @@ class TaskViewModel {
     }
 
     return data;
+  }
+
+  // ランダムに値を出力する処理
+  int randamNum(
+    int min,
+    int max,
+  ) {
+    final random = Random();
+    // 最小値 min、最大値 max の場合 (最大値を含む)
+    int rangeValue = min + random.nextInt(max - min + 1);
+
+    return rangeValue;
+  }
+
+  // ランダムに選んだフレンド情報を取得する処理
+  Future<FriendInfo> findFriend() async {
+    // フレンド一覧を取得
+    List<FriendInfo> friendList = await FriendService().fetchFriendInfo();
+    // ランダムに値を出力
+    int random = randamNum(0, friendList.length);
+
+    // ランダムに選んだユーザーのIDを返す
+    return friendList[random];  
+  }
+
+  // フレンドの承認待ちのタスクを取得し、ランダムに一つ表示する処理
+  Future<(TaskInfo, FriendInfo)> getFriendPicture() async {
+
+    // 承認待ちのタスクを取得
+    final pendingData = await _service.getFriendPending();
+    // フレンド一覧を取得
+    final friendList = await FriendService().fetchFriendInfo();
+    // ランダムに値を出力
+    int random = randamNum(0, pendingData.length - 1);
+    // フレンド名を取得
+    FriendInfo selectrdFrien = friendList.firstWhere(
+      // ToDo: モックで返ってくる承認待ちユーザーのIDがフレンド一覧にいないためテストデータ
+      // (f) => f.userId == pendingData[random].userId,
+      (f) => f.userId == 'u00001',
+      orElse: () => FriendInfo(background: '', dirtLevel: 0, healthPoint: 0, iconName: '', userName: 'notFound', userId: '')
+    );
+
+    return (pendingData[random], selectrdFrien);
   }
 }

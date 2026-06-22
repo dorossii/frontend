@@ -7,7 +7,6 @@ import 'task_view_model.dart';
 import '../../components/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'selected_bar/confirm_selection_bar.dart';
-import 'dart:math';
 
 class TaskView extends StatefulWidget {
   final TaskViewModel viewModel;
@@ -150,11 +149,6 @@ class _TaskView extends State<TaskView> {
                           onUpDate: () async {
                             // タスク更新処理
                             final data = await widget.viewModel.handleUpdateTask(selectedTaskId, "", widget.viewModel);
-                            final random = Random();
-                            // 最小値 min、最大値 max の場合 (最大値を含む)
-                            int min = 2;
-                            int max = 4;
-                            int rangeValue = min + random.nextInt(max - min + 1);
 
                             // 画面遷移
                             Navigator.of(context).push(
@@ -164,11 +158,10 @@ class _TaskView extends State<TaskView> {
                                   selectedTaskId: selectedTaskId,
                                   confirmType: data['requireImage']
                                     ? 1
-                                    : rangeValue,
+                                    : widget.viewModel.randamNum(2, 4),
                                 ),
                               ),
                             );
-
                           },
                         );
                       },
@@ -250,6 +243,7 @@ class _TaskView extends State<TaskView> {
                       allItemSelected = !allItemSelected;
 
                       widget.viewModel.handleSelectAll(
+                        selectedTabIndex,
                         taskSelectedBool,
                         widget.viewModel.taskList,
                         (count) => selectedCount += count,
@@ -339,7 +333,7 @@ class _TaskView extends State<TaskView> {
                 child: Container(
                   height: 24,
                   width: 24,
-                  margin: EdgeInsets.only(right: 12),
+                  margin: EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
                     // color: AppColors.subWhiteBackground,
                     color: taskSelectedBool[index]
@@ -449,6 +443,7 @@ class _TaskView extends State<TaskView> {
                 ),
               ),
               if (task.status == 1) _buildApprovalView(),
+              if (task.status == 0 && task.message.isEmpty) _buildAgainView(),
             ],
           ),
         ),
@@ -490,6 +485,50 @@ class _TaskView extends State<TaskView> {
                   style: TextStyle(
                     fontSize: 10,
                     color: Color.fromRGBO(255, 219, 77, 1),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 承認されなかったウィジェット
+  Widget _buildAgainView() {
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          DottedBorder(
+            color: AppColors.subWhiteBackground,
+            strokeWidth: 1.5,
+            dashPattern: [4, 3],
+            customPath: (size) {
+              return Path()
+                ..moveTo(0, 0)
+                ..lineTo(0, size.height);
+            },
+            child: SizedBox(width: 1, height: double.infinity),
+          ),
+
+          Container(
+            margin: EdgeInsets.only(left: 14, right: 4),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'images/task/againCamera.webp',
+                  height: 20,
+                  width: 20,
+                  fit: BoxFit.contain,
+                ),
+
+                Text(
+                  "もう一度",
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Color.fromRGBO(255, 77, 77, 1),
                   ),
                 ),
               ],
