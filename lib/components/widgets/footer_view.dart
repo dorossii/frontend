@@ -19,7 +19,7 @@ class FooterView extends StatelessWidget {
     final bool hideDecorator = isTop || currentPage == null;
 
     final List<BottomNavigationBarItem> items = [
-      _buildStyledItem("images/footer/home_icon.png", "Top", 0),
+      _buildStyledItem("images/footer/home_icon.png", "Home", 0),
       _buildStyledItem("images/footer/task_icon.png", "Task", 1),
       _buildStyledItem("images/footer/friend_icon.png", "Friend", 2),
       _buildStyledItem("images/footer/setting_icon.png", "Setting", 3),
