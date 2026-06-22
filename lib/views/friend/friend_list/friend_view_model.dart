@@ -7,60 +7,68 @@ import '../../../models/friend_info.dart';
 import '../../../services/friend/friend_service.dart';
 
 class FriendListViewModel {
-  // タブ選択コールバック
   final Function(PageType) onTabSelected;
 
-  // 汚さレベル
   LifeState currentState = LifeState.normal;
 
-  // コンストラクタで受け取る
   FriendListViewModel({required this.onTabSelected});
 
-  /// API通信クラス
   final FriendService _service = FriendService();
 
-  /// APIから取得したユーザー情報
+  /// 元データ
   List<FriendInfo> friendList = [];
 
-  /// ローディング状態
+  /// 表示用
+  List<FriendInfo> filteredFriendList = [];
+
   bool isLoading = false;
 
-  /// 初期化
   Future<void> initialize(void Function() onUpdate) async {
     await fetchFriendInfo(onUpdate);
   }
 
-  /// APIからフレンド情報取得
   Future<void> fetchFriendInfo(void Function() onUpdate) async {
-    /// ローディング開始
+    if (isLoading) return;
+
     isLoading = true;
 
-    /// UI更新
-    onUpdate();
-
     try {
-      /// API通信
-      friendList = await _service.fetchFriendInfo();
+      final friends = await _service.fetchFriendInfo();
 
-      /// 汚さレベル → 状態変換
-      currentState = LifeState.fromValue(friendList.first.dirtLevel);
+      // 空返却なら上書きしない
+      if (friends.isNotEmpty) {
+        friendList = friends;
 
+        filteredFriendList = List.from(friends);
+
+        currentState = LifeState.fromValue(friends.first.dirtLevel);
+      }
     } catch (e) {
-      /// エラー表示
-      debugPrint(e.toString());
+      debugPrint('friend fetch error $e');
     }
 
-    /// ローディング終了
     isLoading = false;
 
-    /// UI更新
     onUpdate();
+  }
+
+  void searchFriend(String keyword) {
+    final text = keyword.trim();
+
+    if (text.isEmpty) {
+      filteredFriendList = List.from(friendList);
+
+      return;
+    }
+
+    filteredFriendList = friendList.where((friend) {
+      return friend.userName.toLowerCase().contains(text.toLowerCase());
+    }).toList();
   }
 
   void onFriendTapped(BuildContext context, FriendInfo friend) {
     Navigator.push(
       context,
-
       MaterialPageRoute(
         builder: (context) =>
             FriendHomeScreen(friendInfo: friend, onTabSelected: onTabSelected),
