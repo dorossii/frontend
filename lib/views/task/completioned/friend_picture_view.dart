@@ -76,7 +76,6 @@ class _FriendPictureView extends State<FriendPictureView> {
                     color: AppColors.subWhiteBackground,
                   ),
                   child: Text(
-                    // pendingData.isEmpty ? pendingData[0].taskName : '',
                     (pendingData != null) ? pendingData!.taskName : '',
                     style: TextStyle(fontSize: 20),
                   ),
@@ -151,8 +150,8 @@ class _FriendPictureView extends State<FriendPictureView> {
                 color: AppColors.subWhiteBackground,
               ),
               child: Image.asset(
-                // pendingData!.imageId,
-                'images/task/test_picture.png',
+                pendingData!.imageId,
+                // 'images/task/test_picture.png',
                 fit: BoxFit.fill,
               ),
             ),
