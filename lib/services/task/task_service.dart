@@ -58,26 +58,20 @@ class TaskService {
       );
     } else {
       // まとめて更新
-      response = await http.post(
-        Uri.parse('${MockApiResponse.baseUrl}/app/user/tasks/complete'),
-        headers: {'accept': 'application/json', 'Authorization': token},
-        body: jsonEncode(selectedTaskId),
+      response = await http.put(
+        Uri.parse('$url/${selectedTaskId.first}'),
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        },
+        body: jsonEncode({"status": "complete", "message": message}),
       );
     }
 
     /// 成功
     if (response.statusCode == 200) {
-      // Todo: 何も返ってこないからテストデータでしのいでる
-      var data = jsonDecode(response.body);
-
-      // debugPrint('更新成功');
-      // debugPrint('✏️ data: $data');
-
-      return data;
-    } else {
-      /// 失敗
-      debugPrint('更新失敗: ${response.statusCode}');
-      debugPrint(response.body);
+      return jsonDecode(response.body);
     }
 
     throw Exception('タスク更新失敗');
@@ -112,7 +106,6 @@ class TaskService {
   Future<void> sendMessage({
     // required String selectedTaskId,
     required String sendUserId,
-    required String userType, // user or friend
     required String message,
   }) async {
 

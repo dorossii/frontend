@@ -15,7 +15,6 @@ class CompletionedScreen extends StatelessWidget {
   final TaskViewModel viewModel;
   final List<String> selectedTaskId;
   final int confirmType;
-  
 
   const CompletionedScreen({
     super.key,
@@ -44,7 +43,7 @@ class CompletionedScreen extends StatelessWidget {
   // ignore: strict_top_level_inference
   Widget _buildContent(confirmType) {
 
-    confirmType = 2;
+    confirmType=4;
 
     switch(confirmType) {
       case 1:
@@ -57,9 +56,11 @@ class CompletionedScreen extends StatelessWidget {
           // ユーザー情報取得
           future: UserService().fetchUserStatus(),
           builder: (context, snapshot) {
-            // まだデータの取得が終わっていない間は、ローディング画面を表示する
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError || !snapshot.hasData) {
+              return const Center(child: Text('データの取得に失敗しました'));
             }
             return CreateMessageView(
               viewModel: viewModel,

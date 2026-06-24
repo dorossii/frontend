@@ -150,7 +150,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                 color: AppColors.subWhiteBackground,
               ),
               child: Image.network(
-                'https://mock-dorossii.mattuu.com/app/user/task/image?imageId=${pendingData!.imageId}',
+                'https://mock-dorossii.mattuu.com/app/user/task/imageId=${pendingData!.imageId}/image',
                 fit: BoxFit.fill,
               ),
             ),
@@ -166,7 +166,6 @@ class _FriendPictureView extends State<FriendPictureView> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    //ToDo:モーダル開く処理
                     _buildShowDialog();
                   },
                   child: Container(
@@ -298,7 +297,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                       SizedBox(width: 32),
                       GestureDetector(
                         onTap: () => {
-                          TaskService().sendMessage(sendUserId: selectedFriend!.userId, userType: 'friend', message: _controller.text),
+                          TaskService().sendMessage(sendUserId: selectedFriend!.userId, message: _controller.text),
                           // 画面遷移
                           Navigator.of(context).push(
                             MaterialPageRoute(

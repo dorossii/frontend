@@ -182,10 +182,7 @@ class TaskViewModel {
     TaskViewModel viewModel,
   ) async {
 
-    Map<String, dynamic> data = {
-      "isChanged": false,
-      "requireImage": false,
-    };
+    Map<String, dynamic> data = {};
 
     if(selectedTaskId.isNotEmpty) {
       // タスク更新のPUT処理
@@ -214,23 +211,22 @@ class TaskViewModel {
 
   // ランダムに選んだフレンド情報を取得する処理
   Future<FriendInfo> findFriend() async {
-    // フレンド一覧を取得
     List<FriendInfo> friendList = await FriendService().fetchFriendInfo();
-    // ランダムに値を出力
+    if (friendList.isEmpty) {
+      throw Exception('フレンドが登録されていません');
+    }
     int random = randamNum(0, friendList.length - 1);
-
-    // ランダムに選んだユーザーのIDを返す
-    return friendList[random];  
+    return friendList[random];
   }
 
   // フレンドの承認待ちのタスクを取得し、ランダムに一つ表示する処理
   Future<(TaskInfo, FriendInfo)> getFriendPicture() async {
 
-    // 承認待ちのタスクを取得
     final pendingData = await _service.getFriendPending();
-    // フレンド一覧を取得
+    if (pendingData.isEmpty) {
+      throw Exception('承認待ちタスクがありません');
+    }
     final friendList = await FriendService().fetchFriendInfo();
-    // ランダムに値を出力
     int random = randamNum(0, pendingData.length - 1);
     // フレンド名を取得
     FriendInfo selectrdFrien = friendList.firstWhere(

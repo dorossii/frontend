@@ -123,6 +123,7 @@ class _TaskView extends State<TaskView> {
                   // 選択確定処理
                   onConfirm: () {
                     // 選択したタスクIDを格納する
+                    selectedTaskId.clear();
                     widget.viewModel.taskList.asMap().forEach((
                       int index,
                       task,
@@ -157,17 +158,9 @@ class _TaskView extends State<TaskView> {
                                   viewModel: widget.viewModel,
                                   selectedTaskId: selectedTaskId,
                                   // 写真が必須の場合は1(写真を撮る画面)
-                                  confirmType: (selectedTaskId.length == 1)
-                                    // 単体
-                                    ? (data['requireImage']
-                                        ? 1
-                                        : widget.viewModel.randamNum(2, 4))
-                                    // 複数
-                                    : (data[selectedTaskId[
-                                            widget.viewModel.randamNum(0, selectedTaskId.length - 1)]]
-                                            ['requireImage']
-                                        ? 1
-                                        : widget.viewModel.randamNum(2, 4)),
+                                  confirmType: data['requireImage']
+                                    ? 1
+                                    : widget.viewModel.randamNum(2, 4),
                                 ),
                               ),
                             );
@@ -204,12 +197,10 @@ class _TaskView extends State<TaskView> {
                       onTap: () {
                         setState(() {
                           selectSortIndex = index;
-                          if (index == selectSortIndex) {
-                            widget.viewModel.handleSort(
-                              widget.viewModel.taskList,
-                              selectSortIndex,
-                            );
-                          }
+                          widget.viewModel.handleSort(
+                            widget.viewModel.taskList,
+                            selectSortIndex,
+                          );
                         });
                       },
                       child: Container(
@@ -422,12 +413,10 @@ class _TaskView extends State<TaskView> {
                                       "残り時間：",
                                       style: TextStyle(fontSize: 12),
                                     ),
-                                    // ToDO
                                     Text(
                                       widget.viewModel.handleGetLimit(
                                         task.endTime,
                                       ),
-                                      // "",
                                       style: TextStyle(fontSize: 10),
                                     ),
                                   ],
