@@ -44,8 +44,6 @@ class CompletionedScreen extends StatelessWidget {
   // ignore: strict_top_level_inference
   Widget _buildContent(confirmType) {
 
-    confirmType = 2;
-
     switch(confirmType) {
       case 1:
         return TakePictureView(viewModel: viewModel, selectedTaskId: selectedTaskId);
