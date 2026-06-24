@@ -149,9 +149,8 @@ class _FriendPictureView extends State<FriendPictureView> {
                 borderRadius: BorderRadius.circular(6),
                 color: AppColors.subWhiteBackground,
               ),
-              child: Image.asset(
-                pendingData!.imageId,
-                // 'images/task/test_picture.png',
+              child: Image.network(
+                'https://mock-dorossii.mattuu.com/app/user/task/image?imageId=${pendingData!.imageId}',
                 fit: BoxFit.fill,
               ),
             ),
