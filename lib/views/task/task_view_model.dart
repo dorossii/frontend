@@ -217,7 +217,7 @@ class TaskViewModel {
     // フレンド一覧を取得
     List<FriendInfo> friendList = await FriendService().fetchFriendInfo();
     // ランダムに値を出力
-    int random = randamNum(0, friendList.length);
+    int random = randamNum(0, friendList.length - 1);
 
     // ランダムに選んだユーザーのIDを返す
     return friendList[random];  

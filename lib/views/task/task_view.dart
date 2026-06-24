@@ -1,3 +1,5 @@
+// ignore_for_file: collection_methods_unrelated_type
+
 import 'dart:async';
 import 'package:authbase_mobile/views/app.dart';
 import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
@@ -156,9 +158,18 @@ class _TaskView extends State<TaskView> {
                                 builder: (context) => CompletionedScreen(
                                   viewModel: widget.viewModel,
                                   selectedTaskId: selectedTaskId,
-                                  confirmType: data['requireImage']
-                                    ? 1
-                                    : widget.viewModel.randamNum(2, 4),
+                                  // 写真が必須の場合は1(写真を撮る画面)
+                                  confirmType: (selectedTaskId.length == 1)
+                                    // 単体
+                                    ? (data['requireImage']
+                                        ? 1
+                                        : widget.viewModel.randamNum(2, 4))
+                                    // 複数
+                                    : (data[selectedTaskId[
+                                            widget.viewModel.randamNum(0, selectedTaskId.length - 1)]]
+                                            ['requireImage']
+                                        ? 1
+                                        : widget.viewModel.randamNum(2, 4)),
                                 ),
                               ),
                             );

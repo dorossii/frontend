@@ -5,6 +5,8 @@ import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CreateMessageView extends StatefulWidget {
   final TaskViewModel viewModel;
@@ -129,6 +131,10 @@ class _CreateMessageView extends State<CreateMessageView> {
                   width: MediaQuery.of(context).size.width,
                   child: TextField(
                     controller: _controller,
+                    inputFormatters: [
+                      // 最大8文字まで入力可能
+                      LengthLimitingTextInputFormatter(32),
+                    ],
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -167,14 +173,18 @@ class _CreateMessageView extends State<CreateMessageView> {
                   },
                   child: GestureDetector(
                     onTap: () => {
-                      // メッセージ送信処理
-                      TaskService().sendMessage(sendUserId: widget.userStatus.userId, userType: "user", message: _controller.text),
-                      // 画面遷移
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SplashScreen(),
+                      if(_controller.text.trim().isEmpty) {
+                        Fluttertoast.showToast(msg: "文章を入力してください。"),
+                      } else {
+                        // メッセージ送信処理
+                        TaskService().sendMessage(sendUserId: widget.userStatus.userId, userType: "user", message: _controller.text),
+                        // 画面遷移
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SplashScreen(),
+                          ),
                         ),
-                      ),
+                      },
                     },
                     child: Container(
                       height: 40,

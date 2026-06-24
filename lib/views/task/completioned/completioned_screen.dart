@@ -44,8 +44,6 @@ class CompletionedScreen extends StatelessWidget {
   // ignore: strict_top_level_inference
   Widget _buildContent(confirmType) {
 
-    confirmType = 2;
-
     switch(confirmType) {
       case 1:
         return TakePictureView(viewModel: viewModel, selectedTaskId: selectedTaskId);
@@ -67,11 +65,14 @@ class CompletionedScreen extends StatelessWidget {
             );
           }
         );
-        // return CreateMessageView(viewModel: viewModel, userInfo: UserInfo,);
       case 4:
         return FutureBuilder<FriendInfo>(
           future: viewModel.findFriend(),
           builder: (context, snapshot) {
+            // まだデータの取得が終わっていない間は、ローディング画面を表示する
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(child: CircularProgressIndicator());
+            }
             return FriendMessageView(
               viewModel: viewModel,
               friendData: snapshot.data!,

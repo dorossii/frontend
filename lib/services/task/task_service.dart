@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:authbase_mobile/models/task_info.dart';
@@ -47,15 +46,10 @@ class TaskService {
     required String message,
   }) async {
 
-    // selectedTaskId = [
-    //   "task_001",
-    //   "task_002",
-    //   "task_003"
-    // ];
-
     final http.Response response;
 
     if(selectedTaskId.length == 1) {
+
       // 単体で更新
       response = await http.put(
         Uri.parse('$url/${selectedTaskId.first}'),
@@ -74,14 +68,10 @@ class TaskService {
     /// 成功
     if (response.statusCode == 200) {
       // Todo: 何も返ってこないからテストデータでしのいでる
-      // var data = jsonDecode(response.body);
-      final Map<String, dynamic> data = {
-        "isChanged": true,
-        "requireImage": false,
-      };
+      var data = jsonDecode(response.body);
 
-      debugPrint('更新成功');
-      debugPrint('✏️ data: $data');
+      // debugPrint('更新成功');
+      // debugPrint('✏️ data: $data');
 
       return data;
     } else {
@@ -139,19 +129,12 @@ class TaskService {
       body: jsonEncode(requestData),
     );
 
-    /// 成功
-    if (response.statusCode == 200) {
-      debugPrint('メッセージ送信成功');
-      debugPrint(requestData["friendId"]);
-      debugPrint(requestData["message"]);
+    /// 失敗
+    if (response.statusCode != 200) {
+      debugPrint('メッセージ送信失敗: ${response.statusCode}');
+      debugPrint(response.body);
       return;
     }
-
-    /// 失敗
-    debugPrint('メッセージ送信失敗: ${response.statusCode}');
-    debugPrint(response.body);
-
-    throw Exception('メッセージ送信失敗');
   }
 
   static void message() {}

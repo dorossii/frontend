@@ -20,6 +20,7 @@ class _FriendPictureView extends State<FriendPictureView> {
   late TextEditingController _controller;
   TaskInfo? pendingData;
   FriendInfo? selectedFriend;
+  List<String> selectedTaskId = [];
 
   @override
   void initState() {
@@ -29,10 +30,11 @@ class _FriendPictureView extends State<FriendPictureView> {
       final (task, friend) = await widget.viewModel.getFriendPicture();
 
       if (!mounted) return;
-
+      
       setState(() {
         pendingData = task;
         selectedFriend = friend;
+        selectedTaskId = [pendingData!.taskId];
       });
     });
   }
@@ -121,7 +123,7 @@ class _FriendPictureView extends State<FriendPictureView> {
           Container(
             margin: EdgeInsets.only(top: 28, bottom: 16),
             child: Text(
-              "${selectedFriend?.userName ?? ""}のタスクを確認しよう！",
+              "${selectedFriend?.userName ?? ''}のタスクを確認しよう！",
               style: TextStyle(fontSize: 18),
             ),
           ),
@@ -197,6 +199,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                 SizedBox(width: 48),
                 GestureDetector(
                   onTap: () {
+                    TaskService().updateTaskStatus(selectedTaskId: selectedTaskId, message: "");
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => SplashScreen()),
                     );
