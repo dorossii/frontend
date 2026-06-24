@@ -1,7 +1,7 @@
 import 'package:authbase_mobile/components/Colors.dart';
 import 'package:authbase_mobile/models/friend_info.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
-import 'package:authbase_mobile/views/task/splash/splash_screen.dart';
+import 'package:authbase_mobile/views/splash/task/splash_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';

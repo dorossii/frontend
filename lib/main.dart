@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'components/extensions/user_view_model.dart';
+import 'components/Colors.dart';
 import 'models/user_info.dart';
 import 'views/login/login_screen.dart';
-import 'views/app.dart';
 import 'package:authbase_mobile/services/deep_link_service.dart';
 import 'package:authbase_mobile/services/auth_manager.dart';
+
+import 'views/splash/login/login_splash_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -79,7 +81,10 @@ class _MyAppState extends State<MyApp> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
+      builder: (_) => Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(child: CircularProgressIndicator(color: Colors.white)),
+      ),
     );
 
     final userInfo = await deepLinkService.handleBridgeToken(token);
@@ -88,18 +93,16 @@ class _MyAppState extends State<MyApp> {
     if (Navigator.canPop(context)) Navigator.pop(context);
 
     if (userInfo == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ログイン失敗')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('ログイン失敗')));
       return;
     }
 
     // Homeへ
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (_) => const App(),
-      ),
+      MaterialPageRoute(builder: (_) => LoginSplashScreen()),
       (_) => false,
     );
   }
@@ -112,31 +115,30 @@ class _MyAppState extends State<MyApp> {
       home: FutureBuilder<String?>(
         future: AuthManager.getRefreshToken(),
         builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            return FutureBuilder<UserInfo?>(
+              future: AuthManager.getCurrentUserInfo(),
+              builder: (context, snapshot) {
+                // ローディング
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Scaffold(
+                    backgroundColor: AppColors.background,
+                    body: Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  );
+                }
 
-          
-      if (snapshot.data != null) {
-  return FutureBuilder<UserInfo?>(
-    future: AuthManager.getCurrentUserInfo(),
-    builder: (context, snapshot) {
+                // データなし（トークン無効）
+                if (!snapshot.hasData) {
+                  return const LoginScreen();
+                }
 
-      // ローディング
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
-      }
+                final userInfo = snapshot.data!;
 
-      // データなし（トークン無効）
-      if (!snapshot.hasData) {
-        return const LoginScreen();
-      }
-
-      final userInfo = snapshot.data!;
-
-      return const App();
-    },
-  );
-
+                return const LoginSplashScreen();
+              },
+            );
           }
 
           // 未ログイン

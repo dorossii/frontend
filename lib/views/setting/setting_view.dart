@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../task/splash/splash_screen.dart';
+import '../splash/task/splash_screen.dart';
 
 class SettingsView extends StatelessWidget {
   final VoidCallback onLogoutPressed;

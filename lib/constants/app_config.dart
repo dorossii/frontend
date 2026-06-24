@@ -23,5 +23,6 @@ class MockApiResponse {
     static const String taskListEndpoint = '/app/user/task';
     // レスキューが必要なフレンドの取得
     static const String rescueFriendListEndpoint = '/app/friend/rescue';
-
+    // レスキューが必要なフレンドの登録
+    static const String registerRescueFriendEndpoint = '/app/friend/rescue';
 }

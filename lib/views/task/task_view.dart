@@ -1,5 +1,3 @@
-// ignore_for_file: collection_methods_unrelated_type
-
 import 'dart:async';
 import 'package:authbase_mobile/views/app.dart';
 import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
