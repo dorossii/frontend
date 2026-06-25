@@ -37,7 +37,6 @@ class TaskViewModel {
     try {
       /// API通信
       taskList = await _service.fetchTaskInfo();
-
     } catch (e, stackTrace) {
       debugPrint(e.toString());
       debugPrint(stackTrace.toString());
@@ -50,9 +49,9 @@ class TaskViewModel {
     onUpdate();
   }
 
-/// task_view ------------------------------
+  /// task_view ------------------------------
 
-  // 並び替え処理 
+  // 並び替え処理
   void handleSort(List<TaskInfo> taskItems, int selectSortIndex) {
     // 名前順
     if (selectSortIndex == 0) {
@@ -61,16 +60,12 @@ class TaskViewModel {
 
     // 期限順
     if (selectSortIndex == 1) {
-      taskItems.sort(
-        (b, a) => a.endTime.compareTo(b.endTime)
-      );
+      taskItems.sort((b, a) => a.endTime.compareTo(b.endTime));
     }
 
     // 難易度順
     if (selectSortIndex == 2) {
-      taskItems.sort(
-        (b, a) => a.level.compareTo(b.level),
-      );
+      taskItems.sort((b, a) => a.level.compareTo(b.level));
     }
   }
 
@@ -103,7 +98,7 @@ class TaskViewModel {
       }
     } else {
       for (int i = 0; i < taskSelectedBool.length; i++) {
-        if(taskList[i].tag == selectedTabIndex) {
+        if (taskList[i].tag == selectedTabIndex) {
           if (taskList[i].status == 0 && !taskSelectedBool[i]) {
             taskSelectedBool[i] = true;
             count++;
@@ -116,9 +111,7 @@ class TaskViewModel {
   }
 
   // 選択解除
-  void handleDeselect(
-    List<bool> taskSelectedBool
-  ) {
+  void handleDeselect(List<bool> taskSelectedBool) {
     for (int i = 0; i < taskSelectedBool.length; i++) {
       taskSelectedBool[i] = false;
     }
@@ -126,10 +119,9 @@ class TaskViewModel {
 
   // 時間を取得
   String handleGetLimit(int endTime) {
-
     // 秒単位で現在時間を取得する(Unixタイムスタンプ)
     final int nowTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    
+
     int limitNum = nowTime - endTime;
 
     int day = limitNum ~/ (60 * 60 * 24);
@@ -139,10 +131,10 @@ class TaskViewModel {
     String limitTime = "";
 
     // コメント部分：時間を最大二つ表示
-    if(day > 0) {
+    if (day > 0) {
       limitTime += "${day.toString()}日";
       // limitTime += "${hour.toString()}時間";
-    } else if(hour > 0) {
+    } else if (hour > 0) {
       limitTime += "${hour.toString()}時間";
       // limitTime += "${min.toString()}分";
     } else {
@@ -152,7 +144,7 @@ class TaskViewModel {
     return limitTime;
   }
 
-  // ステータスを変化する処理 
+  // ステータスを変化する処理
   void handleUpdateStatus(task, index, taskSelectedBool) {
     // 選択中と選択件数を更新する処理
     if (task.status == 0) {
@@ -172,36 +164,46 @@ class TaskViewModel {
     // }
   }
 
-
-/// タスクを更新する処理 ------------------------------
+  /// タスクを更新する処理 ------------------------------
 
   // タスク更新(完了/未完了)
   Future<Map<String, dynamic>> handleUpdateTask(
-    List<String> selectedTaskId,
+    List<String> selectedTaskId, // 選択されているタスクのリスト
     String message,
     TaskViewModel viewModel,
   ) async {
+    debugPrint("🔋 selectedTaskId: $selectedTaskId");
 
-    Map<String, dynamic> data = {};
+    Map<String, dynamic> result = {}; // 結果を格納する変数
+    Map<String, dynamic> target = {}; // データを一つづつ格納する変数
 
-    if(selectedTaskId.isNotEmpty) {
+    if (selectedTaskId.isNotEmpty) {
       // タスク更新のPUT処理
-      data = await TaskService().updateTaskStatus(
-        selectedTaskId: selectedTaskId,
-        message: message
+      result = await TaskService().updateTaskStatus(
+        selectedTaskId: [selectedTaskId.first],
+        message: message,
       );
+
+      // requireImageがtrueの場合、resultに格納する
+      for (final item in selectedTaskId) {
+        target = await TaskService().updateTaskStatus(
+          selectedTaskId: [item],
+          message: message,
+        );
+
+        if (target['requireImage'] == true) {
+          result = target;
+        }
+      }
     } else {
       debugPrint('❌ 選択されたタスクIDが見つかりません');
     }
 
-    return data;
+    return result;
   }
 
   // ランダムに値を出力する処理
-  int randamNum(
-    int min,
-    int max,
-  ) {
+  int randamNum(int min, int max) {
     final random = Random();
     // 最小値 min、最大値 max の場合 (最大値を含む)
     int rangeValue = min + random.nextInt(max - min + 1);
@@ -221,7 +223,6 @@ class TaskViewModel {
 
   // フレンドの承認待ちのタスクを取得し、ランダムに一つ表示する処理
   Future<(TaskInfo, FriendInfo)> getFriendPicture() async {
-
     final pendingData = await _service.getFriendPending();
     if (pendingData.isEmpty) {
       throw Exception('承認待ちタスクがありません');
@@ -233,7 +234,14 @@ class TaskViewModel {
       // ToDo: モックで返ってくる承認待ちユーザーのIDがフレンド一覧にいないためテストデータ
       // (f) => f.userId == pendingData[random].userId,
       (f) => f.userId == 'u00001',
-      orElse: () => FriendInfo(background: '', dirtLevel: 0, healthPoint: 0, iconName: '', userName: 'notFound', userId: '')
+      orElse: () => FriendInfo(
+        background: '',
+        dirtLevel: 0,
+        healthPoint: 0,
+        iconName: '',
+        userName: 'notFound',
+        userId: '',
+      ),
     );
 
     return (pendingData[random], selectrdFrien);
