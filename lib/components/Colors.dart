@@ -14,6 +14,7 @@ class AppColors {
   static const Color text = Color(0xFF033535);
   static const Color grayBackground = Color(0xFFEEEEEE);
   static const Color gray = Color(0xFF7A867E);
+  static const Color black = Color(0x00000000);
 
 // アイコンのカラー
   static const Color icon1 = Color(0xFF3D7D73);

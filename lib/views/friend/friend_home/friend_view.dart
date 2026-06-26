@@ -167,7 +167,6 @@ class FriendHomeView extends StatelessWidget {
           TrashLayer(theme: theme, layer: TrashLayerType.back),
           // キャラクター画像
           CharacterLayer(theme: theme),
-
           TrashLayer(theme: theme, layer: TrashLayerType.front),
 
           // ステータスとボタンのコンテナ
