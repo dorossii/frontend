@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+// メッセージ送信デザインのコンポーネント
 class CreateMessageDesign extends StatelessWidget {
   final TaskViewModel viewModel;
   final TextEditingController controller;

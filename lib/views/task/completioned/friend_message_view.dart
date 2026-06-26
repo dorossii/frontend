@@ -3,6 +3,7 @@ import 'package:authbase_mobile/views/component/task/create_message_design.dart'
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:flutter/material.dart';
 
+// フレンドにメッセージを送る画面
 class FriendMessageView extends StatefulWidget {
   final TaskViewModel viewModel;
   final FriendInfo friendData;
@@ -36,7 +37,6 @@ class _FriendMessageView extends State<FriendMessageView> {
     super.dispose();
   }
 
-  // 完了したタスクの写真を撮る画面
   @override
   Widget build(BuildContext context) {
     return CreateMessageDesign(

@@ -167,39 +167,45 @@ class TaskViewModel {
   /// タスクを更新する処理 ------------------------------
 
   // タスク更新(完了/未完了)
-  Future<Map<String, dynamic>> handleUpdateTask(
+  Future<(Map<String, dynamic>, String)> handleUpdateTask(
     List<String> selectedTaskId, // 選択されているタスクのリスト
     String message,
     TaskViewModel viewModel,
   ) async {
-    debugPrint("🔋 selectedTaskId: $selectedTaskId");
 
-    Map<String, dynamic> result = {}; // 結果を格納する変数
+    Map<String, dynamic> res = {}; // 結果を格納する変数
     Map<String, dynamic> target = {}; // データを一つづつ格納する変数
+    String resultId = "";
 
     if (selectedTaskId.isNotEmpty) {
+
+      resultId = selectedTaskId.first;
+
       // タスク更新のPUT処理
-      result = await TaskService().updateTaskStatus(
-        selectedTaskId: [selectedTaskId.first],
+      res = await TaskService().updateTaskStatus(
+        selectedTaskId: [resultId],
         message: message,
       );
 
-      // requireImageがtrueの場合、resultに格納する
+      // 選択が複数の場合、requireImageがtrueの要素でresultを上書き
       for (final item in selectedTaskId) {
+
         target = await TaskService().updateTaskStatus(
           selectedTaskId: [item],
           message: message,
         );
 
         if (target['requireImage'] == true) {
-          result = target;
+          res = target;
+          resultId = item;
         }
       }
+
     } else {
       debugPrint('❌ 選択されたタスクIDが見つかりません');
     }
-
-    return result;
+    
+    return (res, resultId);
   }
 
   // ランダムに値を出力する処理
@@ -231,7 +237,7 @@ class TaskViewModel {
     int random = randamNum(0, pendingData.length - 1);
     // フレンド名を取得
     FriendInfo selectrdFrien = friendList.firstWhere(
-      // ToDo: モックで返ってくる承認待ちユーザーのIDがフレンド一覧にいないためテストデータ
+      // ToDo: モックで返ってくる承認待ちユーザーがフレンド一覧にいないためテストデータ
       // (f) => f.userId == pendingData[random].userId,
       (f) => f.userId == 'u00001',
       orElse: () => FriendInfo(

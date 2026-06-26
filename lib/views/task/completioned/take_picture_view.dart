@@ -4,9 +4,10 @@ import 'package:authbase_mobile/views/component/task/take_picture_design.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:flutter/material.dart';
 
+// 写真を撮る画面
 class TakePictureView extends StatefulWidget {
   final TaskViewModel viewModel;
-  final List<String> selectedTaskId;
+  final String selectedTaskId;
   
   const TakePictureView({
     super.key,
@@ -26,9 +27,8 @@ class _TakePictureView extends State<TakePictureView> {
     super.initState();
 
     // タスクの名前を取得
-    // Todo：送られてきた選択済みの配列の一番最初の要素を取ってるので、選ばれたIDを選択するようにする処理に変更が必要
     lavelTask = widget.viewModel.taskList.firstWhere(
-      (t) => t.taskId == widget.selectedTaskId[0],
+      (t) => t.taskId == widget.selectedTaskId,
     );
 
     widget.viewModel.initialize(() {
@@ -44,14 +44,23 @@ class _TakePictureView extends State<TakePictureView> {
       viewModel: widget.viewModel,
       taskName: lavelTask.taskName,
       lavelText: "完了した場所の写真を撮ろう！！",
-      buttomBtn: _buttomBtn,
-      pageType: "user",
-      imagePath: "",
+      imgContainer: _imgContainer,
+      buttomBtn: _buttomBtn,      
     );
   }
 
-    Widget _buttomBtn() {
+  // 写真撮影の画像を表示する部分
+  Widget _imgContainer() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: AppColors.subWhiteBackground,
+      ),
+    );
+  }
 
+  // 撮影ボタン
+  Widget _buttomBtn() {
     return Container(
       height: 64,
       width: 64,
@@ -70,6 +79,5 @@ class _TakePictureView extends State<TakePictureView> {
         ],
       ),
     );
-
   }
 }

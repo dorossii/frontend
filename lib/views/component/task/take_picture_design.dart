@@ -1,25 +1,23 @@
 import 'package:authbase_mobile/components/Colors.dart';
-import 'package:authbase_mobile/views/app.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
+// 写真確認画面デザインのコンポーネント
 class TakePictureDesign extends StatelessWidget {
   final TaskViewModel viewModel;
   final String taskName;
   final String lavelText;
-  final buttomBtn;
-  final String pageType;    // user or friend
-  final String imagePath;
-  
+  final imgContainer; // 写真部分のウィジェット
+  final buttomBtn; // 下のボタン部分のウィジェット
+
   const TakePictureDesign({
     super.key,
     required this.viewModel,
     required this.taskName,
     required this.lavelText,
+    required this.imgContainer,
     required this.buttomBtn,
-    required this.pageType,
-    required this.imagePath,
   });
 
   @override
@@ -51,10 +49,7 @@ class TakePictureDesign extends StatelessWidget {
                     ],
                     color: AppColors.subWhiteBackground,
                   ),
-                  child: Text(
-                    taskName,
-                     style: TextStyle(fontSize: 20)
-                    ),
+                  child: Text(taskName, style: TextStyle(fontSize: 20)),
                 ),
                 Positioned(
                   top: -20,
@@ -115,25 +110,7 @@ class TakePictureDesign extends StatelessWidget {
                 ),
               ],
             ),
-
-            // 写真部分
-            child: pageType == "user"
-              ? Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.subWhiteBackground,
-                  ),
-                )
-              : Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.subWhiteBackground,
-                  ),
-                  child: Image.network(
-                    imagePath,
-                    fit: BoxFit.fill,
-                  ),
-                )
+            child: imgContainer(), // 写真部分
           ),
           buttomBtn(),
         ],

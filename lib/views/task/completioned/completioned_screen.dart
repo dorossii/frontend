@@ -11,9 +11,10 @@ import 'package:authbase_mobile/views/task/completioned/take_picture_view.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:flutter/material.dart';
 
+// タスク確定後に表示させる画面
 class CompletionedScreen extends StatelessWidget {
   final TaskViewModel viewModel;
-  final List<String> selectedTaskId;
+  final String selectedTaskId;
   final int confirmType;
 
   const CompletionedScreen({
@@ -40,7 +41,6 @@ class CompletionedScreen extends StatelessWidget {
     );
   }
 
-  // ignore: strict_top_level_inference
   Widget _buildContent(confirmType) {
 
     switch(confirmType) {

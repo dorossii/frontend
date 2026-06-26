@@ -3,6 +3,7 @@ import 'package:authbase_mobile/views/component/task/create_message_design.dart'
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:flutter/material.dart';
 
+// 未来の自分にメッセージを送る画面
 class CreateMessageView extends StatefulWidget {
   final TaskViewModel viewModel;
   final UserStatus userStatus;
