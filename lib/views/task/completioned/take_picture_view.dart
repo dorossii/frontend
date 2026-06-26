@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class TakePictureView extends StatefulWidget {
   final TaskViewModel viewModel;
   final String selectedTaskId;
-  
+
   const TakePictureView({
     super.key,
     required this.viewModel,
@@ -45,7 +45,7 @@ class _TakePictureView extends State<TakePictureView> {
       taskName: lavelTask.taskName,
       lavelText: "完了した場所の写真を撮ろう！！",
       imgContainer: _imgContainer,
-      buttomBtn: _buttomBtn,      
+      buttomBtn: _buttomBtn,
     );
   }
 

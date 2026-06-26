@@ -149,7 +149,12 @@ class _TaskView extends State<TaskView> {
                           // 完了時の処理
                           onUpDate: () async {
                             // タスク更新処理
-                            final (data, resultId) = await widget.viewModel.handleUpdateTask(selectedTaskId, "", widget.viewModel);
+                            final (data, resultId) = await widget.viewModel
+                                .handleUpdateTask(
+                                  selectedTaskId,
+                                  "",
+                                  widget.viewModel,
+                                );
 
                             // 画面遷移
                             Navigator.of(context).push(
@@ -159,8 +164,8 @@ class _TaskView extends State<TaskView> {
                                   selectedTaskId: resultId,
                                   // 写真が必須の場合は1(写真を撮る画面)
                                   confirmType: data['requireImage']
-                                    ? 1
-                                    : widget.viewModel.randamNum(2, 4),
+                                      ? 1
+                                      : widget.viewModel.randamNum(2, 4),
                                 ),
                               ),
                             );

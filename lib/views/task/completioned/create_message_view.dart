@@ -41,7 +41,7 @@ class _CreateMessageView extends State<CreateMessageView> {
   @override
   Widget build(BuildContext context) {
     return CreateMessageDesign(
-      viewModel:  widget.viewModel,
+      viewModel: widget.viewModel,
       controller: _controller,
       labelText: "未来の自分に向けて、メッセージを送ろう！",
       sendUserId: widget.userStatus.userId,

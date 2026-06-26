@@ -6,7 +6,6 @@ import '../../constants/app_config.dart';
 
 /// タスクの情報を取得する
 class TaskService {
-
   /// API URL
   static const String url =
       MockApiResponse.baseUrl + MockApiResponse.taskListEndpoint;
@@ -45,11 +44,9 @@ class TaskService {
     required List<String> selectedTaskId,
     required String message,
   }) async {
-
     final http.Response response;
 
-    if(selectedTaskId.length == 1) {
-
+    if (selectedTaskId.length == 1) {
       // 単体で更新
       response = await http.put(
         Uri.parse('$url/${selectedTaskId.first}'),
@@ -108,7 +105,6 @@ class TaskService {
     required String sendUserId,
     required String message,
   }) async {
-
     // データを送信する ----------------------
     // 送信するデータ（マップ型）
     final Map<String, dynamic> requestData = {

@@ -26,26 +26,23 @@ class CompletionedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppHeader(currentPage: PageType.task),
       body: DefaultTextStyle(
-        style: TextStyle(
-          fontFamily: 'textFont',
-          color: AppColors.darkEdgey,
-        ),
-        child: 
-          _buildContent(confirmType),
+        style: TextStyle(fontFamily: 'textFont', color: AppColors.darkEdgey),
+        child: _buildContent(confirmType),
       ),
     );
   }
 
   Widget _buildContent(confirmType) {
-
-    switch(confirmType) {
+    switch (confirmType) {
       case 1:
-        return TakePictureView(viewModel: viewModel, selectedTaskId: selectedTaskId);
+        return TakePictureView(
+          viewModel: viewModel,
+          selectedTaskId: selectedTaskId,
+        );
       case 2:
         return FriendPictureView(viewModel: viewModel);
       case 3:
@@ -64,7 +61,7 @@ class CompletionedScreen extends StatelessWidget {
               viewModel: viewModel,
               userStatus: snapshot.data!,
             );
-          }
+          },
         );
       case 4:
         return FutureBuilder<FriendInfo>(
@@ -81,7 +78,7 @@ class CompletionedScreen extends StatelessWidget {
           },
         );
       default:
-      return SizedBox();
+        return SizedBox();
     }
   }
 }

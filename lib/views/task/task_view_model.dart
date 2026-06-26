@@ -172,13 +172,11 @@ class TaskViewModel {
     String message,
     TaskViewModel viewModel,
   ) async {
-
     Map<String, dynamic> res = {}; // 結果を格納する変数
     Map<String, dynamic> target = {}; // データを一つづつ格納する変数
     String resultId = "";
 
     if (selectedTaskId.isNotEmpty) {
-
       resultId = selectedTaskId.first;
 
       // タスク更新のPUT処理
@@ -189,7 +187,6 @@ class TaskViewModel {
 
       // 選択が複数の場合、requireImageがtrueの要素でresultを上書き
       for (final item in selectedTaskId) {
-
         target = await TaskService().updateTaskStatus(
           selectedTaskId: [item],
           message: message,
@@ -200,11 +197,10 @@ class TaskViewModel {
           resultId = item;
         }
       }
-
     } else {
       debugPrint('❌ 選択されたタスクIDが見つかりません');
     }
-    
+
     return (res, resultId);
   }
 

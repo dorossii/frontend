@@ -31,7 +31,7 @@ class _FriendPictureView extends State<FriendPictureView> {
       final (task, friend) = await widget.viewModel.getFriendPicture();
 
       if (!mounted) return;
-      
+
       setState(() {
         pendingData = task;
         selectedFriend = friend;
@@ -65,11 +65,11 @@ class _FriendPictureView extends State<FriendPictureView> {
         color: AppColors.subWhiteBackground,
       ),
       child: (pendingData != null)
-        ? Image.network(
-            'https://mock-dorossii.mattuu.com/app/user/task/${pendingData!.imageId}/image',
-            fit: BoxFit.cover,
-          )
-        : SizedBox.shrink(),
+          ? Image.network(
+              'https://mock-dorossii.mattuu.com/app/user/task/${pendingData!.imageId}/image',
+              fit: BoxFit.cover,
+            )
+          : SizedBox.shrink(),
     );
   }
 
@@ -78,83 +78,86 @@ class _FriendPictureView extends State<FriendPictureView> {
     return Column(
       children: [
         Container(
-            margin: EdgeInsets.only(top: 8),
-            child: Text('この写真でタスクが完了しているか判定してください'),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 24, bottom: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _buildShowDialog();
-                  },
-                  child: Container(
-                    width: 112,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: AppColors.subBackground,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade400,
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      "未完了",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.subWhiteBackground,
+          margin: EdgeInsets.only(top: 8),
+          child: Text('この写真でタスクが完了しているか判定してください'),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 24, bottom: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _buildShowDialog();
+                },
+                child: Container(
+                  width: 112,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.subBackground,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade400,
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 3),
                       ),
+                    ],
+                  ),
+                  child: Text(
+                    "未完了",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.subWhiteBackground,
                     ),
                   ),
                 ),
-                SizedBox(width: 48),
-                GestureDetector(
-                  onTap: () {
-                    TaskService().updateTaskStatus(selectedTaskId: selectedTaskId, message: "");
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => SplashScreen()),
-                    );
-                  },
-                  child: Container(
-                    width: 112,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: AppColors.background,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade400,
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      "完了",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.subWhiteBackground,
+              ),
+              SizedBox(width: 48),
+              GestureDetector(
+                onTap: () {
+                  TaskService().updateTaskStatus(
+                    selectedTaskId: selectedTaskId,
+                    message: "",
+                  );
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SplashScreen()),
+                  );
+                },
+                child: Container(
+                  width: 112,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade400,
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 3),
                       ),
+                    ],
+                  ),
+                  child: Text(
+                    "完了",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.subWhiteBackground,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Text(
-            "フレンドのタスクの完了処理を行います。",
-            style: TextStyle(color: AppColors.darkEdgey.withValues(alpha: 0.5)),
-          ),
+        ),
+        Text(
+          "フレンドのタスクの完了処理を行います。",
+          style: TextStyle(color: AppColors.darkEdgey.withValues(alpha: 0.5)),
+        ),
       ],
     );
   }
@@ -218,7 +221,10 @@ class _FriendPictureView extends State<FriendPictureView> {
                       SizedBox(width: 32),
                       GestureDetector(
                         onTap: () => {
-                          TaskService().sendMessage(sendUserId: selectedFriend!.userId, message: _controller.text),
+                          TaskService().sendMessage(
+                            sendUserId: selectedFriend!.userId,
+                            message: _controller.text,
+                          ),
                           // 画面遷移
                           Navigator.of(context).push(
                             MaterialPageRoute(
