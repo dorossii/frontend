@@ -2,22 +2,47 @@ import 'package:flutter/material.dart';
 
 import '../../../components/Colors.dart';
 import '../../../components/extensions/life_state_layout.dart';
-import '../../../components/models/status.dart';
+import '../../../components/widgets/app_footer.dart';
+import '../../../components/widgets/app_header.dart';
 import '../../../components/widgets/character/character_layer.dart';
+import '../../app.dart';
+import '../../component/home/bottom_view.dart';
+import '../../friend/friend_home/friend_view_model.dart';
 
 class FriendRipEvent extends StatelessWidget {
-  const FriendRipEvent({super.key});
+  final FriendHomeViewModel viewModel;
+  final Function(PageType) onTabSelected;
 
+  const FriendRipEvent({
+    super.key,
+    required this.viewModel,
+    required this.onTabSelected,
+  });
   @override
   Widget build(BuildContext context) {
-    // ripイベントのテーマを取得
-    final theme = LifeState.rip.theme;
-    return Stack(
-      children: [
-        Container(color: AppColors.black), // 背景色を黒に設定
-        // キャラクター画像
-        CharacterLayer(theme: theme),
-      ],
+    final theme = viewModel.currentState.theme;
+    final friend = viewModel.friendInfo;
+    return Scaffold(
+      appBar: AppHeader(currentPage: PageType.friend),
+      extendBody: false,
+      extendBodyBehindAppBar: false,
+      bottomNavigationBar: AppFooter(
+        currentPage: null,
+        onTap: (page) {
+          Navigator.pop(context);
+          if (page != PageType.friend) {
+            onTabSelected(page);
+          }
+        },
+      ),
+      backgroundColor: AppColors.black,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          CharacterLayer(theme: theme),
+          BottomView(),
+        ],
+      ),
     );
   }
 }
