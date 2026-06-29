@@ -40,7 +40,7 @@ class FriendRipEvent extends StatelessWidget {
       body: Stack(
         children: [
           Positioned(
-            top: 100.0, 
+            top: 100.0,
             left: 0,
             right: 0,
             child: Center(
@@ -54,7 +54,10 @@ class FriendRipEvent extends StatelessWidget {
           ),
 
           CharacterLayer(theme: theme),
-          BottomView(),
+          BottomView(
+            description: viewModel.currentState.theme.description,
+            healthPoint: viewModel.friendInfo.healthPoint,
+          ),
         ],
       ),
     );

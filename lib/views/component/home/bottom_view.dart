@@ -1,25 +1,23 @@
 // 友達救済のボタンとステータス表示を含む、ホーム画面の下部に配置されるウィジェット
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../components/Colors.dart';
-import '../../../components/extensions/life_state_layout.dart';
-import '../../../components/extensions/user_view_model.dart';
 import '../../../models/friend_rescue.dart';
 import '../../../services/friend/friend_rescue_service.dart';
 import '../rescue/rescue_view.dart';
 import '../rescue/rescue_view_model.dart';
 
 class BottomView extends StatelessWidget {
-  const BottomView({super.key});
+  final String description;
+  final int healthPoint;
+  const BottomView({
+    super.key,
+    required this.description,
+    required this.healthPoint,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<UserViewModel>();
-
-    final theme = vm.currentState.theme;
-    final user = vm.userStatus;
-
     return Align(
       alignment: Alignment.bottomCenter,
       child: SafeArea(
@@ -49,11 +47,11 @@ class BottomView extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildStatusBox("汚さレベル", theme.description),
+                    _buildStatusBox("汚さレベル", description),
                     const SizedBox(height: 8),
                     _buildStatusBox(
                       "HP",
-                      "${((user?.healthPoint ?? 0) / 10).floor()}/100",
+                      "${((healthPoint) / 10).floor()}/100",
                     ),
                   ],
                 ),

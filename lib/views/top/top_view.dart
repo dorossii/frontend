@@ -39,7 +39,10 @@ class TopView extends StatelessWidget {
                 TrashLayer(theme: theme, layer: TrashLayerType.front),
 
                 // ステータスとボタンのコンテナ
-                BottomView(),
+                BottomView(
+                  description: vm.currentState.theme.description,
+                  healthPoint: vm.userStatus?.healthPoint ?? 0,
+                ),
               ],
             ),
     );

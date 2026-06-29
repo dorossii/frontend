@@ -170,7 +170,10 @@ class FriendNormalHomeView extends StatelessWidget {
           TrashLayer(theme: theme, layer: TrashLayerType.front),
 
           // ステータスとボタンのコンテナ
-          BottomView(),
+          BottomView(
+            description: viewModel.currentState.theme.description,
+            healthPoint: viewModel.friendInfo.healthPoint,
+          ),
         ],
       ),
     );
