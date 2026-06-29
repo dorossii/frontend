@@ -6,6 +6,7 @@ import '../../../components/widgets/app_footer.dart';
 import '../../../components/widgets/app_header.dart';
 import '../../../components/widgets/character/character_layer.dart';
 import '../../app.dart';
+import '../../component/animation/typing/typing_text.dart';
 import '../../component/home/bottom_view.dart';
 import '../../friend/friend_home/friend_view_model.dart';
 
@@ -37,8 +38,21 @@ class FriendRipEvent extends StatelessWidget {
       ),
       backgroundColor: AppColors.black,
       body: Stack(
-        fit: StackFit.expand,
         children: [
+          Positioned(
+            top: 100.0, 
+            left: 0,
+            right: 0,
+            child: Center(
+              child: TypingText(
+                friendName: friend.userName,
+                onFinished: () {
+                  print("タイピング終了");
+                },
+              ),
+            ),
+          ),
+
           CharacterLayer(theme: theme),
           BottomView(),
         ],
