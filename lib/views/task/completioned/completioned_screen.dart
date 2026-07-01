@@ -37,6 +37,9 @@ class CompletionedScreen extends StatelessWidget {
   }
 
   Widget _buildContent(confirmType) {
+
+    confirmType = 1;
+    
     switch (confirmType) {
       case 1:
         return TakePictureView(
