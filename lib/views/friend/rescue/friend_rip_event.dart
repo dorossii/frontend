@@ -91,7 +91,7 @@ class _FriendRipEventState extends State<FriendRipEvent> {
                           MaterialPageRoute(
                             builder: (_) => CallScreen(
                               roomName: "test-room",
-                              participantName: "aaaa",
+                              participantName: vm.userStatus?.userName ?? "User",
                             ),
                           ),
                         );
