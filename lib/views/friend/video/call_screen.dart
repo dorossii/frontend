@@ -117,8 +117,12 @@ class _CallScreenState extends State<CallScreen> {
           dev.log(
             '[LK] ParticipantConnectedEvent: ${event.participant.identity}',
           );
-          // 参加者リストを再構築して画面を更新する
-          if (mounted) setState(() => _updateParticipants(room));
+
+          if (mounted) {
+            setState(() {
+              _updateParticipants(room);
+            });
+          }
         })
         // 他の参加者がルームから退出したときの処理
         ..on<ParticipantDisconnectedEvent>((event) {
@@ -179,12 +183,20 @@ class _CallScreenState extends State<CallScreen> {
 
   // ルームの現在の参加者リストをローカル参加者を先頭にして再構築するメソッド
   void _updateParticipants(Room room) {
-    _participants = [
-      // ローカル参加者（自分自身）を最初に追加する
-      room.localParticipant!,
-      // リモート参加者（他のユーザー）を後ろに追加する
-      ...room.remoteParticipants.values,
-    ];
+    // ローカル参加者を先頭、その後にリモート参加者を追加
+    _participants = [room.localParticipant!, ...room.remoteParticipants.values];
+
+    // ===== デバッグログ =====
+    dev.log('===== Participants (${_participants.length}) =====');
+
+    for (final p in _participants) {
+      dev.log(
+        'identity: ${p.identity}, '
+        'type: ${p.runtimeType}',
+      );
+    }
+
+    dev.log('========================');
   }
 
   // マイクのオン/オフを切り替える非同期メソッド
