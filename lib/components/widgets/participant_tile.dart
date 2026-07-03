@@ -169,8 +169,10 @@ class _ParticipantTileState extends State<ParticipantTile> {
                       displayName,
                       style: const TextStyle(
                         // 文字色は白、サイズは12px
-                        color: Colors.white,
+                        color: AppColors.subBackground,
                         fontSize: 12,
+                        fontFamily: "textFont",
+                        fontWeight: FontWeight.bold,
                       ),
                       // 名前が長い場合は末尾を「...」で省略する
                       overflow: TextOverflow.ellipsis,

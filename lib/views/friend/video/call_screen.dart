@@ -1,4 +1,4 @@
-// デバッグログ出力のために dart:developer をインポートする（dev.log でログを出力）
+// デバッグログ出力のために dart:developer をインポートする（print でログを出力）
 import 'dart:developer' as dev;
 // Flutterのマテリアルデザインウィジェットをインポートする
 import 'package:flutter/material.dart';
@@ -69,8 +69,8 @@ class _CallScreenState extends State<CallScreen> {
 
   // LiveKit サーバーへ接続する非同期メソッド
   Future<void> _connect() async {
-    dev.log('participantName = ${widget.participantName}');
-    dev.log('roomName = ${widget.roomName}');
+    print('participantName = ${widget.participantName}');
+    print('roomName = ${widget.roomName}');
 
     try {
       // TokenService を使って JWT アクセストークンを生成する
@@ -95,7 +95,7 @@ class _CallScreenState extends State<CallScreen> {
       _listener!
         // ルームへの接続が完了したときの処理
         ..on<RoomConnectedEvent>((event) {
-          dev.log('[LK] RoomConnectedEvent');
+          print('[LK] RoomConnectedEvent');
           if (mounted) {
             setState(() {
               // ローディング画面を非表示にする
@@ -107,14 +107,23 @@ class _CallScreenState extends State<CallScreen> {
         })
         // ルームから切断されたときの処理（通常終了・エラー両方）
         ..on<RoomDisconnectedEvent>((event) {
-          dev.log('[LK] RoomDisconnectedEvent: ${event.reason}');
+          print('========== DISCONNECTED ==========');
+          print('reason : ${event.reason}');
+          print('room   : ${room.name}');
+          print('local  : ${room.localParticipant?.identity}');
+          print('remote : ${room.remoteParticipants.length}');
+          print(event.toString());
+          print('=================================');
 
-          // 前の画面（JoinScreen）に戻る
-          if (mounted) Navigator.of(context).pop();
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
         })
         // 他の参加者がルームに参加したときの処理
         ..on<ParticipantConnectedEvent>((event) {
-          dev.log(
+          print("NEW PARTICIPANT");
+          print(event.participant.identity);
+          print(
             '[LK] ParticipantConnectedEvent: ${event.participant.identity}',
           );
 
@@ -126,7 +135,7 @@ class _CallScreenState extends State<CallScreen> {
         })
         // 他の参加者がルームから退出したときの処理
         ..on<ParticipantDisconnectedEvent>((event) {
-          dev.log(
+          print(
             '[LK] ParticipantDisconnectedEvent: ${event.participant.identity}',
           );
           // 参加者リストを再構築して画面を更新する
@@ -134,13 +143,13 @@ class _CallScreenState extends State<CallScreen> {
         })
         // 他の参加者のトラック（音声・映像）のサブスクライブが完了したときの処理
         ..on<TrackSubscribedEvent>((event) {
-          dev.log('[LK] TrackSubscribedEvent');
+          print('[LK] TrackSubscribedEvent');
           // 映像表示を更新するために参加者リストを再構築する
           if (mounted) setState(() => _updateParticipants(room));
         })
         // 他の参加者のトラックのサブスクライブが解除されたときの処理
         ..on<TrackUnsubscribedEvent>((event) {
-          dev.log('[LK] TrackUnsubscribedEvent');
+          print('[LK] TrackUnsubscribedEvent');
           // 映像表示を更新するために参加者リストを再構築する
           if (mounted) setState(() => _updateParticipants(room));
         })
@@ -168,8 +177,10 @@ class _CallScreenState extends State<CallScreen> {
 
       // 接続成功後にルームオブジェクトをフィールドに保持する
       _room = room;
-    } catch (e) {
-      dev.log('[LK] connect error: $e');
+    } catch (e, stack) {
+      print('CONNECT ERROR');
+      print(e.toString());
+      print(stack.toString());
       if (mounted) {
         setState(() {
           // ローディング画面を非表示にする
@@ -187,16 +198,16 @@ class _CallScreenState extends State<CallScreen> {
     _participants = [room.localParticipant!, ...room.remoteParticipants.values];
 
     // ===== デバッグログ =====
-    dev.log('===== Participants (${_participants.length}) =====');
+    print('===== Participants (${_participants.length}) =====');
 
     for (final p in _participants) {
-      dev.log(
+      print(
         'identity: ${p.identity}, '
         'type: ${p.runtimeType}',
       );
     }
 
-    dev.log('========================');
+    print('========================');
   }
 
   // マイクのオン/オフを切り替える非同期メソッド
