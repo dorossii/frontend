@@ -95,6 +95,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
 
   @override
   Widget build(BuildContext context) {
+    final isLocal = widget.isLocal;
     // 参加者名が空の場合は「匿名」を使用する
     final name = widget.participant.identity.isNotEmpty
         ? widget.participant.identity
@@ -143,48 +144,39 @@ class _ParticipantTileState extends State<ParticipantTile> {
             ),
           // 名前バー（タイル下部に絶対配置で表示）
           Positioned(
-            // 下から8pxの位置に配置
             bottom: 8,
-            // 左端から8px内側に配置
             left: 8,
-            // 右端から8px内側に配置
             right: 8,
             child: Container(
-              // 横8px・縦4pxのパディングを設定する
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                // 半透明の黒背景（名前を読みやすくするため）
-                color: Colors.black54,
-                // 角を6pxの半径で丸める
+              decoration:isLocal ? BoxDecoration(
+                color: Colors.black45,
                 borderRadius: BorderRadius.circular(6),
-              ),
+              ) : null,
               child: Row(
-                // Rowが内容に合わせた最小サイズになるようにする
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // 名前テキストを残りのスペースいっぱいに広げる
-                  Expanded(
+                  Flexible(
                     child: Text(
-                      // 表示用の名前（自分の場合は「(自分)」付き）
                       displayName,
-                      style: const TextStyle(
-                        // 文字色は白、サイズは12px
-                        color: AppColors.subBackground,
-                        fontSize: 12,
+                      style: TextStyle(
+                        color: isLocal ? AppColors.subBackground : AppColors.text,
+                        fontSize: isLocal ? 14 : 24,
                         fontFamily: "textFont",
                         fontWeight: FontWeight.bold,
                       ),
-                      // 名前が長い場合は末尾を「...」で省略する
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  // オーディオが無効（ミュート中）の場合はミュートアイコンを表示する
+
                   if (!_audioEnabled)
-                    const Icon(
-                      Icons.mic_off,
-                      // アイコン色は赤系、サイズは14px
-                      color: Colors.redAccent,
-                      size: 14,
+                    Padding(
+                      padding: EdgeInsets.only(left: 4),
+                      child: Icon(
+                        Icons.mic_off,
+                        color: Colors.redAccent,
+                        size: isLocal ? 12 : 20,
+                      ),
                     ),
                 ],
               ),

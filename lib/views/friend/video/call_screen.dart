@@ -329,7 +329,11 @@ class _CallScreenState extends State<CallScreen> {
         child: Stack(
           children: [
             /// 相手の映像
-            Positioned.fill(
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 160,
               child: _participants.length >= 2
                   ? ParticipantTile(
                       participant: _participants[1],

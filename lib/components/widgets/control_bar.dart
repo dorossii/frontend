@@ -56,7 +56,7 @@ class ControlBar extends StatelessWidget {
           _ControlButton(
             icon: Icons.call_end,
             label: '終了',
-            color: Colors.white,
+            color: AppColors.subBackground,
             // 終了ボタンのみ赤背景にする
             backgroundColor: Colors.red,
             textStyle: const TextStyle(
