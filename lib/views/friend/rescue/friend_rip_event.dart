@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../components/Colors.dart';
 import '../../../components/extensions/life_state_layout.dart';
-import '../../../components/extensions/user_view_model.dart';
 import '../../../components/widgets/app_footer.dart';
 import '../../../components/widgets/app_header.dart';
 import '../../../components/widgets/character/character_layer.dart';
+import '../../../services/auth_manager.dart';
 import '../../app.dart';
 import '../../component/animation/typing/typing_text.dart';
 import '../../component/home/bottom_view.dart';
@@ -28,12 +27,10 @@ class FriendRipEvent extends StatefulWidget {
 }
 
 class _FriendRipEventState extends State<FriendRipEvent> {
-  
   bool _showButtons = false;
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<UserViewModel>();
     final theme = widget.viewModel.currentState.theme;
     final friend = widget.viewModel.friendInfo;
 
@@ -85,13 +82,15 @@ class _FriendRipEventState extends State<FriendRipEvent> {
                     width: 260,
                     height: 56,
                     child: ElevatedButton.icon(
-                      onPressed: () {
+                      onPressed: () async {
+                        final userInfo = await AuthManager.getCurrentUserInfo();
+                        final name = userInfo?.name ?? "unknown";
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => CallScreen(
                               roomName: "test-room",
-                              participantName:  vm.userName,
+                              participantName: name,
                             ),
                           ),
                         );
