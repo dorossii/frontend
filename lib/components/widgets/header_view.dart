@@ -73,8 +73,6 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
 
   // 通常画面用：マイステータス
   Widget _buildMyStatusHeader(UserViewModel vm, BuildContext context) {
-    final user = vm.userStatus;
-    final theme = vm.currentState.theme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
