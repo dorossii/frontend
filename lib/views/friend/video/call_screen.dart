@@ -69,6 +69,9 @@ class _CallScreenState extends State<CallScreen> {
 
   // LiveKit サーバーへ接続する非同期メソッド
   Future<void> _connect() async {
+    dev.log('participantName = ${widget.participantName}');
+    dev.log('roomName = ${widget.roomName}');
+
     try {
       // TokenService を使って JWT アクセストークンを生成する
       final token = TokenService.generate(
@@ -105,6 +108,7 @@ class _CallScreenState extends State<CallScreen> {
         // ルームから切断されたときの処理（通常終了・エラー両方）
         ..on<RoomDisconnectedEvent>((event) {
           dev.log('[LK] RoomDisconnectedEvent: ${event.reason}');
+
           // 前の画面（JoinScreen）に戻る
           if (mounted) Navigator.of(context).pop();
         })
@@ -311,7 +315,12 @@ class _CallScreenState extends State<CallScreen> {
                   : const Center(
                       child: Text(
                         "相手を待っています...",
-                        style: TextStyle(color: AppColors.subBackground, fontSize: 20, fontFamily: "textFont", fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          color: AppColors.subBackground,
+                          fontSize: 20,
+                          fontFamily: "textFont",
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
             ),

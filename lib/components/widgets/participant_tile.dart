@@ -133,9 +133,10 @@ class _ParticipantTileState extends State<ParticipantTile> {
                     // 文字サイズ28px
                     fontSize: 28,
                     // 文字色は白
-                    color: Colors.white,
+                    color: AppColors.subBackground,
                     // 太字で表示
                     fontWeight: FontWeight.bold,
+                    fontFamily: "textFont",
                   ),
                 ),
               ),
