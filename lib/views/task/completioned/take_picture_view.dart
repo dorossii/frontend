@@ -42,23 +42,70 @@ class _TakePictureView extends State<TakePictureView> {
   }
 
   Future<void> checkCamera() async {
-    // デバイスで使用可能なカメラのリストを取得
-    final cameras = await availableCameras();
+    try {
+      final cameras = await availableCameras();
 
-    // 利用可能なカメラのリストから特定のカメラを取得
-    final firstCamera = cameras.first;
+      // カメラが存在しない場合の処理
+      if (cameras.isEmpty) {
+        _showCameraError('カメラの権限をONにしてください');
+        return;
+      }
 
-    _controller = CameraController(
-      // カメラを指定
-      firstCamera,
-      // 解像度を定義
-      ResolutionPreset.medium,
-    );
+      final firstCamera = cameras.first;
+      _controller = CameraController(firstCamera, ResolutionPreset.medium);
 
-    // コントローラーを初期化
-    _initializeControllerFuture = _controller?.initialize();
+      // 初期化エラーをキャッチ
+      _initializeControllerFuture = _controller?.initialize().catchError((
+        error,
+      ) {
+        _showCameraError('カメラの初期化に失敗しました');
+        return Future.error(error);
+      });
 
-    setState(() {});
+      setState(() {});
+    } on CameraException catch (e) {
+      // カメラ固有のエラーを処理
+      _showCameraError('カメラエラー: ${e.description}');
+    } catch (e) {
+      // 予期しないエラーを処理
+      _showCameraError('予期しないエラーが発生しました');
+    }
+  }
+
+  // ユーザーにエラーを通知するメソッド
+  Future<void> _showCameraError(String message) async {
+    if (mounted) {
+      await showDialog(
+        context: context,
+        barrierColor: Colors.transparent,
+        builder: (_) {
+          Future.delayed(const Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
+          return Center(
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.black87,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  message,
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -89,6 +136,27 @@ class _TakePictureView extends State<TakePictureView> {
     return FutureBuilder<void>(
       future: _initializeControllerFuture,
       builder: (context, snapshot) {
+        // ✅ エラー状態をチェック
+        if (snapshot.hasError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'カメラが利用できません\n\n${snapshot.error}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 14, color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
         if (snapshot.connectionState == ConnectionState.done) {
           return CameraPreview(_controller!);
         }
@@ -149,7 +217,7 @@ class _TakePictureView extends State<TakePictureView> {
                   "この写真でよろしいですか？",
                   style: TextStyle(fontSize: 16, fontFamily: 'textFont'),
                 ),
-                SizedBox( height: 16 ),
+                SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
@@ -160,16 +228,14 @@ class _TakePictureView extends State<TakePictureView> {
                       ? Image.file(File(imagePath), fit: BoxFit.cover)
                       : Text("写真取得に失敗しました。"),
                 ),
-                SizedBox( height: 16 ),
+                SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween, // 両端に寄せる
                   children: [
                     SizedBox(
                       width: 114,
                       child: ElevatedButton(
-                        onPressed: () => {
-                          Navigator.pop(context),
-                        },
+                        onPressed: () => {Navigator.pop(context)},
                         style: ElevatedButton.styleFrom(
                           foregroundColor: AppColors.subWhiteBackground,
                           backgroundColor: AppColors.subBackground,
@@ -191,8 +257,10 @@ class _TakePictureView extends State<TakePictureView> {
                       child: ElevatedButton(
                         onPressed: () => {
                           Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => SplashScreen()),
-                          )
+                            MaterialPageRoute(
+                              builder: (context) => SplashScreen(),
+                            ),
+                          ),
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: AppColors.subWhiteBackground,
