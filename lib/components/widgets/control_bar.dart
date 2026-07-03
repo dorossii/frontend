@@ -1,6 +1,8 @@
 // Flutterのマテリアルデザインウィジェットをインポートする
 import 'package:flutter/material.dart';
 
+import '../Colors.dart';
+
 // 通話画面下部に表示するコントロールバーウィジェット（マイク・終了・カメラボタンを含む）
 class ControlBar extends StatelessWidget {
   // マイクの有効状態（true = オン、false = ミュート）
@@ -29,7 +31,7 @@ class ControlBar extends StatelessWidget {
     // コントロールバー全体のコンテナ（背景色・縦パディング設定）
     return Container(
       // 背景色を暗い紺色に設定する
-      color: const Color(0xFF16213E),
+      color: AppColors.subBackground,
       // 上下に16pxのパディングを設定する
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
@@ -40,7 +42,14 @@ class ControlBar extends StatelessWidget {
           _ControlButton(
             icon: micEnabled ? Icons.mic : Icons.mic_off,
             label: micEnabled ? 'ミュート' : 'ミュート解除',
-            color: micEnabled ? Colors.white : Colors.redAccent,
+            color: AppColors.subWhiteBackground, // アイコン色
+            backgroundColor: AppColors.background, // 背景色
+            textStyle: TextStyle(
+              color:micEnabled ? AppColors.subWhiteBackground : Colors.redAccent,
+              fontFamily: 'textFont',
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
             onTap: onToggleMic,
           ),
           // 通話終了ボタン：大きめのサイズ・赤背景で目立たせる
@@ -58,7 +67,14 @@ class ControlBar extends StatelessWidget {
           _ControlButton(
             icon: cameraEnabled ? Icons.videocam : Icons.videocam_off,
             label: cameraEnabled ? 'カメラOFF' : 'カメラON',
-            color: cameraEnabled ? Colors.white : Colors.redAccent,
+            color: AppColors.subWhiteBackground, // アイコン色
+            backgroundColor: AppColors.background, // 背景色
+            textStyle: TextStyle(
+              color:cameraEnabled ? AppColors.subWhiteBackground : Colors.redAccent,
+              fontFamily: 'textFont',
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
             onTap: onToggleCamera,
           ),
         ],
@@ -69,53 +85,57 @@ class ControlBar extends StatelessWidget {
 
 // コントロールバー内の個々のボタンウィジェット（アイコン＋ラベルの縦並び）
 class _ControlButton extends StatelessWidget {
-  // ボタンに表示するアイコン
+  /// アイコン
   final IconData icon;
-  // アイコン下部に表示するラベルテキスト
+
+  /// ラベル
   final String label;
-  // アイコンの色
+
+  /// アイコン色
   final Color color;
-  // アイコンの背景色（デフォルトは濃紺）
+
+  /// 背景色
   final Color backgroundColor;
-  // ボタンタップ時のコールバック
+
+  /// ラベルの文字スタイル
+  final TextStyle? textStyle;
+
+  /// タップ時
   final VoidCallback onTap;
-  // 大きいサイズで表示するかどうか（終了ボタン用）
+
+  /// 終了ボタンだけ大きくする
   final bool large;
 
-  // コンストラクタ：backgroundColorとlargeはオプション（デフォルト値あり）
   const _ControlButton({
+    super.key,
     required this.icon,
     required this.label,
     required this.color,
     required this.onTap,
-    // デフォルト背景色は濃紺
     this.backgroundColor = const Color(0xFF0F3460),
-    // デフォルトは通常サイズ
+    this.textStyle,
     this.large = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // GestureDetector でタップイベントを検知する
     return GestureDetector(
       onTap: onTap,
       child: Column(
-        // Columnが内容に合わせた最小サイズになるようにする
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 円形のアイコンボタン（large の場合は半径30、通常は24）
           CircleAvatar(
             radius: large ? 30 : 24,
             backgroundColor: backgroundColor,
-            // アイコンのサイズも large に応じて切り替える
             child: Icon(icon, color: color, size: large ? 28 : 22),
           ),
-          // アイコンとラベルの間のスペース
-          const SizedBox(height: 4),
-          // ボタンのラベルテキスト（薄い白・小さめフォント）
-          Text(label,
-              style:
-                  const TextStyle(color: Colors.white70, fontSize: 11)),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style:
+                textStyle ??
+                const TextStyle(color: Colors.white70, fontSize: 11),
+          ),
         ],
       ),
     );

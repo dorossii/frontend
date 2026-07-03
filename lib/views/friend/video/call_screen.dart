@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // LiveKit クライアント SDK をインポートする（Room・イベント・トラック操作に使用）
 import 'package:livekit_client/livekit_client.dart';
 // LiveKit サーバーのURL・APIキー等の設定値をインポートする
+import '../../../components/Colors.dart';
 import '/config/livekit_config.dart';
 // JWT アクセストークンを生成するサービスをインポートする
 import '/services/token_service.dart';
@@ -109,13 +110,17 @@ class _CallScreenState extends State<CallScreen> {
         })
         // 他の参加者がルームに参加したときの処理
         ..on<ParticipantConnectedEvent>((event) {
-          dev.log('[LK] ParticipantConnectedEvent: ${event.participant.identity}');
+          dev.log(
+            '[LK] ParticipantConnectedEvent: ${event.participant.identity}',
+          );
           // 参加者リストを再構築して画面を更新する
           if (mounted) setState(() => _updateParticipants(room));
         })
         // 他の参加者がルームから退出したときの処理
         ..on<ParticipantDisconnectedEvent>((event) {
-          dev.log('[LK] ParticipantDisconnectedEvent: ${event.participant.identity}');
+          dev.log(
+            '[LK] ParticipantDisconnectedEvent: ${event.participant.identity}',
+          );
           // 参加者リストを再構築して画面を更新する
           if (mounted) setState(() => _updateParticipants(room));
         })
@@ -214,17 +219,23 @@ class _CallScreenState extends State<CallScreen> {
     if (_connecting) {
       return const Scaffold(
         // 暗い背景色
-        backgroundColor: Color(0xFF1A1A2E),
+        backgroundColor: AppColors.background,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // 紫色のローディングインジケーター
-              CircularProgressIndicator(color: Color(0xFF6C63FF)),
+              // ローディングインジケーター
+              CircularProgressIndicator(color: AppColors.subWhiteBackground),
               SizedBox(height: 20),
               // 接続中メッセージ
-              Text('接続中...',
-                  style: TextStyle(color: Colors.white70, fontSize: 16)),
+              Text(
+                '接続中...',
+                style: TextStyle(
+                  color: AppColors.subWhiteBackground,
+                  fontSize: 16,
+                  fontFamily: 'textfont',
+                ),
+              ),
             ],
           ),
         ),
@@ -234,7 +245,7 @@ class _CallScreenState extends State<CallScreen> {
     // 接続エラーが発生した場合はエラー画面を表示する
     if (_error != null) {
       return Scaffold(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: AppColors.background,
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(32),
@@ -242,23 +253,32 @@ class _CallScreenState extends State<CallScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // エラーを示す赤いアイコン
-                const Icon(Icons.error_outline,
-                    color: Colors.redAccent, size: 64),
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.redAccent,
+                  size: 64,
+                ),
                 const SizedBox(height: 16),
                 // エラータイトルテキスト
-                const Text('接続に失敗しました',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold)),
+                const Text(
+                  '接続に失敗しました',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 12),
                 // エラーの詳細メッセージ（ユーザーがコピーできるように SelectableText を使用）
-                SelectableText(_error!,
-                    style: const TextStyle(
-                        color: Colors.white54,
-                        fontSize: 12,
-                        height: 1.5),
-                    textAlign: TextAlign.center),
+                SelectableText(
+                  _error!,
+                  style: const TextStyle(
+                    color: Colors.white54,
+                    fontSize: 12,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 24),
                 // 前の画面に戻るボタン
                 ElevatedButton.icon(
@@ -266,7 +286,7 @@ class _CallScreenState extends State<CallScreen> {
                   icon: const Icon(Icons.arrow_back),
                   label: const Text('戻る'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6C63FF),
+                    backgroundColor: AppColors.background,
                     foregroundColor: Colors.white,
                   ),
                 ),
@@ -276,74 +296,57 @@ class _CallScreenState extends State<CallScreen> {
         ),
       );
     }
-
-    // 通常の通話画面を表示する
     return Scaffold(
-      // 暗い背景色（ビデオ通話に適した暗めのトーン）
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            // 参加者タイル表示エリア（残りの縦スペースをすべて使う）
-            Expanded(
-              child: _participants.isEmpty
-                  // 参加者がいない場合（接続直後など）は待機メッセージを表示する
-                  ? const Center(
-                      child: Text('他の参加者を待っています...',
-                          style: TextStyle(color: Colors.white54)),
+            /// 相手の映像
+            Positioned.fill(
+              child: _participants.length >= 2
+                  ? ParticipantTile(
+                      participant: _participants[1],
+                      isLocal: false,
                     )
-                  // 参加者が自分1人の場合は中央に大きく表示する
-                  : _participants.length == 1
-                      ? Center(
-                          child: SizedBox(
-                            // 幅・高さ240pxの正方形タイルで表示する
-                            width: 240,
-                            height: 240,
-                            child: ParticipantTile(
-                              participant: _participants[0],
-                              // 1人目はローカル参加者（自分自身）なので isLocal=true
-                              isLocal: true,
-                            ),
-                          ),
-                        )
-                      // 参加者が2人以上の場合はグリッドレイアウトで表示する
-                      : GridView.builder(
-                          // グリッド全体に8pxのパディングを設定する
-                          padding: const EdgeInsets.all(8),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            // 横に2列並べる
-                            crossAxisCount: 2,
-                            // タイル間の縦方向の隙間
-                            mainAxisSpacing: 8,
-                            // タイル間の横方向の隙間
-                            crossAxisSpacing: 8,
-                          ),
-                          // 表示する参加者の総数
-                          itemCount: _participants.length,
-                          // 各インデックスに対応する参加者タイルを生成する
-                          itemBuilder: (context, index) {
-                            final p = _participants[index];
-                            return ParticipantTile(
-                              participant: p,
-                              // ルームのローカル参加者と一致する場合は自分自身として扱う
-                              isLocal: p == _room?.localParticipant,
-                            );
-                          },
-                        ),
+                  : const Center(
+                      child: Text(
+                        "相手を待っています...",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
             ),
-            // 画面下部のコントロールバー（マイク・カメラ・終了ボタン）
-            ControlBar(
-              // マイクの現在の状態を渡す
-              micEnabled: _micEnabled,
-              // カメラの現在の状態を渡す
-              cameraEnabled: _cameraEnabled,
-              // マイクトグルのコールバックを渡す
-              onToggleMic: _toggleMic,
-              // カメラトグルのコールバックを渡す
-              onToggleCamera: _toggleCamera,
-              // 通話終了のコールバックを渡す
-              onLeave: _leave,
+
+            /// 自分の映像
+            if (_participants.isNotEmpty)
+              Positioned(
+                top: 20,
+                right: 20,
+                child: SizedBox(
+                  width: 110,
+                  height: 160,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: ParticipantTile(
+                      participant: _participants[0],
+                      isLocal: true,
+                    ),
+                  ),
+                ),
+              ),
+
+            /// 下のボタン
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: ControlBar(
+                  micEnabled: _micEnabled,
+                  cameraEnabled: _cameraEnabled,
+                  onToggleMic: _toggleMic,
+                  onToggleCamera: _toggleCamera,
+                  onLeave: _leave,
+                ),
+              ),
             ),
           ],
         ),

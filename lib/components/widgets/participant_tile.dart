@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // LiveKitクライアントSDKから参加者・トラック関連のクラスをインポート
 import 'package:livekit_client/livekit_client.dart';
 
+import '../Colors.dart';
+
 // 各参加者を表示するタイルウィジェット（StatefulWidget）
 class ParticipantTile extends StatefulWidget {
   // 表示対象の参加者オブジェクト
@@ -95,15 +97,14 @@ class _ParticipantTileState extends State<ParticipantTile> {
   Widget build(BuildContext context) {
     // 参加者名が空の場合は「匿名」を使用する
     final name =
-        widget.participant.name.isNotEmpty ? widget.participant.name : '匿名';
+        widget.participant.identity.isNotEmpty ? widget.participant.identity : '匿名';
     // ローカル参加者の場合は名前の後ろに「(自分)」を付加する
     final displayName = widget.isLocal ? '$name (自分)' : name;
-
     // タイル全体のコンテナ（角丸・背景色付き）
     return Container(
       decoration: BoxDecoration(
         // 濃紺の背景色（ビデオなし時の背景として使用）
-        color: const Color(0xFF0F3460),
+        color: AppColors.subBackground,
         // 角を12pxの半径で丸める
         borderRadius: BorderRadius.circular(12),
       ),
@@ -123,7 +124,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
                 // アバターの半径
                 radius: 32,
                 // アバターの背景色（紫系）
-                backgroundColor: const Color(0xFF6C63FF),
+                backgroundColor: AppColors.subBackground,
                 child: Text(
                   // 名前の頭文字を大文字で表示、名前が空なら「?」を表示
                   name.isNotEmpty ? name[0].toUpperCase() : '?',
