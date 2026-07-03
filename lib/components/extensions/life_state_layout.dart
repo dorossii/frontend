@@ -268,7 +268,7 @@ extension LifeStateExtension on LifeState {
 
           animation: CharacterAnimationType.wobble,
 
-          description: 'ゾンビになっちゃった',
+          description: 'ゾンビになっちゃった...',
 
           darkness: 0,
 
@@ -359,7 +359,7 @@ extension LifeStateExtension on LifeState {
 
           animation: CharacterAnimationType.tired,
 
-          description: '汚くなってきたかも',
+          description: 'ぎりぎり人間レベル...?',
 
           darkness: 0,
 
@@ -477,7 +477,7 @@ extension LifeStateExtension on LifeState {
           characterHeight: 320,
 
           animation: CharacterAnimationType.breathing,
-          description: 'まだまだ大丈夫',
+          description: 'どろっしーが現れた',
 
           darkness: 0,
 
@@ -526,7 +526,7 @@ extension LifeStateExtension on LifeState {
           characterHeight: 320,
 
           animation: CharacterAnimationType.bounce,
-          description: 'きれいになった！',
+          description: 'きれい！その調子！',
 
           darkness: 0,
 
@@ -566,7 +566,7 @@ extension LifeStateExtension on LifeState {
           characterHeight: 340,
 
           animation: CharacterAnimationType.floating,
-          description: '完璧な状態！',
+          description: '完璧です...！',
 
           darkness: 0,
 
