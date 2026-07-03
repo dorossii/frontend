@@ -1,6 +1,5 @@
 import 'package:authbase_mobile/models/task_info.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '/views/login/login_screen.dart';
 import '/views/top/top_screen.dart';
@@ -12,8 +11,6 @@ import '/services/auth_manager.dart';
 
 import '../components/widgets/app_header.dart';
 import '../components/widgets/app_footer.dart';
-
-import '../components/extensions/user_view_model.dart';
 
 enum PageType { top, task, friend, setting }
 
@@ -72,13 +69,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserViewModel()..initialize(),
-
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-
-        home: Scaffold(
+    return Scaffold(
           appBar: AppHeader(currentPage: _currentPage),
 
           // 中身だけ変わる
@@ -92,8 +83,6 @@ class _AppState extends State<App> {
               });
             },
           ),
-        ),
-      ),
     );
   }
 }

@@ -1,16 +1,11 @@
 import 'dart:async';
-
-import 'package:authbase_mobile/models/task_info.dart';
-import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/app.dart';
+import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
 import 'package:authbase_mobile/views/task/selected_bar/completeModal.dart';
-import 'package:authbase_mobile/views/splash/task/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'task_view_model.dart';
 import '../../components/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
-import '../task/task_view_model.dart';
-import 'task_view_model.dart';
 import 'selected_bar/confirm_selection_bar.dart';
 
 class TaskView extends StatefulWidget {
@@ -128,6 +123,7 @@ class _TaskView extends State<TaskView> {
                   // 選択確定処理
                   onConfirm: () {
                     // 選択したタスクIDを格納する
+                    selectedTaskId.clear();
                     widget.viewModel.taskList.asMap().forEach((
                       int index,
                       task,
@@ -136,7 +132,7 @@ class _TaskView extends State<TaskView> {
                         selectedTaskId.add(task.taskId);
                       }
                     });
-                    // _buildCompleteModal();  // 確定確認のモーダルを開く
+                    // 確定確認のモーダルを開く
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -150,13 +146,27 @@ class _TaskView extends State<TaskView> {
                                     )
                                     .taskName
                               : "まとめて選択",
+                          // 完了時の処理
                           onUpDate: () async {
-                            await TaskService().updateTaskStatus(
-                              taskId: "task_001",
-                            );
+                            // タスク更新処理
+                            final (data, resultId) = await widget.viewModel
+                                .handleUpdateTask(
+                                  selectedTaskId,
+                                  "",
+                                  widget.viewModel,
+                                );
+
+                            // 画面遷移
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => SplashScreen(),
+                                builder: (context) => CompletionedScreen(
+                                  viewModel: widget.viewModel,
+                                  selectedTaskId: resultId,
+                                  // 写真が必須の場合は1(写真を撮る画面)
+                                  confirmType: data['requireImage']
+                                      ? 1
+                                      : widget.viewModel.randamNum(2, 4),
+                                ),
                               ),
                             );
                           },
@@ -192,12 +202,10 @@ class _TaskView extends State<TaskView> {
                       onTap: () {
                         setState(() {
                           selectSortIndex = index;
-                          if (index == selectSortIndex) {
-                            widget.viewModel.handleSort(
-                              widget.viewModel.taskList,
-                              selectSortIndex,
-                            );
-                          }
+                          widget.viewModel.handleSort(
+                            widget.viewModel.taskList,
+                            selectSortIndex,
+                          );
                         });
                       },
                       child: Container(
@@ -240,6 +248,7 @@ class _TaskView extends State<TaskView> {
                       allItemSelected = !allItemSelected;
 
                       widget.viewModel.handleSelectAll(
+                        selectedTabIndex,
                         taskSelectedBool,
                         widget.viewModel.taskList,
                         (count) => selectedCount += count,
@@ -329,7 +338,7 @@ class _TaskView extends State<TaskView> {
                 child: Container(
                   height: 24,
                   width: 24,
-                  margin: EdgeInsets.only(right: 12),
+                  margin: EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
                     // color: AppColors.subWhiteBackground,
                     color: taskSelectedBool[index]
@@ -409,12 +418,10 @@ class _TaskView extends State<TaskView> {
                                       "残り時間：",
                                       style: TextStyle(fontSize: 12),
                                     ),
-                                    // ToDO
                                     Text(
                                       widget.viewModel.handleGetLimit(
                                         task.endTime,
                                       ),
-                                      // "",
                                       style: TextStyle(fontSize: 10),
                                     ),
                                   ],
@@ -439,6 +446,7 @@ class _TaskView extends State<TaskView> {
                 ),
               ),
               if (task.status == 1) _buildApprovalView(),
+              if (task.status == 0 && task.message.isEmpty) _buildAgainView(),
             ],
           ),
         ),
@@ -480,6 +488,50 @@ class _TaskView extends State<TaskView> {
                   style: TextStyle(
                     fontSize: 10,
                     color: Color.fromRGBO(255, 219, 77, 1),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 承認されなかったウィジェット
+  Widget _buildAgainView() {
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          DottedBorder(
+            color: AppColors.subWhiteBackground,
+            strokeWidth: 1.5,
+            dashPattern: [4, 3],
+            customPath: (size) {
+              return Path()
+                ..moveTo(0, 0)
+                ..lineTo(0, size.height);
+            },
+            child: SizedBox(width: 1, height: double.infinity),
+          ),
+
+          Container(
+            margin: EdgeInsets.only(left: 14, right: 4),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'images/task/againCamera.webp',
+                  height: 20,
+                  width: 20,
+                  fit: BoxFit.contain,
+                ),
+
+                Text(
+                  "もう一度",
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Color.fromRGBO(255, 77, 77, 1),
                   ),
                 ),
               ],

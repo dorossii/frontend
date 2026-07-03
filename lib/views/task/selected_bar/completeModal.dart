@@ -11,6 +11,7 @@ class CompleteDialog extends StatelessWidget {
     required this.onUpDate,
   });
 
+  // タスクを完了するか確認するモーダル
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(
