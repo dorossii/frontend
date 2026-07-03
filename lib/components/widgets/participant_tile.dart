@@ -96,8 +96,9 @@ class _ParticipantTileState extends State<ParticipantTile> {
   @override
   Widget build(BuildContext context) {
     // 参加者名が空の場合は「匿名」を使用する
-    final name =
-        widget.participant.identity.isNotEmpty ? widget.participant.identity : '匿名';
+    final name = widget.participant.identity.isNotEmpty
+        ? widget.participant.identity
+        : '匿名';
     // ローカル参加者の場合は名前の後ろに「(自分)」を付加する
     final displayName = widget.isLocal ? '$name (自分)' : name;
     // タイル全体のコンテナ（角丸・背景色付き）
@@ -116,14 +117,14 @@ class _ParticipantTileState extends State<ParticipantTile> {
         children: [
           // ビデオが有効でトラックが存在する場合はビデオ映像を表示する
           if (_videoEnabled && _videoTrack != null)
-            VideoTrackRenderer(_videoTrack!)
+            VideoTrackRenderer(_videoTrack!, fit: VideoViewFit.cover)
           else
             // ビデオがない場合は中央にアバターアイコンを表示する
             Center(
               child: CircleAvatar(
                 // アバターの半径
                 radius: 32,
-                // アバターの背景色（紫系）
+                // アバターの背景色
                 backgroundColor: AppColors.subBackground,
                 child: Text(
                   // 名前の頭文字を大文字で表示、名前が空なら「?」を表示
@@ -149,8 +150,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
             right: 8,
             child: Container(
               // 横8px・縦4pxのパディングを設定する
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 // 半透明の黒背景（名前を読みやすくするため）
                 color: Colors.black54,
@@ -167,17 +167,22 @@ class _ParticipantTileState extends State<ParticipantTile> {
                       // 表示用の名前（自分の場合は「(自分)」付き）
                       displayName,
                       style: const TextStyle(
-                          // 文字色は白、サイズは12px
-                          color: Colors.white, fontSize: 12),
+                        // 文字色は白、サイズは12px
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
                       // 名前が長い場合は末尾を「...」で省略する
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   // オーディオが無効（ミュート中）の場合はミュートアイコンを表示する
                   if (!_audioEnabled)
-                    const Icon(Icons.mic_off,
-                        // アイコン色は赤系、サイズは14px
-                        color: Colors.redAccent, size: 14),
+                    const Icon(
+                      Icons.mic_off,
+                      // アイコン色は赤系、サイズは14px
+                      color: Colors.redAccent,
+                      size: 14,
+                    ),
                 ],
               ),
             ),

@@ -311,7 +311,7 @@ class _CallScreenState extends State<CallScreen> {
                   : const Center(
                       child: Text(
                         "相手を待っています...",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.subBackground, fontSize: 20, fontFamily: "textFont", fontWeight: FontWeight.bold),
                       ),
                     ),
             ),
@@ -322,14 +322,11 @@ class _CallScreenState extends State<CallScreen> {
                 top: 20,
                 right: 20,
                 child: SizedBox(
-                  width: 110,
-                  height: 160,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: ParticipantTile(
-                      participant: _participants[0],
-                      isLocal: true,
-                    ),
+                  width: 120,
+                  height: 180,
+                  child: ParticipantTile(
+                    participant: _participants[0],
+                    isLocal: true,
                   ),
                 ),
               ),

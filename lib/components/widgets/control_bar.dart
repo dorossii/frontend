@@ -31,7 +31,7 @@ class ControlBar extends StatelessWidget {
     // コントロールバー全体のコンテナ（背景色・縦パディング設定）
     return Container(
       // 背景色を暗い紺色に設定する
-      color: AppColors.subBackground,
+      color: AppColors.background,
       // 上下に16pxのパディングを設定する
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
@@ -42,13 +42,13 @@ class ControlBar extends StatelessWidget {
           _ControlButton(
             icon: micEnabled ? Icons.mic : Icons.mic_off,
             label: micEnabled ? 'ミュート' : 'ミュート解除',
-            color: AppColors.subWhiteBackground, // アイコン色
+            color:micEnabled ? AppColors.subBackground : Colors.redAccent, // アイコン色
             backgroundColor: AppColors.background, // 背景色
             textStyle: TextStyle(
-              color:micEnabled ? AppColors.subWhiteBackground : Colors.redAccent,
+              color:micEnabled ? AppColors.subBackground : Colors.redAccent,
               fontFamily: 'textFont',
               fontWeight: FontWeight.bold,
-              fontSize: 13,
+              fontSize: 18,
             ),
             onTap: onToggleMic,
           ),
@@ -59,6 +59,12 @@ class ControlBar extends StatelessWidget {
             color: Colors.white,
             // 終了ボタンのみ赤背景にする
             backgroundColor: Colors.red,
+            textStyle: const TextStyle(
+              color: AppColors.subBackground,
+              fontFamily: 'textFont',
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
             onTap: onLeave,
             // 他のボタンより大きく表示する
             large: true,
@@ -67,13 +73,13 @@ class ControlBar extends StatelessWidget {
           _ControlButton(
             icon: cameraEnabled ? Icons.videocam : Icons.videocam_off,
             label: cameraEnabled ? 'カメラOFF' : 'カメラON',
-            color: AppColors.subWhiteBackground, // アイコン色
+            color:cameraEnabled ? AppColors.subBackground : Colors.redAccent, // アイコン色
             backgroundColor: AppColors.background, // 背景色
             textStyle: TextStyle(
-              color:cameraEnabled ? AppColors.subWhiteBackground : Colors.redAccent,
+              color:cameraEnabled ? AppColors.subBackground : Colors.redAccent,
               fontFamily: 'textFont',
               fontWeight: FontWeight.bold,
-              fontSize: 13,
+              fontSize: 18,
             ),
             onTap: onToggleCamera,
           ),
@@ -125,16 +131,16 @@ class _ControlButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CircleAvatar(
-            radius: large ? 30 : 24,
+            radius: large ? 38 : 24,
             backgroundColor: backgroundColor,
-            child: Icon(icon, color: color, size: large ? 28 : 22),
+            child: Icon(icon, color: color, size: large ? 34 : 22),
           ),
           const SizedBox(height: 6),
           Text(
             label,
             style:
                 textStyle ??
-                const TextStyle(color: Colors.white70, fontSize: 11),
+                const TextStyle(color: AppColors.subBackground, fontSize: 18),
           ),
         ],
       ),
