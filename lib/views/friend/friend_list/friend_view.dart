@@ -107,7 +107,7 @@ class _FriendListViewState extends State<FriendListView> {
                   ),
                 ),
 
-                icon: Image.asset('images/friend+.png', width: 18, height: 18),
+                icon: Image.asset('images/friend/friend_+.webp', width: 18, height: 18),
 
                 label: const Text(
                   'フレンドを追加',
@@ -233,7 +233,7 @@ class _FriendListViewState extends State<FriendListView> {
 
   Widget _buildActionButton(BuildContext context, FriendInfo friend) {
     return GradientButton(
-      imagePath: 'images/friend_go.png',
+      imagePath: 'images/friend/friend_go.webp',
 
       gradient: AppColors.greenGradient,
 
