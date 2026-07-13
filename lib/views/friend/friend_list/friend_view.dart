@@ -33,7 +33,12 @@ class _FriendListViewState extends State<FriendListView> {
         children: [
           // 検索バー
           Padding(
-            padding: const EdgeInsets.only(top: 16, left: 20, right: 20),
+            padding: const EdgeInsets.only(
+              top: 4,
+              left: 20,
+              right: 20,
+              bottom: 4,
+            ),
 
             child: SizedBox(
               height: 40,
@@ -45,13 +50,17 @@ class _FriendListViewState extends State<FriendListView> {
                   });
                 },
 
-                style: const TextStyle(fontSize: 14),
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: AppColors.text,
+                  fontFamily: 'textFont',
+                ),
 
                 decoration: InputDecoration(
                   hintText: '検索',
 
                   hintStyle: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     color: AppColors.text,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'textFont',
@@ -107,7 +116,11 @@ class _FriendListViewState extends State<FriendListView> {
                   ),
                 ),
 
-                icon: Image.asset('images/friend/friend_+.webp', width: 18, height: 18),
+                icon: Image.asset(
+                  'images/friend/friend_+.webp',
+                  width: 18,
+                  height: 18,
+                ),
 
                 label: const Text(
                   'フレンドを追加',
@@ -259,12 +272,14 @@ class HpBar extends StatelessWidget {
 
     return Row(
       children: [
-        const Text('HP ',
-            style: TextStyle(
-              color: AppColors.text,
-              fontSize: 12,
-              fontFamily: 'textFont',
-            )),
+        const Text(
+          'HP ',
+          style: TextStyle(
+            color: AppColors.text,
+            fontSize: 12,
+            fontFamily: 'textFont',
+          ),
+        ),
 
         Expanded(
           child: Container(
