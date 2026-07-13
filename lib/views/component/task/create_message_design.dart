@@ -148,7 +148,7 @@ class CreateMessageDesign extends StatelessWidget {
                         message: controller.text,
                       );
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SplashScreen()),
+                        MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: "まつえもん")),
                       );
                     }
                   },

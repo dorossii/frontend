@@ -123,7 +123,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                     message: "",
                   );
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SplashScreen()),
+                    MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: "まつえもん")),
                   );
                 },
                 child: Container(
@@ -228,7 +228,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                           // 画面遷移
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => SplashScreen(),
+                              builder: (context) => TaskAnimationScreen(friendName: "まつえもん"),
                             ),
                           ),
                         },
