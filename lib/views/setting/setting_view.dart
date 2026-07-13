@@ -22,7 +22,7 @@ class SettingsView extends StatelessWidget {
             // ここにボタンを押した時に呼ばれるコードを書く
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SplashScreen()),
+              MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: "まつえもん")),
             );
           },
         ),
