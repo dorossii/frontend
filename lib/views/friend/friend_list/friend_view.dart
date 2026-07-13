@@ -6,19 +6,13 @@ import '../../../models/friend_info.dart';
 class FriendListView extends StatefulWidget {
   final FriendListViewModel viewModel;
 
-  const FriendListView({
-    super.key,
-    required this.viewModel,
-  });
+  const FriendListView({super.key, required this.viewModel});
 
   @override
-  State<FriendListView> createState() =>
-      _FriendListViewState();
+  State<FriendListView> createState() => _FriendListViewState();
 }
 
-class _FriendListViewState
-    extends State<FriendListView> {
-
+class _FriendListViewState extends State<FriendListView> {
   @override
   void initState() {
     super.initState();
@@ -33,83 +27,66 @@ class _FriendListViewState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          AppColors.subWhiteBackground,
+      backgroundColor: AppColors.subWhiteBackground,
 
       body: Column(
         children: [
           // 検索バー
           Padding(
             padding: const EdgeInsets.only(
-              top: 16,
+              top: 4,
               left: 20,
               right: 20,
+              bottom: 4,
             ),
 
             child: SizedBox(
-              height: 36,
+              height: 40,
 
               child: TextField(
                 onChanged: (value) {
                   setState(() {
-                    widget.viewModel
-                        .searchFriend(
-                      value,
-                    );
+                    widget.viewModel.searchFriend(value);
                   });
                 },
 
-                style:
-                    const TextStyle(
-                  fontSize: 14,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: AppColors.text,
+                  fontFamily: 'textFont',
                 ),
 
-                decoration:
-                    InputDecoration(
+                decoration: InputDecoration(
                   hintText: '検索',
 
-                  hintStyle:
-                      const TextStyle(
-                    fontSize: 14,
-                    color:
-                        AppColors
-                            .text,
-                    fontFamily:
-                        'textFont',
+                  hintStyle: const TextStyle(
+                    fontSize: 20,
+                    color: AppColors.text,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'textFont',
                   ),
 
-                  prefixIcon:
-                      const Icon(
+                  prefixIcon: const Icon(
                     Icons.search,
-                    color:
-                        AppColors
-                            .text,
+                    color: AppColors.text,
                     size: 20,
                   ),
 
                   filled: true,
 
-                  fillColor:
-                      AppColors
-                          .grayBackground,
+                  fillColor: AppColors.grayBackground,
 
                   isDense: true,
 
-                  contentPadding:
-                      const EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     vertical: 0,
                     horizontal: 12,
                   ),
 
-                  border:
-                      OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(
-                      10,
-                    ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
 
-                    borderSide:
-                        BorderSide.none,
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
@@ -118,66 +95,44 @@ class _FriendListViewState
 
           // フレンド追加
           Align(
-            alignment:
-                Alignment.centerRight,
+            alignment: Alignment.centerRight,
 
             child: Padding(
-              padding:
-                  const EdgeInsets.only(
-                right: 16,
-              ),
+              padding: const EdgeInsets.only(right: 16),
 
-              child:
-                  TextButton.icon(
+              child: TextButton.icon(
                 onPressed: () {},
 
-                style:
-                    TextButton.styleFrom(
-                  backgroundColor:
-                      AppColors
-                          .grayBackground,
+                style: TextButton.styleFrom(
+                  backgroundColor: AppColors.grayBackground,
 
-                  padding:
-                      const EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 6,
                   ),
 
-                  shape:
-                      RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(
-                      14,
-                    ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
                   ),
                 ),
 
-                icon:
-                    Image.asset(
-                  'images/friend+.png',
+                icon: Image.asset(
+                  'images/friend/friend_+.webp',
                   width: 18,
                   height: 18,
                 ),
 
-                label:
-                    const Text(
+                label: const Text(
                   'フレンドを追加',
 
-                  style:
-                      TextStyle(
-                    color:
-                        AppColors
-                            .text,
+                  style: TextStyle(
+                    color: AppColors.text,
 
-                    fontSize:
-                        13,
+                    fontSize: 13,
 
-                    fontWeight:
-                        FontWeight
-                            .normal,
+                    fontWeight: FontWeight.bold,
 
-                    fontFamily:
-                        'textFont',
+                    fontFamily: 'textFont',
                   ),
                 ),
               ),
@@ -186,33 +141,15 @@ class _FriendListViewState
 
           // リスト
           Expanded(
-            child:
-                ListView.builder(
-              padding:
-                  const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
 
-              itemCount:
-                  widget
-                      .viewModel
-                      .filteredFriendList
-                      .length,
+              itemCount: widget.viewModel.filteredFriendList.length,
 
-              itemBuilder:
-                  (
-                    context,
-                    index,
-                  ) {
-                final user =
-                    widget
-                        .viewModel
-                        .filteredFriendList[index];
+              itemBuilder: (context, index) {
+                final user = widget.viewModel.filteredFriendList[index];
 
-                return _buildFriendItem(
-                  context,
-                  user,
-                );
+                return _buildFriendItem(context, user);
               },
             ),
           ),
@@ -221,62 +158,40 @@ class _FriendListViewState
     );
   }
 
-  Widget _buildFriendItem(
-    BuildContext context,
-    FriendInfo friend,
-  ) {
+  Widget _buildFriendItem(BuildContext context, FriendInfo friend) {
     String dirtLevelImage;
 
     if (friend.dirtLevel > 5) {
-      dirtLevelImage =
-          'images/status/zombieIcon.png';
+      dirtLevelImage = 'images/status/zombieIcon.png';
     } else if (friend.dirtLevel > 3) {
-      dirtLevelImage =
-          'images/status/human2Icon.png';
+      dirtLevelImage = 'images/status/human2Icon.png';
     } else if (friend.dirtLevel > 0) {
-      dirtLevelImage =
-          'images/status/humanIcon.png';
+      dirtLevelImage = 'images/status/humanIcon.png';
     } else {
-      dirtLevelImage =
-          'images/status/godIcon.png';
+      dirtLevelImage = 'images/status/godIcon.png';
     }
 
     return Container(
-      padding:
-          const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 15,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
 
-      decoration:
-          const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color:
-                Colors.black12,
-            width: 1,
-          ),
-        ),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.black12, width: 1)),
       ),
 
       child: Row(
         children: [
           Stack(
-            clipBehavior:
-                Clip.none,
+            clipBehavior: Clip.none,
 
             children: [
               CircleAvatar(
                 radius: 30,
 
-                backgroundImage:
-                    AssetImage(
+                backgroundImage: AssetImage(
                   'images/icons/${friend.iconName}.png',
                 ),
 
-                backgroundColor:
-                    AppColors
-                        .getBackgroundColor(
+                backgroundColor: AppColors.getBackgroundColor(
                   friend.background,
                 ),
               ),
@@ -285,188 +200,109 @@ class _FriendListViewState
                 right: -10,
                 bottom: -10,
 
-                child:
-                    ClipOval(
-                  child:
-                      Image.asset(
+                child: ClipOval(
+                  child: Image.asset(
                     dirtLevelImage,
                     width: 35,
                     height: 35,
-                    fit:
-                        BoxFit
-                            .cover,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(
-            width: 15,
-          ),
+          const SizedBox(width: 15),
 
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment
-                      .start,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
                 Text(
                   friend.userName,
 
-                  style:
-                      const TextStyle(
-                    fontSize:
-                        18,
-
-                    fontWeight:
-                        FontWeight
-                            .bold,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontFamily: "textFont",
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(
-                  height: 8,
-                ),
+                const SizedBox(height: 8),
 
-                HpBar(
-                  value:
-                      friend.healthPoint /
-                      1000,
-                ),
+                HpBar(value: friend.healthPoint / 1000),
               ],
             ),
           ),
 
-          const SizedBox(
-            width: 15,
-          ),
+          const SizedBox(width: 15),
 
-          _buildActionButton(
-            context,
-            friend,
-          ),
+          _buildActionButton(context, friend),
         ],
       ),
     );
   }
 
-  Widget _buildActionButton(
-    BuildContext context,
-    FriendInfo friend,
-  ) {
+  Widget _buildActionButton(BuildContext context, FriendInfo friend) {
     return GradientButton(
-      imagePath:
-          'images/friend_go.png',
+      imagePath: 'images/friend/friend_go.webp',
 
-      gradient:
-          AppColors
-              .greenGradient,
+      gradient: AppColors.greenGradient,
 
       onTap: () {
-        widget.viewModel
-            .onFriendTapped(
-          context,
-          friend,
-        );
+        widget.viewModel.onFriendTapped(context, friend);
       },
     );
   }
 }
 
-class HpBar
-    extends StatelessWidget {
-  const HpBar({
-    super.key,
-    required this.value,
-    this.height = 12,
-  });
+class HpBar extends StatelessWidget {
+  const HpBar({super.key, required this.value, this.height = 12});
 
   final double value;
 
   final double height;
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final gradient =
-        value <= 0.4
-        ? const LinearGradient(
-            colors: [
-              Color(
-                0xFFD53B2A,
-              ),
-              Color(
-                0xFFFFDB4D,
-              ),
-            ],
-          )
-        : const LinearGradient(
-            colors: [
-              Color(
-                0xFFFEE590,
-              ),
-              Color(
-                0xFF55A871,
-              ),
-            ],
-          );
+  Widget build(BuildContext context) {
+    final gradient = value <= 0.4
+        ? const LinearGradient(colors: [Color(0xFFD53B2A), Color(0xFFFFDB4D)])
+        : const LinearGradient(colors: [Color(0xFFFEE590), Color(0xFF55A871)]);
 
     return Row(
       children: [
         const Text(
           'HP ',
+          style: TextStyle(
+            color: AppColors.text,
+            fontSize: 12,
+            fontFamily: 'textFont',
+          ),
         ),
 
         Expanded(
           child: Container(
             height: height,
 
-            decoration:
-                BoxDecoration(
-              color:
-                  const Color(
-                0xFFEBEBEB,
-              ),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEBEBEB),
 
-              borderRadius:
-                  BorderRadius.circular(
-                height / 2,
-              ),
+              borderRadius: BorderRadius.circular(height / 2),
             ),
 
-            child:
-                FractionallySizedBox(
-              alignment:
-                  Alignment
-                      .centerLeft,
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
 
-              widthFactor:
-                  value.clamp(
-                0,
-                1,
-              ),
+              widthFactor: value.clamp(0, 1),
 
-              child:
-                  AnimatedContainer(
-                duration:
-                    const Duration(
-                  milliseconds:
-                      300,
-                ),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
 
-                decoration:
-                    BoxDecoration(
-                  gradient:
-                      gradient,
+                decoration: BoxDecoration(
+                  gradient: gradient,
 
-                  borderRadius:
-                      BorderRadius.circular(
-                    height /
-                        2,
-                  ),
+                  borderRadius: BorderRadius.circular(height / 2),
                 ),
               ),
             ),
