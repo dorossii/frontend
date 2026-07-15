@@ -66,14 +66,18 @@ late String currentMessage;
 
   /// 初回ユーザー登録・生活環境情報登録を行い、完了後にホームへ遷移する
   Future<void> _registerUserAndGoNext() async {
+    debugPrint('🚀 初回ユーザー登録処理を開始します');
+
     try {
       // ① 初回ユーザー登録
       await _registerService.registerUser(widget.registerRequest);
 
       // ② 生活環境情報の登録
       await _registerService.registerLifestyle(widget.lifestyleInfo);
+
+      debugPrint('✅ 初回ユーザー登録処理が完了しました');
     } catch (e) {
-      debugPrint('初回ユーザー登録処理でエラーが発生しました: $e');
+      debugPrint('❌ 初回ユーザー登録処理でエラーが発生しました: $e');
     }
 
     _goNext();

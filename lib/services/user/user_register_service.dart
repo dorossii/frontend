@@ -14,11 +14,15 @@ import '../auth_manager.dart';
 class UserRegisterService {
   /// 初回ユーザー登録
   Future<UserRegisterResponse> registerUser(UserRegisterRequest request) async {
+    debugPrint('🚀 初回ユーザー登録リクエスト: ${AppConfig.userRegisterEndpoint} - ${jsonEncode(request.toJson())}');
+
     final response = await AuthManager.authenticatedRequest(
       AppConfig.userRegisterEndpoint,
       method: 'POST',
       body: request.toJson(),
     );
+
+    debugPrint('🔍 初回ユーザー登録レスポンス: ${response.statusCode} - ${response.body}');
 
     /// 通信成功
     if (response.statusCode == 200) {
@@ -27,17 +31,21 @@ class UserRegisterService {
     }
 
     /// 通信失敗
-    debugPrint('初回ユーザー登録失敗: ${response.statusCode} - ${response.body}');
+    debugPrint('❌ 初回ユーザー登録失敗: ${response.statusCode} - ${response.body}');
     throw Exception('初回ユーザー登録失敗');
   }
 
   /// 生活環境情報の登録（初回）
   Future<UserLifestyleInfo> registerLifestyle(UserLifestyleInfo lifestyle) async {
+    debugPrint('🚀 生活環境情報登録リクエスト: ${AppConfig.userLifestyleEndpoint} - ${jsonEncode(lifestyle.toJson())}');
+
     final response = await AuthManager.authenticatedRequest(
       AppConfig.userLifestyleEndpoint,
       method: 'POST',
       body: lifestyle.toJson(),
     );
+
+    debugPrint('🔍 生活環境情報登録レスポンス: ${response.statusCode} - ${response.body}');
 
     /// 通信成功
     if (response.statusCode == 200) {
@@ -46,7 +54,7 @@ class UserRegisterService {
     }
 
     /// 通信失敗
-    debugPrint('生活環境情報登録失敗: ${response.statusCode} - ${response.body}');
+    debugPrint('❌ 生活環境情報登録失敗: ${response.statusCode} - ${response.body}');
     throw Exception('生活環境情報登録失敗');
   }
 }
