@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
 
                 final userInfo = snapshot.data!;
 
-                return const LoginSplashScreen();
+                return LoginSplashScreen();
               },
             );
           }
