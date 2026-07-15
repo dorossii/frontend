@@ -45,6 +45,7 @@ class HpBar extends StatelessWidget {
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: AppColors.text,
+            fontSize: 14,
             fontFamily: "textFont",
           ),
         ),

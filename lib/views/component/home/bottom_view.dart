@@ -79,8 +79,9 @@ class BottomView extends StatelessWidget {
       child: Text(
         value,
         style: const TextStyle(
-          fontSize: 14,
+          fontSize: 18,
           fontFamily: 'textFont',
+          fontWeight: FontWeight.bold,
           color: AppColors.text,
         ),
       ),
@@ -206,7 +207,7 @@ class BottomView extends StatelessWidget {
                     child: Text(
                       label,
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 14,
                         fontFamily: 'textFont',
                         fontWeight: FontWeight.bold,
                         color: AppColors.text,
@@ -310,7 +311,7 @@ class BottomView extends StatelessWidget {
                       "レスキューボタン",
                       style: TextStyle(
                         color: AppColors.subWhiteBackground,
-                        fontSize: 9,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'textFont',
                       ),
