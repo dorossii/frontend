@@ -62,7 +62,7 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(vertical: 1),
               child: Text(
                 logs[index],
-                style: const TextStyle(fontSize: 10, fontFamily: 'textFont'),
+                style: const TextStyle(fontSize: 12, fontFamily: 'textFont'),
               ),
             );
           },
@@ -104,7 +104,7 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
                   vm.userName,
                   style: const TextStyle(
                     color: AppColors.subWhiteBackground,
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'textFont',
                   ),
@@ -120,7 +120,7 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
                 "汚さレベル",
                 style: TextStyle(
                   color: AppColors.subWhiteBackground,
-                  fontSize: 8,
+                  fontSize: 10,
                   fontFamily: 'textFont',
                 ),
               ),
@@ -128,7 +128,7 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
                 vm.currentState.theme.description,
                 style: const TextStyle(
                   color: AppColors.subWhiteBackground,
-                  fontSize: 10,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'textFont',
                 ),
