@@ -62,7 +62,6 @@ class _FriendListViewState extends State<FriendListView> {
                   hintStyle: const TextStyle(
                     fontSize: 20,
                     color: AppColors.text,
-                    fontWeight: FontWeight.bold,
                     fontFamily: 'textFont',
                   ),
 
