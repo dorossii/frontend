@@ -22,7 +22,6 @@ class MockTopView extends StatelessWidget {
     final vm = context.watch<UserViewModel>();
 
     final theme = LifeState.dirty.theme;
-    final user = vm.userStatus;
 
     return Scaffold(
       appBar: AppHeader(currentPage: PageType.top),
@@ -87,7 +86,7 @@ class MockTopView extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 _buildStatusBox(
                                   "HP",
-                                  "${((user?.healthPoint ?? 0) / 10).floor()}/100",
+                                  "5/100",
                                 ),
                               ],
                             ),

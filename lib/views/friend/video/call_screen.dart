@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:livekit_client/livekit_client.dart';
 // LiveKit サーバーのURL・APIキー等の設定値をインポートする
 import '../../../components/Colors.dart';
+import '../../mock/mock_top_view.dart';
 import '/config/livekit_config.dart';
 // JWT アクセストークンを生成するサービスをインポートする
 import '/services/token_service.dart';
@@ -237,7 +238,14 @@ class _CallScreenState extends State<CallScreen> {
     // ルームから切断する（サーバーに退出を通知する）
     await _room?.disconnect();
     // 前の画面（JoinScreen）に戻る
-    if (mounted) Navigator.of(context).pop();
+    // if (mounted) Navigator.of(context).pop();
+    // mock_top_view.dart での変更により、戻る先を mock_top_view.dart に変更する
+    if (mounted) {
+      Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MockTopView()),
+            );
+    }
   }
 
   @override
