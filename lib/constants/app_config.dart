@@ -6,6 +6,11 @@ class AppConfig {
   static const String meEndpoint = '/auth/me';
   static const String tokenEndpoint = '/auth/token';
   static const String appEndpoint = '/app/authed';
+
+  // 初回ユーザー登録
+  static const String userRegisterEndpoint = '/app/user/register';
+  // 生活環境情報の登録（初回）
+  static const String userLifestyleEndpoint = '/app/user/lifestyle';
 }
 
 // モックのAPIレスポンスを定義

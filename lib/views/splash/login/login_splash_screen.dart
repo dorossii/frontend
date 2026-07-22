@@ -2,11 +2,38 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 import '../../../components/colors.dart';
+import '../../../models/user_lifestyle_info.dart';
+import '../../../models/user_register_info.dart';
+import '../../../services/user/user_register_service.dart';
 import './chara_massages.dart';
 import '../../app.dart';
 
 class LoginSplashScreen extends StatefulWidget {
-  const LoginSplashScreen({super.key});
+  // TODO: 生活環境情報アンケート画面が実装され次第、呼び出し元から実際の入力値を渡すようにする
+  /// 初回ユーザー登録リクエスト
+  final UserRegisterRequest registerRequest;
+
+  /// 生活環境情報
+  final UserLifestyleInfo lifestyleInfo;
+
+  LoginSplashScreen({
+    super.key,
+    UserRegisterRequest? registerRequest,
+    UserLifestyleInfo? lifestyleInfo,
+  })  : registerRequest = registerRequest ??
+            UserRegisterRequest(
+              birthDate: 946684800,
+              livingType: 'alone',
+            ),
+        lifestyleInfo = lifestyleInfo ??
+            UserLifestyleInfo(
+              isAlone: true,
+              hasWasher: true,
+              hasVacuum: false,
+              hasRobot: true,
+              useTableware: true,
+              hasDishwasher: true,
+            );
 
   @override
   State<LoginSplashScreen> createState() => _LoginSplashScreenState();
@@ -21,6 +48,9 @@ class _LoginSplashScreenState extends State<LoginSplashScreen> {
 
 late String currentMessage;
 
+  /// 初回ユーザー登録・生活環境情報登録を行うサービス
+  final _registerService = UserRegisterService();
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +59,27 @@ late String currentMessage;
 
     _startAnimation();
     _startMilkFloat();
+
+    // ローディング中に初回登録APIを呼び出してからホームへ遷移する
+    _registerUserAndGoNext();
+  }
+
+  /// 初回ユーザー登録・生活環境情報登録を行い、完了後にホームへ遷移する
+  Future<void> _registerUserAndGoNext() async {
+    debugPrint('初回ユーザー登録処理を開始します');
+
+    try {
+      // ① 初回ユーザー登録
+      await _registerService.registerUser(widget.registerRequest);
+
+      // ② 生活環境情報の登録
+      await _registerService.registerLifestyle(widget.lifestyleInfo);
+
+      debugPrint('初回ユーザー登録処理が完了しました');
+    } catch (e) {
+      debugPrint('初回ユーザー登録処理でエラーが発生しました: $e');
+    }
+
     _goNext();
   }
 
