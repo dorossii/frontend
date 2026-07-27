@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:authbase_mobile/services/auth_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:authbase_mobile/models/task_info.dart';
@@ -7,7 +8,7 @@ import '../../constants/app_config.dart';
 /// タスクの情報を取得する
 class TaskService {
   /// API URL
-  static const String url =
+ static const String url =
       MockApiResponse.baseUrl + MockApiResponse.taskListEndpoint;
 
   /// 認証トークン
@@ -15,15 +16,16 @@ class TaskService {
 
   /// ==== タスク情報取得 ====
   Future<List<TaskInfo>> fetchTaskInfo() async {
-    /// GET通信
-    final response = await http.get(
-      Uri.parse(url),
 
-      headers: {'accept': 'application/json', 'Authorization': token},
+    /// GET通信
+    final response = await AuthManager.authenticatedRequest(
+      AppConfig.taskListEndpoint,
+      method: 'GET',
     );
 
     /// 通信成功
     if (response.statusCode == 200) {
+      debugPrint("タスク一覧取得完了");
       /// JSON変換
       final jsonData = jsonDecode(response.body);
 

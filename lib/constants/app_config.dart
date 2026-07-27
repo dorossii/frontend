@@ -6,6 +6,7 @@ class AppConfig {
   static const String meEndpoint = '/auth/me';
   static const String tokenEndpoint = '/auth/token';
   static const String appEndpoint = '/app/authed';
+  static const String taskListEndpoint = '/app/user/task';
 
   // 初回ユーザー登録
   static const String userRegisterEndpoint = '/app/user/register';
