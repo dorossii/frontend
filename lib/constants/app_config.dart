@@ -11,6 +11,8 @@ class AppConfig {
   static const String userRegisterEndpoint = '/app/user/register';
   // 生活環境情報の登録（初回）
   static const String userLifestyleEndpoint = '/app/user/lifestyle';
+  // トップ画面ユーザーステータスの取得
+  static const String topStatusEndpoint = '/app/user/status';
 }
 
 // モックのAPIレスポンスを定義
