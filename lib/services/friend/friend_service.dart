@@ -1,43 +1,37 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import '../../../models/friend_info.dart';
 import '../../constants/app_config.dart';
+import '../auth_manager.dart';
 
 // フレンドの情報を取得する
 class FriendService {
-  /// API URL
-  static const String url =
-      MockApiResponse.baseUrl + MockApiResponse.friendListEndpoint;
-
-  /// 認証トークン
-  static const String token = 'mock-token-super-secret';
-
-  /// フレンド情報取得
   Future<List<FriendInfo>> fetchFriendInfo() async {
     /// GET通信
-    final response = await http.get(
-      Uri.parse(url),
-
-      headers: {'accept': 'application/json', 'Authorization': token},
+    final response = await AuthManager.authenticatedRequest(
+      AppConfig.friendListEndpoint,
+      method: 'GET',
     );
 
     /// 通信成功
     if (response.statusCode == 200) {
+      debugPrint('フレンド情報取得成功');
       /// JSON変換
-      final jsonData = jsonDecode(response.body);
+      final Map<String, dynamic> jsonData = jsonDecode(response.body);
 
-      final List friends = jsonData['friends'];
+      final List<dynamic> friends = jsonData['friends'];
 
       /// Modelへ変換
-      return friends.map((e) => FriendInfo.fromJson(e)).toList();
+      return friends
+          .map((e) => FriendInfo.fromJson(e as Map<String, dynamic>))
+          .toList();
+      
     }
 
     /// 通信失敗
     debugPrint('Failed to load friend info: ${response.statusCode}');
     throw Exception('フレンド情報取得失敗');
-   
   }
 }
