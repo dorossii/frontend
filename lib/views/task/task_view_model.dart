@@ -122,7 +122,7 @@ class TaskViewModel {
     // 秒単位で現在時間を取得する(Unixタイムスタンプ)
     final int nowTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-    int limitNum = nowTime - endTime;
+    int limitNum = endTime - nowTime;
 
     int day = limitNum ~/ (60 * 60 * 24);
     int hour = limitNum % (60 * 60 * 24) ~/ (60 * 60);
