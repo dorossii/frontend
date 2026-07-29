@@ -80,7 +80,11 @@ class TaskViewModel {
     );
   }
 
-  // まとめて選択の処理
+  /// まとめて選択の処理
+  /// selectedTabIndex：選択されているタグ
+  /// taskSelectedBool：選択状態を管理するリスト
+  /// taskList：タスクリスト
+  /// updateSelectedCount：選択されたタスクの数
   void handleSelectAll(
     int selectedTabIndex,
     List<bool> taskSelectedBool,
@@ -89,8 +93,10 @@ class TaskViewModel {
   ) {
     int count = 0;
 
+    //　すべてのタグの場合
     if (selectedTabIndex == 100) {
       for (int i = 0; i < taskSelectedBool.length; i++) {
+        // 未完了＆選択が選択済でない場合
         if (taskList[i].status == 0 && !taskSelectedBool[i]) {
           taskSelectedBool[i] = true;
           count++;
@@ -144,8 +150,12 @@ class TaskViewModel {
     return limitTime;
   }
 
-  // ステータスを変化する処理
+  // 選択されたタスクを選択済みor選択解除する
   void handleUpdateStatus(task, index, taskSelectedBool) {
+    // 0: 未完了
+    // 1: 承認待ち
+    // 2: 完了
+
     // 選択中と選択件数を更新する処理
     if (task.status == 0) {
       if (taskSelectedBool[index]) {
@@ -154,14 +164,9 @@ class TaskViewModel {
         taskSelectedBool[index] = true;
       }
     }
-    // if(task["status"] == 1){
-    //   task["selected"] = false;
-    // }
-    // if(task["status"] == 0 || task["status"] == 1) {
-    //   task["status"] = 2;
-    // } else {
-    //   task["status"] = 0;
-    // }
+    if(task.status == 1 || task.status == 2){
+      taskSelectedBool[index] = false;
+    }
   }
 
   /// タスクを更新する処理 ------------------------------

@@ -60,7 +60,7 @@ class _TaskView extends State<TaskView> {
   List<String> selectedTaskId = []; // 選択されたアイテムのID
   int tabHeight = 36; // タブの高さ
 
-  List<bool> taskSelectedBool = [];
+  List<bool> taskSelectedBool = []; // タスクが選択の有無を格納するリスト
 
   // タブの配列
   static const category = ["掃除", "洗濯", "料理", "ゴミ捨て"];
@@ -104,7 +104,7 @@ class _TaskView extends State<TaskView> {
             ),
 
             // タスク選択時の確認バー
-            if (allItemSelected || selectedCount != 0)
+            if (allItemSelected && selectedCount != 0)
               Positioned(
                 bottom: 8,
                 left: 0,
@@ -251,8 +251,10 @@ class _TaskView extends State<TaskView> {
                         selectedTabIndex,
                         taskSelectedBool,
                         widget.viewModel.taskList,
-                        (count) => selectedCount += count,
+                        (_) {},
                       );
+
+                      selectedCount = taskSelectedBool.where((e) => e).length;
                     });
                   },
                   child: Text("まとめて選択", style: TextStyle(color: Colors.white)),
@@ -323,6 +325,7 @@ class _TaskView extends State<TaskView> {
           ),
           child: Row(
             children: [
+              // 選択ボタン部分
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -330,9 +333,11 @@ class _TaskView extends State<TaskView> {
                       task,
                       index,
                       taskSelectedBool,
-                    ); // 選択を確定するボタン表示
-                    taskSelectedBool[index] ? selectedCount++ : selectedCount--;
-                    if (selectedCount == 0) allItemSelected = false;
+                    );
+
+                    selectedCount = taskSelectedBool.where((e) => e).length;
+                    allItemSelected =
+                        selectedCount == taskSelectedBool.where((_) => true).length;
                   });
                 },
                 child: Container(
@@ -445,8 +450,10 @@ class _TaskView extends State<TaskView> {
                   ),
                 ),
               ),
-              if (task.status == 1) _buildApprovalView(),
-              if (task.status == 0 && task.message.isEmpty) _buildAgainView(),
+
+              // タスクごとの表示設定
+              if (task.status == 1) _buildApprovalView(), // 承認待ち
+              if (task.status == 0 && task.message.isEmpty) _buildAgainView(),  // もう一度(メッセージの有無で判断)
             ],
           ),
         ),
