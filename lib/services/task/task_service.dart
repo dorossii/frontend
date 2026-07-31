@@ -32,6 +32,8 @@ class TaskService {
       // print("レスポンス: $jsonData");
       final List<dynamic> tasks = jsonData;
 
+      debugPrint('タスクリスト： ${jsonData}');
+
       /// Modelへ変換
       return tasks.map((e) => TaskInfo.fromJson(e)).toList();
     }
