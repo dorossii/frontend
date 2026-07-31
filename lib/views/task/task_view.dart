@@ -454,7 +454,7 @@ class _TaskView extends State<TaskView> {
 
               // タスクごとの表示設定
               if (task.status == 1) _buildApprovalView(), // 承認待ち
-              if (task.status == 0 && task.message.isEmpty)
+              if (task.status == 0 && task.message.isNotEmpty)
                 _buildAgainView(), // もう一度(メッセージの有無で判断)
             ],
           ),
@@ -691,13 +691,26 @@ class _TaskView extends State<TaskView> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(top: 32),
-                      decoration: BoxDecoration(
-                        color: AppColors.subWhiteBackground,
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.only(top: 32),
+                        decoration: BoxDecoration(
+                          color: AppColors.subWhiteBackground,
+                        ),
+                        child: DefaultTextStyle(
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: "textFont",
+                            color: AppColors.text,
+                          ),
+                          child: Column(
+                            children: [
+                              Text(style: TextStyle(fontSize: 24), "皿洗いをする"),
+                            ],
+                          ),
+                        ),
                       ),
-                      child: Column(children: [Text("aaa")]),
                     ),
                   ],
                 ),
