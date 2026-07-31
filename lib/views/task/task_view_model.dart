@@ -104,6 +104,7 @@ class TaskViewModel {
       }
     } else {
       for (int i = 0; i < taskSelectedBool.length; i++) {
+        // タグが合致したアイテム
         if (taskList[i].tag == selectedTabIndex) {
           if (taskList[i].status == 0 && !taskSelectedBool[i]) {
             taskSelectedBool[i] = true;

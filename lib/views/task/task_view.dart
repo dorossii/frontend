@@ -104,7 +104,7 @@ class _TaskView extends State<TaskView> {
             ),
 
             // タスク選択時の確認バー
-            if (allItemSelected && selectedCount != 0)
+            if (allItemSelected || selectedCount != 0)
               Positioned(
                 bottom: 8,
                 left: 0,
@@ -247,12 +247,18 @@ class _TaskView extends State<TaskView> {
                     setState(() {
                       allItemSelected = !allItemSelected;
 
-                      widget.viewModel.handleSelectAll(
-                        selectedTabIndex,
-                        taskSelectedBool,
-                        widget.viewModel.taskList,
-                        (_) {},
-                      );
+                      if (allItemSelected) {
+                        widget.viewModel.handleSelectAll(
+                          selectedTabIndex,
+                          taskSelectedBool,
+                          widget.viewModel.taskList,
+                          (_) {},
+                        );
+                      } else {
+                        widget.viewModel.handleDeselect(
+                          taskSelectedBool
+                        );
+                      }
 
                       selectedCount = taskSelectedBool.where((e) => e).length;
                     });
@@ -329,6 +335,7 @@ class _TaskView extends State<TaskView> {
               GestureDetector(
                 onTap: () {
                   setState(() {
+                    //
                     widget.viewModel.handleUpdateStatus(
                       task,
                       index,
@@ -336,9 +343,11 @@ class _TaskView extends State<TaskView> {
                     );
 
                     selectedCount = taskSelectedBool.where((e) => e).length;
-                    allItemSelected =
-                        selectedCount ==
-                        taskSelectedBool.where((_) => true).length;
+                    debugPrint('選択中：$selectedCount');
+
+                    // allItemSelected =
+                    //     selectedCount ==
+                    //     taskSelectedBool.where((_) => true).length;
                   });
                 },
                 child: Container(
