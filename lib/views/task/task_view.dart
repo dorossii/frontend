@@ -337,7 +337,8 @@ class _TaskView extends State<TaskView> {
 
                     selectedCount = taskSelectedBool.where((e) => e).length;
                     allItemSelected =
-                        selectedCount == taskSelectedBool.where((_) => true).length;
+                        selectedCount ==
+                        taskSelectedBool.where((_) => true).length;
                   });
                 },
                 child: Container(
@@ -453,7 +454,8 @@ class _TaskView extends State<TaskView> {
 
               // タスクごとの表示設定
               if (task.status == 1) _buildApprovalView(), // 承認待ち
-              if (task.status == 0 && task.message.isEmpty) _buildAgainView(),  // もう一度(メッセージの有無で判断)
+              if (task.status == 0 && task.message.isEmpty)
+                _buildAgainView(), // もう一度(メッセージの有無で判断)
             ],
           ),
         ),
@@ -688,6 +690,14 @@ class _TaskView extends State<TaskView> {
                         color: AppColors.gray,
                         borderRadius: BorderRadius.circular(10),
                       ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.only(top: 32),
+                      decoration: BoxDecoration(
+                        color: AppColors.subWhiteBackground,
+                      ),
+                      child: Column(children: [Text("aaa")]),
                     ),
                   ],
                 ),
