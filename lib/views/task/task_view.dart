@@ -191,7 +191,11 @@ class _TaskView extends State<TaskView> {
         child: Column(
           children: [
             DefaultTextStyle(
-              style: TextStyle(fontSize: 10, color: AppColors.edgew),
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: AppColors.edgew,
+              ),
 
               // 並び替え欄
               child: Row(
@@ -255,15 +259,13 @@ class _TaskView extends State<TaskView> {
                           (_) {},
                         );
                       } else {
-                        widget.viewModel.handleDeselect(
-                          taskSelectedBool
-                        );
+                        widget.viewModel.handleDeselect(taskSelectedBool);
                       }
 
                       selectedCount = taskSelectedBool.where((e) => e).length;
                     });
                   },
-                  child: Text("まとめて選択", style: TextStyle(color: Colors.white)),
+                  child: Text("まとめて選択", style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
             ),
@@ -343,11 +345,6 @@ class _TaskView extends State<TaskView> {
                     );
 
                     selectedCount = taskSelectedBool.where((e) => e).length;
-                    debugPrint('選択中：$selectedCount');
-
-                    // allItemSelected =
-                    //     selectedCount ==
-                    //     taskSelectedBool.where((_) => true).length;
                   });
                 },
                 child: Container(
@@ -373,8 +370,8 @@ class _TaskView extends State<TaskView> {
                           taskSelectedBool[index]
                       ? SizedBox(
                           child: Image.asset(
-                            height: 20,
-                            width: 20,
+                            height: 24,
+                            width: 24,
                             'images/task/check.webp',
                             fit: BoxFit.contain,
                           ),
@@ -391,10 +388,10 @@ class _TaskView extends State<TaskView> {
                         children: [
                           Text(
                             task.taskName,
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 18),
                             overflow: TextOverflow.ellipsis,
                           ),
-
+                          // 完了時の線
                           if (task.status == 2)
                             Positioned(
                               left: 0,
@@ -407,6 +404,7 @@ class _TaskView extends State<TaskView> {
                             ),
                         ],
                       ),
+                      SizedBox(height: 10),
                       Stack(
                         children: [
                           Row(
@@ -415,8 +413,8 @@ class _TaskView extends State<TaskView> {
                                 children: [
                                   for (int i = 0; i < (task.level as int); i++)
                                     SizedBox(
-                                      height: 16,
-                                      width: 16,
+                                      height: 20,
+                                      width: 20,
                                       child: Image.asset(
                                         'images/task/difficultyLevel.webp',
                                         fit: BoxFit.cover,
@@ -424,26 +422,22 @@ class _TaskView extends State<TaskView> {
                                     ),
                                 ],
                               ),
-                              Spacer(),
-                              Container(
-                                margin: EdgeInsets.only(right: 8),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "残り時間：",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Text(
-                                      widget.viewModel.handleGetLimit(
-                                        task.endTime,
-                                      ),
-                                      style: TextStyle(fontSize: 10),
-                                    ),
-                                  ],
+                              // Spacer(),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                fit: FlexFit.loose,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "残り時間：${widget.viewModel.handleGetLimit(task.endTime)}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                              ),
+                              )
                             ],
                           ),
+                          // 完了時の線
                           if (task.status == 2)
                             Positioned(
                               left: 0,
@@ -477,6 +471,7 @@ class _TaskView extends State<TaskView> {
     return IntrinsicHeight(
       child: Row(
         children: [
+          const SizedBox(width: 8), // ← 左余白
           DottedBorder(
             color: AppColors.subWhiteBackground,
             strokeWidth: 1.5,
@@ -521,6 +516,7 @@ class _TaskView extends State<TaskView> {
     return IntrinsicHeight(
       child: Row(
         children: [
+          const SizedBox(width: 8), // ← 左余白
           DottedBorder(
             color: AppColors.subWhiteBackground,
             strokeWidth: 1.5,
@@ -716,6 +712,42 @@ class _TaskView extends State<TaskView> {
                           child: Column(
                             children: [
                               Text(style: TextStyle(fontSize: 24), "皿洗いをする"),
+                              Container(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          child: Image.asset(
+                                            height: 20,
+                                            width: 20,
+                                            'images/task/carender.webp',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                        Text("日付"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("難易度"),
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              child: Image.asset(
+                                                height: 20,
+                                                width: 20,
+                                                'images/task/difficultyLevel_green.webp',
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
