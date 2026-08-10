@@ -38,7 +38,7 @@ class CompletionedScreen extends StatelessWidget {
 
   Widget _buildContent(confirmType) {
 
-    confirmType = 1;
+    confirmType = 3;
     
     switch (confirmType) {
       case 1:
@@ -63,6 +63,7 @@ class CompletionedScreen extends StatelessWidget {
             return CreateMessageView(
               viewModel: viewModel,
               userStatus: snapshot.data!,
+              selectedTaskId: selectedTaskId,
             );
           },
         );
@@ -77,6 +78,7 @@ class CompletionedScreen extends StatelessWidget {
             return FriendMessageView(
               viewModel: viewModel,
               friendData: snapshot.data!,
+              selectedTaskId: selectedTaskId,
             );
           },
         );

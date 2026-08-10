@@ -8,7 +8,7 @@ import '../../constants/app_config.dart';
 /// タスクの情報を取得する
 class TaskService {
   /// API URL
- static const String url =
+  static const String url =
       MockApiResponse.baseUrl + MockApiResponse.taskListEndpoint;
 
   /// 認証トークン
@@ -16,7 +16,6 @@ class TaskService {
 
   /// ==== タスク情報取得 ====
   Future<List<TaskInfo>> fetchTaskInfo() async {
-
     /// GET通信
     final response = await AuthManager.authenticatedRequest(
       AppConfig.taskListEndpoint,
@@ -26,13 +25,14 @@ class TaskService {
     /// 通信成功
     if (response.statusCode == 200) {
       debugPrint("タスク一覧取得完了");
+
       /// JSON変換
       final jsonData = jsonDecode(response.body);
 
       // print("レスポンス: $jsonData");
       final List<dynamic> tasks = jsonData;
 
-      debugPrint('タスクリスト： ${jsonData}');
+      // debugPrint('タスクリスト： $jsonData');
 
       /// Modelへ変換
       return tasks.map((e) => TaskInfo.fromJson(e)).toList();
@@ -105,22 +105,37 @@ class TaskService {
 
   /// ==== メッセージ送信処理 ====
   Future<void> sendMessage({
-    // required String selectedTaskId,
+    required String selectedTaskId,
     required String sendUserId,
     required String message,
   }) async {
-    // データを送信する ----------------------
     // 送信するデータ（マップ型）
-    final Map<String, dynamic> requestData = {
-      'friendId': sendUserId,
-      'message': message,
-    };
+    // final Map<String, dynamic> requestData = {
+    //   'friendId': sendUserId,
+    //   'message': message,
+    // };
 
-    final response = await http.post(
-      Uri.parse('$url/$sendUserId/message'),
-      headers: {'accept': 'application/json', 'Authorization': token},
-      body: jsonEncode(requestData),
+
+    final endpoint = '${AppConfig.taskListEndpoint}/$selectedTaskId/message';
+    print('エンドポイント： $endpoint');
+
+    debugPrint("フレンドID： $sendUserId");
+    debugPrint("メッセージ： $message");
+
+    final response = await AuthManager.authenticatedRequest(
+      endpoint,
+      method: 'POST',
+      body: {
+        'friendId': sendUserId,
+        'message': message,
+      }
     );
+
+    // final response = await http.post(
+    //   Uri.parse('$url/$sendUserId/message'),
+    //   headers: {'accept': 'application/json', 'Authorization': token},
+    //   body: jsonEncode(requestData),
+    // );
 
     /// 失敗
     if (response.statusCode != 200) {

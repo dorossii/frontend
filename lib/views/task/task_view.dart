@@ -265,7 +265,10 @@ class _TaskView extends State<TaskView> {
                       selectedCount = taskSelectedBool.where((e) => e).length;
                     });
                   },
-                  child: Text("まとめて選択", style: TextStyle(color: Colors.white, fontSize: 16)),
+                  child: Text(
+                    "まとめて選択",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
               ),
             ),
@@ -434,7 +437,7 @@ class _TaskView extends State<TaskView> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           // 完了時の線
@@ -472,18 +475,20 @@ class _TaskView extends State<TaskView> {
       child: Row(
         children: [
           const SizedBox(width: 8), // ← 左余白
-          DottedBorder(
-            color: AppColors.subWhiteBackground,
-            strokeWidth: 1.5,
-            dashPattern: [4, 3],
-            customPath: (size) {
-              return Path()
-                ..moveTo(0, 0)
-                ..lineTo(0, size.height);
-            },
-            child: SizedBox(width: 1, height: double.infinity),
+          SizedBox(
+            height: 60,
+            child: DottedBorder(
+              color: AppColors.subWhiteBackground,
+              strokeWidth: 1.5,
+              dashPattern: [4, 3],
+              customPath: (size) {
+                return Path()
+                  ..moveTo(0, 0)
+                  ..lineTo(0, size.height);
+              },
+              child: SizedBox(width: 1, height: double.infinity),
+            ),
           ),
-
           Container(
             margin: EdgeInsets.only(left: 8),
             child: Column(
@@ -516,17 +521,20 @@ class _TaskView extends State<TaskView> {
     return IntrinsicHeight(
       child: Row(
         children: [
-          const SizedBox(width: 8), // ← 左余白
-          DottedBorder(
-            color: AppColors.subWhiteBackground,
-            strokeWidth: 1.5,
-            dashPattern: [4, 3],
-            customPath: (size) {
-              return Path()
-                ..moveTo(0, 0)
-                ..lineTo(0, size.height);
-            },
-            child: SizedBox(width: 1, height: double.infinity),
+          const SizedBox(width: 8), // 左余白
+          SizedBox(
+            height: 60,
+            child: DottedBorder(
+              color: AppColors.subWhiteBackground,
+              strokeWidth: 1.5,
+              dashPattern: [4, 3],
+              customPath: (size) {
+                return Path()
+                  ..moveTo(0, 0)
+                  ..lineTo(0, size.height);
+              },
+              child: SizedBox(width: 1, height: double.infinity),
+            ),
           ),
 
           Container(
@@ -700,6 +708,7 @@ class _TaskView extends State<TaskView> {
                       child: Container(
                         width: double.infinity,
                         margin: EdgeInsets.only(top: 32),
+                        padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: AppColors.subWhiteBackground,
                         ),
@@ -712,27 +721,77 @@ class _TaskView extends State<TaskView> {
                           child: Column(
                             children: [
                               Text(style: TextStyle(fontSize: 24), "皿洗いをする"),
+
                               Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.all(12),
                                 child: Column(
                                   children: [
+                                    // 終了時間
                                     Row(
                                       children: [
-                                        SizedBox(
-                                          child: Image.asset(
-                                            height: 20,
-                                            width: 20,
-                                            'images/task/carender.webp',
-                                            fit: BoxFit.contain,
+                                        Expanded(
+                                          flex: 1, // 1/5
+                                          child: Center(
+                                            child: Image.asset(
+                                              height: 20,
+                                              width: 20,
+                                              'images/task/carender.webp',
+                                              fit: BoxFit.contain,
+                                            ),
                                           ),
                                         ),
-                                        Text("日付"),
+                                        Expanded(
+                                          flex: 4, // 残り4/5
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 16),
+                                              Text("2026年○月×日(火)"),
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
+
+                                    SizedBox(height: 8),
+
+                                    // 区切り線
                                     Row(
                                       children: [
-                                        Text("難易度"),
-                                        Row(
+                                        Expanded(
+                                          flex: 1, // 1/5
+                                          child: SizedBox(),
+                                        ),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Divider(
+                                            height: 2,
+                                            thickness: 2,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 8),
+
+                                    // 難易度
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1, // 1/5
+                                          child: Center(
+                                            child: Text("難易度"),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 4, // 残り4/5
+                                          child: Row(
                                           children: [
+                                            SizedBox(width: 16),
                                             SizedBox(
                                               child: Image.asset(
                                                 height: 20,
@@ -743,10 +802,21 @@ class _TaskView extends State<TaskView> {
                                             ),
                                           ],
                                         ),
+                                        ),
                                       ],
                                     ),
                                   ],
                                 ),
+                              ),
+
+                              // フレンドからのコメント
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.all(12),
+                                child: Text(""),
                               ),
                             ],
                           ),

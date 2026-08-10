@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 class FriendMessageView extends StatefulWidget {
   final TaskViewModel viewModel;
   final FriendInfo friendData;
+  final String selectedTaskId;
 
   const FriendMessageView({
     super.key,
     required this.viewModel,
     required this.friendData,
+    required this.selectedTaskId,
   });
 
   @override
@@ -44,6 +46,7 @@ class _FriendMessageView extends State<FriendMessageView> {
       controller: _controller,
       labelText: "${widget.friendData.userName}向けて、メッセージを送ろう！",
       sendUserId: widget.friendData.userId,
+      selectedTaskId: widget.selectedTaskId,
     );
   }
 }

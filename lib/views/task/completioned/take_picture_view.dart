@@ -94,10 +94,7 @@ class _TakePictureView extends State<TakePictureView> {
                   color: Colors.black87,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(
-                  message,
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text(message, style: TextStyle(color: Colors.white)),
               ),
             ),
           );
@@ -255,12 +252,15 @@ class _TakePictureView extends State<TakePictureView> {
                     SizedBox(
                       width: 114,
                       child: ElevatedButton(
-                        onPressed: () => {
-                          Navigator.of(context).push(
+                        onPressed: () {
+                          Navigator.pop(context); // ダイアログを閉じる
+
+                          Navigator.of(this.context).push(
                             MaterialPageRoute(
-                              builder: (context) => TaskAnimationScreen(friendName: "まつえもん"),
+                              builder: (_) =>
+                                  TaskAnimationScreen(friendName: "まつえもん"),
                             ),
-                          ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: AppColors.subWhiteBackground,

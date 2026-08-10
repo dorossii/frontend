@@ -221,10 +221,11 @@ class _FriendPictureView extends State<FriendPictureView> {
                       SizedBox(width: 32),
                       GestureDetector(
                         onTap: () => {
-                          TaskService().sendMessage(
-                            sendUserId: selectedFriend!.userId,
-                            message: _controller.text,
-                          ),
+                          // ToDO：
+                          // TaskService().sendMessage(
+                          //   sendUserId: selectedFriend!.userId,
+                          //   message: _controller.text,
+                          // ),
                           // 画面遷移
                           Navigator.of(context).push(
                             MaterialPageRoute(
