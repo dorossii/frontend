@@ -47,6 +47,7 @@ class _CreateMessageView extends State<CreateMessageView> {
       controller: _controller,
       labelText: "未来の自分に向けて、メッセージを送ろう！",
       sendUserId: widget.userStatus.userId,
+      sendUserName: widget.userStatus.userName,
       selectedTaskId: widget.selectedTaskId,
     );
   }

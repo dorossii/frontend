@@ -46,6 +46,7 @@ class _FriendMessageView extends State<FriendMessageView> {
       controller: _controller,
       labelText: "${widget.friendData.userName}向けて、メッセージを送ろう！",
       sendUserId: widget.friendData.userId,
+      sendUserName: widget.friendData.userName,
       selectedTaskId: widget.selectedTaskId,
     );
   }
