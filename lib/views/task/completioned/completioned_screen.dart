@@ -38,7 +38,7 @@ class CompletionedScreen extends StatelessWidget {
 
   Widget _buildContent(confirmType) {
 
-    confirmType = 3;
+    confirmType = 4;
     
     switch (confirmType) {
       case 1:
@@ -69,7 +69,7 @@ class CompletionedScreen extends StatelessWidget {
         );
       case 4:
         return FutureBuilder<FriendInfo>(
-          future: viewModel.findFriend(),
+          future: viewModel.findFriend(), // ランダムにフレンドを取得
           builder: (context, snapshot) {
             // まだデータの取得が終わっていない間は、ローディング画面を表示する
             if (snapshot.connectionState != ConnectionState.done) {

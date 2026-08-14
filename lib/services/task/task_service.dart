@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:authbase_mobile/services/auth_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -109,41 +111,92 @@ class TaskService {
     required String sendUserId,
     required String message,
   }) async {
-    // 送信するデータ（マップ型）
-    // final Map<String, dynamic> requestData = {
-    //   'friendId': sendUserId,
-    //   'message': message,
-    // };
-
-
-    final endpoint = '${AppConfig.taskListEndpoint}/$selectedTaskId/message';
-    print('エンドポイント： $endpoint');
-
-    debugPrint("フレンドID： $sendUserId");
-    debugPrint("メッセージ： $message");
+    // final endpoint = '${AppConfig.taskListEndpoint}/$selectedTaskId/message';
+    final endpoint = '${AppConfig.taskListEndpoint}/message';
 
     final response = await AuthManager.authenticatedRequest(
       endpoint,
       method: 'POST',
-      body: {
-        'friendId': sendUserId,
-        'message': message,
-      }
+      body: {'friendId': sendUserId, 'message': message},
     );
+    
 
-    // final response = await http.post(
-    //   Uri.parse('$url/$sendUserId/message'),
-    //   headers: {'accept': 'application/json', 'Authorization': token},
-    //   body: jsonEncode(requestData),
+    debugPrint('ステータス：${response.statusCode}');
+    debugPrint('レスポンス：${response.body}');
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw Exception('メッセージ送信に失敗しました: ${response.statusCode}');
+    }
+    // // 送信するデータ（マップ型）
+    // // final Map<String, dynamic> requestData = {
+    // //   'friendId': sendUserId,
+    // //   'message': message,
+    // // };
+
+    // final endpoint = '${AppConfig.taskListEndpoint}/$selectedTaskId/message';
+    // print('エンドポイント： $endpoint');
+
+    // debugPrint("フレンドID： $sendUserId");
+    // debugPrint("メッセージ： $message");
+
+    // final response = await AuthManager.authenticatedRequest(
+    //   endpoint,
+    //   method: 'POST',
+    //   body: {'friendId': sendUserId, 'message': message},
     // );
 
-    /// 失敗
-    if (response.statusCode != 200) {
-      debugPrint('メッセージ送信失敗: ${response.statusCode}');
-      debugPrint(response.body);
-      return;
-    }
+    // debugPrint('レスポンス： ${response.body}');
+
+    // // final response = await http.post(
+    // //   Uri.parse('$url/$sendUserId/message'),
+    // //   headers: {'accept': 'application/json', 'Authorization': token},
+    // //   body: jsonEncode(requestData),
+    // // );
+
+    // /// 失敗
+    // if (response.statusCode != 200) {
+    //   debugPrint('メッセージ送信失敗: ${response.statusCode}');
+    //   debugPrint(response.body);
+    //   return;
+    // }
   }
 
-  static void message() {}
+  /// 写真アップロード処理
+  Future<void> sendPicture({
+    required String selectedTaskId,
+    required String imagePath,
+  }) async {
+    final endpoint = '${AppConfig.taskListEndpoint}/$selectedTaskId/image';
+
+    final token = await AuthManager.getAccessToken();
+
+    if (token == null) {
+      throw Exception('Failed to get access token');
+    }
+
+    final url = Uri.parse('${AppConfig.baseUrl}$endpoint');
+
+    final request = http.MultipartRequest('POST', url);
+
+    // authenticatedRequest() と同じ認証方式
+    request.headers['Authorization'] = token;
+
+    // Go側の FormFile("image") に対応
+    request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+
+    debugPrint('画像アップロード開始');
+    debugPrint('endpoint: $endpoint');
+    debugPrint('imagePath: $imagePath');
+
+    final streamedResponse = await request.send();
+
+    final response = await http.Response.fromStream(streamedResponse);
+
+    debugPrint('ステータス：${response.statusCode}');
+    debugPrint('レスポンス：${response.body}');
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw Exception('画像アップロードに失敗しました: ${response.statusCode}');
+    }
+  }
 }
