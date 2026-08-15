@@ -18,6 +18,10 @@ class AppConfig {
   static const String topStatusEndpoint = '/app/user/status';
   // フレンドリストの取得
   static const String friendListEndpoint = '/app/friend';
+  // レスキューが必要なフレンドの取得
+  static const String rescueFriendListEndpoint = '/app/friend/rescue';
+  // レスキューが必要なフレンドの登録
+  static const String registerRescueFriendEndpoint = '/app/friend/rescue';
 
   // 設定画面のユーザー情報
   static const String userProfileEndpoint = '/app/user/setting';
