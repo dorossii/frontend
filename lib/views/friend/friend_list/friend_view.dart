@@ -34,7 +34,7 @@ class _FriendListViewState extends State<FriendListView> {
           // 検索バー
           Padding(
             padding: const EdgeInsets.only(
-              top: 4,
+              top: 16,
               left: 20,
               right: 20,
               bottom: 4,
