@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../models/user_status.dart';
@@ -15,26 +16,53 @@ class UserViewModel extends ChangeNotifier {
   /// API通信クラス
   final UserService _service = UserService();
 
-  /// 初期化
-  Future<void> initialize() async {
+  /// 定期実行用タイマー
+  Timer? _pollingTimer;
+
+  /// 初期化（タイマー開始）
+  Future<void> initialize({Duration interval = const Duration(seconds: 5)}) async {
+    // 初回取得
     await fetchUser();
+    // 定期取得を開始
+    startPolling(interval: interval);
   }
 
-  /// ユーザー情報取得
-  Future<void> fetchUser() async {
+  /// ポーリング（定期実行）を開始
+  void startPolling({Duration interval = const Duration(seconds: 5)}) {
+    _pollingTimer?.cancel(); // 二重起動防止
+    _pollingTimer = Timer.periodic(interval, (_) {
+      fetchUserStatusQuietly();
+    });
+  }
 
+  /// ポーリングを停止
+  void stopPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = null;
+  }
+
+  /// バックグラウンドでの定期更新用（画面全体のローディングを出さずに更新）
+  Future<void> fetchUserStatusQuietly() async {
+    try {
+      final newStatus = await _service.fetchUserStatus();
+      userStatus = newStatus;
+      debugPrint('[Timer] 5秒経過: ステータスを更新しました (${DateTime.now()})');
+      notifyListeners(); // 画面を再描画
+    } catch (e) {
+      debugPrint('定期ステータス取得エラー: $e');
+    }
+  }
+
+  /// 初回や明示的なユーザー操作での情報取得（ローディングを伴う）
+  Future<void> fetchUser() async {
     isLoading = true;
     notifyListeners();
 
     try {
-
       /// API通信
       userStatus = await _service.fetchUserStatus();
-
     } catch (e) {
-
       debugPrint(e.toString());
-
     }
 
     isLoading = false;
@@ -61,5 +89,12 @@ class UserViewModel extends ChangeNotifier {
   /// 汚さレベル
   int get dirtLevel {
     return userStatus?.dirtLevel ?? 0;
+  }
+
+  /// ViewModelが破棄された時にタイマーも停止
+  @override
+  void dispose() {
+    stopPolling();
+    super.dispose();
   }
 }
