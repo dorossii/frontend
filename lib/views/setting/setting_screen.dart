@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../components/Colors.dart';
 import 'setting_view.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -15,11 +16,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-
-      appBar: AppBar(
-        title: const Text('設定'),
-      ),
-
+      backgroundColor: AppColors.subWhiteBackground,
       body: SettingsView(
 
         onLogoutPressed: () async {
