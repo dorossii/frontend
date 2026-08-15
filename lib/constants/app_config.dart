@@ -12,6 +12,8 @@ class AppConfig {
   static const String userRegisterEndpoint = '/app/user/register';
   // 生活環境情報の登録（初回）
   static const String userLifestyleEndpoint = '/app/user/lifestyle';
+  // ログの取得
+  static const String activityLogEndpoint = '/app/notice';
   // トップ画面ユーザーステータスの取得
   static const String topStatusEndpoint = '/app/user/status';
   // フレンドリストの取得

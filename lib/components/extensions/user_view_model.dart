@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../models/user_status.dart';
+import '../../models/activity_log.dart'; // ログモデルをインポート
 import '../../services/user/user_service.dart';
 import '../models/status.dart';
 
@@ -9,6 +10,9 @@ class UserViewModel extends ChangeNotifier {
 
   /// APIから取得したユーザー情報
   UserStatus? userStatus;
+
+  /// APIから取得したお知らせ・ログ一覧
+  List<ActivityLog> logs = [];
 
   /// ローディング状態
   bool isLoading = false;
@@ -44,11 +48,18 @@ class UserViewModel extends ChangeNotifier {
   /// バックグラウンドでの定期更新用（画面全体のローディングを出さずに更新）
   Future<void> fetchUserStatusQuietly() async {
     try {
-      final newStatus = await _service.fetchUserStatus();
-      userStatus = newStatus;
+      // ステータスとログを並行して取得（または順番に取得）
+      final results = await Future.wait([
+        _service.fetchUserStatus(),
+        _service.fetchLogs(), // ※ UserServiceに fetchLogs() を実装した場合
+      ]);
+
+      userStatus = results[0] as UserStatus?;
+      logs = (results[1] as List<ActivityLog>?) ?? [];
+
       notifyListeners(); // 画面を再描画
     } catch (e) {
-      debugPrint('定期ステータス取得エラー: $e');
+      debugPrint('定期ステータス・ログ取得エラー: $e');
     }
   }
 
@@ -58,8 +69,14 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      /// API通信
-      userStatus = await _service.fetchUserStatus();
+      /// API通信（ステータスとログを同時に取得）
+      final results = await Future.wait([
+        _service.fetchUserStatus(),
+        _service.fetchLogs(),
+      ]);
+
+      userStatus = results[0] as UserStatus?;
+      logs = (results[1] as List<ActivityLog>?) ?? [];
     } catch (e) {
       debugPrint(e.toString());
     }
