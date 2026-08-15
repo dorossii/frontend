@@ -46,7 +46,6 @@ class UserViewModel extends ChangeNotifier {
     try {
       final newStatus = await _service.fetchUserStatus();
       userStatus = newStatus;
-      debugPrint('[Timer] 5秒経過: ステータスを更新しました (${DateTime.now()})');
       notifyListeners(); // 画面を再描画
     } catch (e) {
       debugPrint('定期ステータス取得エラー: $e');
