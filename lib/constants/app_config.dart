@@ -16,6 +16,9 @@ class AppConfig {
   static const String topStatusEndpoint = '/app/user/status';
   // フレンドリストの取得
   static const String friendListEndpoint = '/app/friend';
+
+  // 設定画面のユーザー情報
+  static const String userProfileEndpoint = '/app/user/setting';
 }
 
 // モックのAPIレスポンスを定義

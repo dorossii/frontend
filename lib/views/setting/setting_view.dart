@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../components/Colors.dart';
+import 'user/setting_user_view.dart';
 
 class SettingsView extends StatelessWidget {
   final VoidCallback onLogoutPressed;
@@ -62,7 +63,19 @@ class SettingsView extends StatelessWidget {
                     _buildPillButton(
                       icon: Icons.edit,
                       label: '編集',
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileEditView(
+                              initialName: 'まつえもん',
+                              birthday: '2005/01/20',
+                              initialBgColor: AppColors.darkBackground,
+                              initialIconPath: 'images/icons/pc.png',
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
