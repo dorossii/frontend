@@ -38,7 +38,7 @@ class CompletionedScreen extends StatelessWidget {
 
   Widget _buildContent(confirmType) {
 
-    confirmType = 4;
+    // confirmType = 4;
     
     switch (confirmType) {
       case 1:
