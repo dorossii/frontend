@@ -195,6 +195,7 @@ class _TaskView extends State<TaskView> {
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: AppColors.edgew,
+                fontFamily: 'textFont',
               ),
 
               // 並び替え欄
@@ -594,7 +595,10 @@ class _TaskView extends State<TaskView> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(3)),
             ),
             child: Center(
-              child: Text("すべて", style: TextStyle(color: AppColors.text)),
+              child: Text(
+                "すべて", 
+                style: TextStyle(color: AppColors.text)
+              ),
             ),
           ),
         ),
@@ -638,198 +642,230 @@ class _TaskView extends State<TaskView> {
 
   // タスク詳細
   void _showModalBottomSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: AppColors.darkBackground,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (BuildContext context) {
+      return DraggableScrollableSheet(
+        initialChildSize: 0.8,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (
+          BuildContext context,
+          ScrollController scrollController,
+        ) {
+          return Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.darkBackground,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(28),
+                topRight: Radius.circular(28),
+              ),
             ),
-          ),
-          child: Center(
-            child: Stack(
+            child: Column(
               children: [
-                Column(
+                // 上の部分
+                Stack(
                   children: [
-                    Stack(
-                      children: [
-                        Container(
-                          height: 42,
-                          width: 42,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black38,
-                                offset: Offset(0, 3),
-                                blurRadius: 5,
-                                spreadRadius: 1.0,
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: Image.asset(
-                                'images/task/closeBtn.webp',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          child: Container(
-                            height: 10,
-                            width: 10,
-                            decoration: BoxDecoration(
-                              color: AppColors.subBackground,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // 写真
                     Container(
-                      height: 135,
-                      width: 274,
+                      height: 42,
+                      width: 42,
                       decoration: BoxDecoration(
-                        color: AppColors.gray,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        margin: EdgeInsets.only(top: 32),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppColors.subWhiteBackground,
-                        ),
-                        child: DefaultTextStyle(
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "textFont",
-                            color: AppColors.text,
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            offset: Offset(0, 3),
+                            blurRadius: 5,
+                            spreadRadius: 1.0,
                           ),
-                          child: Column(
-                            children: [
-                              Text(style: TextStyle(fontSize: 24), "皿洗いをする"),
-
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.all(12),
-                                child: Column(
-                                  children: [
-                                    // 終了時間
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1, // 1/5
-                                          child: Center(
-                                            child: Image.asset(
-                                              height: 20,
-                                              width: 20,
-                                              'images/task/carender.webp',
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 4, // 残り4/5
-                                          child: Row(
-                                            children: [
-                                              SizedBox(width: 16),
-                                              Text("2026年○月×日(火)"),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    SizedBox(height: 8),
-
-                                    // 区切り線
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1, // 1/5
-                                          child: SizedBox(),
-                                        ),
-                                        Expanded(
-                                          flex: 4,
-                                          child: Divider(
-                                            height: 2,
-                                            thickness: 2,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    SizedBox(height: 8),
-
-                                    // 難易度
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1, // 1/5
-                                          child: Center(
-                                            child: Text("難易度"),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 4, // 残り4/5
-                                          child: Row(
-                                          children: [
-                                            SizedBox(width: 16),
-                                            SizedBox(
-                                              child: Image.asset(
-                                                height: 20,
-                                                width: 20,
-                                                'images/task/difficultyLevel_green.webp',
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              // フレンドからのコメント
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.all(12),
-                                child: Text(""),
-                              ),
-                            ],
+                        ],
+                      ),
+                      child: Center(
+                        child: SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: Image.asset(
+                            'images/task/closeBtn.webp',
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
+
+                // 写真
+                Container(
+                  height: 135,
+                  width: 274,
+                  decoration: BoxDecoration(
+                    color: AppColors.gray,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+
+                // ↓ここからスクロール
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.only(top: 32),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.subWhiteBackground,
+                      ),
+                      child: DefaultTextStyle(
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: "textFont",
+                          color: AppColors.text,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "皿洗いをする",
+                              style: TextStyle(fontSize: 24),
+                            ),
+
+                            SizedBox(height: 10),
+
+                            // タスク情報
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    offset: Offset(0, 3),
+                                    blurRadius: 3,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              padding: EdgeInsets.all(12),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Center(
+                                          child: Image.asset(
+                                            height: 20,
+                                            width: 20,
+                                            'images/task/carender.webp',
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Row(
+                                          children: [
+                                            SizedBox(width: 16),
+                                            Text("2026年○月×日(火)"),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 8),
+
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(),
+                                      ),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Divider(
+                                          height: 2,
+                                          thickness: 2,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 8),
+
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Center(
+                                          child: Text("難易度"),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Row(
+                                          children: [
+                                            SizedBox(width: 16),
+                                            Image.asset(
+                                              height: 20,
+                                              width: 20,
+                                              'images/task/difficultyLevel_green.webp',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 20),
+
+                            Text("フレンドからのコメント"),
+
+                            SizedBox(height: 8),
+
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    offset: Offset(0, 3),
+                                    blurRadius: 3,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              padding: EdgeInsets.all(12),
+                              child: Text(
+                                "フレンドからのコメント。フレンドからのコメント。フレンドからのコメント。",
+                              ),
+                            ),
+
+                            // 必要ならさらにコンテンツ
+                            SizedBox(height: 300),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        );
-      },
-    );
-  }
+          );
+        },
+      );
+    },
+  );
+}
 }
