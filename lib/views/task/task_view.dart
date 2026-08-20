@@ -104,7 +104,7 @@ class _TaskView extends State<TaskView> {
             ),
 
             // タスク選択時の確認バー
-            if (allItemSelected && selectedCount != 0)
+            if (allItemSelected || selectedCount != 0)
               Positioned(
                 bottom: 8,
                 left: 0,
@@ -191,7 +191,12 @@ class _TaskView extends State<TaskView> {
         child: Column(
           children: [
             DefaultTextStyle(
-              style: TextStyle(fontSize: 10, color: AppColors.edgew),
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: AppColors.edgew,
+                fontFamily: 'textFont',
+              ),
 
               // 並び替え欄
               child: Row(
@@ -247,17 +252,24 @@ class _TaskView extends State<TaskView> {
                     setState(() {
                       allItemSelected = !allItemSelected;
 
-                      widget.viewModel.handleSelectAll(
-                        selectedTabIndex,
-                        taskSelectedBool,
-                        widget.viewModel.taskList,
-                        (_) {},
-                      );
+                      if (allItemSelected) {
+                        widget.viewModel.handleSelectAll(
+                          selectedTabIndex,
+                          taskSelectedBool,
+                          widget.viewModel.taskList,
+                          (_) {},
+                        );
+                      } else {
+                        widget.viewModel.handleDeselect(taskSelectedBool);
+                      }
 
                       selectedCount = taskSelectedBool.where((e) => e).length;
                     });
                   },
-                  child: Text("まとめて選択", style: TextStyle(color: Colors.white)),
+                  child: Text(
+                    "まとめて選択",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
               ),
             ),
@@ -329,6 +341,7 @@ class _TaskView extends State<TaskView> {
               GestureDetector(
                 onTap: () {
                   setState(() {
+                    //
                     widget.viewModel.handleUpdateStatus(
                       task,
                       index,
@@ -336,9 +349,6 @@ class _TaskView extends State<TaskView> {
                     );
 
                     selectedCount = taskSelectedBool.where((e) => e).length;
-                    allItemSelected =
-                        selectedCount ==
-                        taskSelectedBool.where((_) => true).length;
                   });
                 },
                 child: Container(
@@ -364,8 +374,8 @@ class _TaskView extends State<TaskView> {
                           taskSelectedBool[index]
                       ? SizedBox(
                           child: Image.asset(
-                            height: 20,
-                            width: 20,
+                            height: 24,
+                            width: 24,
                             'images/task/check.webp',
                             fit: BoxFit.contain,
                           ),
@@ -382,10 +392,10 @@ class _TaskView extends State<TaskView> {
                         children: [
                           Text(
                             task.taskName,
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 18),
                             overflow: TextOverflow.ellipsis,
                           ),
-
+                          // 完了時の線
                           if (task.status == 2)
                             Positioned(
                               left: 0,
@@ -398,6 +408,7 @@ class _TaskView extends State<TaskView> {
                             ),
                         ],
                       ),
+                      SizedBox(height: 10),
                       Stack(
                         children: [
                           Row(
@@ -406,8 +417,8 @@ class _TaskView extends State<TaskView> {
                                 children: [
                                   for (int i = 0; i < (task.level as int); i++)
                                     SizedBox(
-                                      height: 16,
-                                      width: 16,
+                                      height: 20,
+                                      width: 20,
                                       child: Image.asset(
                                         'images/task/difficultyLevel.webp',
                                         fit: BoxFit.cover,
@@ -415,26 +426,22 @@ class _TaskView extends State<TaskView> {
                                     ),
                                 ],
                               ),
-                              Spacer(),
-                              Container(
-                                margin: EdgeInsets.only(right: 8),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "残り時間：",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Text(
-                                      widget.viewModel.handleGetLimit(
-                                        task.endTime,
-                                      ),
-                                      style: TextStyle(fontSize: 10),
-                                    ),
-                                  ],
+                              // Spacer(),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                fit: FlexFit.loose,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "残り時間：${widget.viewModel.handleGetLimit(task.endTime)}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
+                          // 完了時の線
                           if (task.status == 2)
                             Positioned(
                               left: 0,
@@ -454,7 +461,7 @@ class _TaskView extends State<TaskView> {
 
               // タスクごとの表示設定
               if (task.status == 1) _buildApprovalView(), // 承認待ち
-              if (task.status == 0 && task.message.isEmpty)
+              if (task.status == 0 && task.message.isNotEmpty)
                 _buildAgainView(), // もう一度(メッセージの有無で判断)
             ],
           ),
@@ -468,18 +475,21 @@ class _TaskView extends State<TaskView> {
     return IntrinsicHeight(
       child: Row(
         children: [
-          DottedBorder(
-            color: AppColors.subWhiteBackground,
-            strokeWidth: 1.5,
-            dashPattern: [4, 3],
-            customPath: (size) {
-              return Path()
-                ..moveTo(0, 0)
-                ..lineTo(0, size.height);
-            },
-            child: SizedBox(width: 1, height: double.infinity),
+          const SizedBox(width: 8), // ← 左余白
+          SizedBox(
+            height: 60,
+            child: DottedBorder(
+              color: AppColors.subWhiteBackground,
+              strokeWidth: 1.5,
+              dashPattern: [4, 3],
+              customPath: (size) {
+                return Path()
+                  ..moveTo(0, 0)
+                  ..lineTo(0, size.height);
+              },
+              child: SizedBox(width: 1, height: double.infinity),
+            ),
           ),
-
           Container(
             margin: EdgeInsets.only(left: 8),
             child: Column(
@@ -512,16 +522,20 @@ class _TaskView extends State<TaskView> {
     return IntrinsicHeight(
       child: Row(
         children: [
-          DottedBorder(
-            color: AppColors.subWhiteBackground,
-            strokeWidth: 1.5,
-            dashPattern: [4, 3],
-            customPath: (size) {
-              return Path()
-                ..moveTo(0, 0)
-                ..lineTo(0, size.height);
-            },
-            child: SizedBox(width: 1, height: double.infinity),
+          const SizedBox(width: 8), // 左余白
+          SizedBox(
+            height: 60,
+            child: DottedBorder(
+              color: AppColors.subWhiteBackground,
+              strokeWidth: 1.5,
+              dashPattern: [4, 3],
+              customPath: (size) {
+                return Path()
+                  ..moveTo(0, 0)
+                  ..lineTo(0, size.height);
+              },
+              child: SizedBox(width: 1, height: double.infinity),
+            ),
           ),
 
           Container(
@@ -581,7 +595,10 @@ class _TaskView extends State<TaskView> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(3)),
             ),
             child: Center(
-              child: Text("すべて", style: TextStyle(color: AppColors.text)),
+              child: Text(
+                "すべて", 
+                style: TextStyle(color: AppColors.text)
+              ),
             ),
           ),
         ),
@@ -625,87 +642,230 @@ class _TaskView extends State<TaskView> {
 
   // タスク詳細
   void _showModalBottomSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: AppColors.darkBackground,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (BuildContext context) {
+      return DraggableScrollableSheet(
+        initialChildSize: 0.8,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (
+          BuildContext context,
+          ScrollController scrollController,
+        ) {
+          return Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.darkBackground,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(28),
+                topRight: Radius.circular(28),
+              ),
             ),
-          ),
-          child: Center(
-            child: Stack(
+            child: Column(
               children: [
-                Column(
+                // 上の部分
+                Stack(
                   children: [
-                    Stack(
-                      children: [
-                        Container(
-                          height: 42,
-                          width: 42,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black38,
-                                offset: Offset(0, 3),
-                                blurRadius: 5,
-                                spreadRadius: 1.0,
-                              ),
-                            ],
+                    Container(
+                      height: 42,
+                      width: 42,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            offset: Offset(0, 3),
+                            blurRadius: 5,
+                            spreadRadius: 1.0,
                           ),
-                          child: Center(
-                            child: SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: Image.asset(
-                                'images/task/closeBtn.webp',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
+                        ],
+                      ),
+                      child: Center(
+                        child: SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: Image.asset(
+                            'images/task/closeBtn.webp',
+                            fit: BoxFit.contain,
                           ),
                         ),
-                        Align(
-                          child: Container(
-                            height: 10,
-                            width: 10,
-                            decoration: BoxDecoration(
-                              color: AppColors.subBackground,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // 写真
-                    Container(
-                      height: 135,
-                      width: 274,
-                      decoration: BoxDecoration(
-                        color: AppColors.gray,
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(top: 32),
-                      decoration: BoxDecoration(
-                        color: AppColors.subWhiteBackground,
-                      ),
-                      child: Column(children: [Text("aaa")]),
                     ),
                   ],
                 ),
+
+                // 写真
+                Container(
+                  height: 135,
+                  width: 274,
+                  decoration: BoxDecoration(
+                    color: AppColors.gray,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+
+                // ↓ここからスクロール
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.only(top: 32),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.subWhiteBackground,
+                      ),
+                      child: DefaultTextStyle(
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: "textFont",
+                          color: AppColors.text,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "皿洗いをする",
+                              style: TextStyle(fontSize: 24),
+                            ),
+
+                            SizedBox(height: 10),
+
+                            // タスク情報
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    offset: Offset(0, 3),
+                                    blurRadius: 3,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              padding: EdgeInsets.all(12),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Center(
+                                          child: Image.asset(
+                                            height: 20,
+                                            width: 20,
+                                            'images/task/carender.webp',
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Row(
+                                          children: [
+                                            SizedBox(width: 16),
+                                            Text("2026年○月×日(火)"),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 8),
+
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(),
+                                      ),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Divider(
+                                          height: 2,
+                                          thickness: 2,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 8),
+
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Center(
+                                          child: Text("難易度"),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Row(
+                                          children: [
+                                            SizedBox(width: 16),
+                                            Image.asset(
+                                              height: 20,
+                                              width: 20,
+                                              'images/task/difficultyLevel_green.webp',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 20),
+
+                            Text("フレンドからのコメント"),
+
+                            SizedBox(height: 8),
+
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    offset: Offset(0, 3),
+                                    blurRadius: 3,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              padding: EdgeInsets.all(12),
+                              child: Text(
+                                "フレンドからのコメント。フレンドからのコメント。フレンドからのコメント。",
+                              ),
+                            ),
+
+                            // 必要ならさらにコンテンツ
+                            SizedBox(height: 300),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        );
-      },
-    );
-  }
+          );
+        },
+      );
+    },
+  );
+}
 }

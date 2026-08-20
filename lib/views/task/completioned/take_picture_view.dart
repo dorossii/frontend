@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:authbase_mobile/components/Colors.dart';
 import 'package:authbase_mobile/models/task_info.dart';
+import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/component/task/take_picture_design.dart';
 import 'package:authbase_mobile/views/splash/task/splash_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
@@ -94,10 +95,7 @@ class _TakePictureView extends State<TakePictureView> {
                   color: Colors.black87,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(
-                  message,
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text(message, style: TextStyle(color: Colors.white)),
               ),
             ),
           );
@@ -255,12 +253,20 @@ class _TakePictureView extends State<TakePictureView> {
                     SizedBox(
                       width: 114,
                       child: ElevatedButton(
-                        onPressed: () => {
-                          Navigator.of(context).push(
+                        onPressed: () {
+                          TaskService().sendPicture(
+                            selectedTaskId: widget.selectedTaskId,
+                            imagePath: imagePath
+                          );
+                          
+                          Navigator.pop(context); // ダイアログを閉じる
+
+                          Navigator.of(this.context).push(
                             MaterialPageRoute(
-                              builder: (context) => TaskAnimationScreen(friendName: "まつえもん"),
+                              builder: (_) =>
+                                  TaskAnimationScreen(friendName: "まつえもん"),
                             ),
-                          ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: AppColors.subWhiteBackground,

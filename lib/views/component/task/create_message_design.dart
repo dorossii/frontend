@@ -13,6 +13,8 @@ class CreateMessageDesign extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final String sendUserId;
+  final String sendUserName;
+  final String selectedTaskId;
 
   const CreateMessageDesign({
     super.key,
@@ -20,6 +22,8 @@ class CreateMessageDesign extends StatelessWidget {
     required this.controller,
     required this.labelText,
     required this.sendUserId,
+    required this.sendUserName,
+    required this.selectedTaskId,
   });
 
   @override
@@ -144,11 +148,12 @@ class CreateMessageDesign extends StatelessWidget {
                       Fluttertoast.showToast(msg: "文章を入力してください。");
                     } else {
                       TaskService().sendMessage(
+                        selectedTaskId: selectedTaskId,
                         sendUserId: sendUserId,
                         message: controller.text,
                       );
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: "まつえもん")),
+                        MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: sendUserName)),
                       );
                     }
                   },
