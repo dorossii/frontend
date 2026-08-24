@@ -109,8 +109,6 @@ class TaskService {
     required String sendUserId,
     required String message,
   }) async {
-    // ToDo:
-    // final endpoint = '${AppConfig.taskListEndpoint}/$selectedTaskId/message';
     final endpoint = '${AppConfig.taskListEndpoint}/message';
 
     final response = await AuthManager.authenticatedRequest(
@@ -118,7 +116,7 @@ class TaskService {
       method: 'POST',
       body: {'friendId': sendUserId, 'message': message},
     );
-    
+
     // debugPrint('ステータス：${response.statusCode}');
     // debugPrint('レスポンス：${response.body}');
 
