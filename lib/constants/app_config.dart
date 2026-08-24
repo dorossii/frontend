@@ -12,10 +12,19 @@ class AppConfig {
   static const String userRegisterEndpoint = '/app/user/register';
   // 生活環境情報の登録（初回）
   static const String userLifestyleEndpoint = '/app/user/lifestyle';
+  // ログの取得
+  static const String activityLogEndpoint = '/app/notice';
   // トップ画面ユーザーステータスの取得
   static const String topStatusEndpoint = '/app/user/status';
   // フレンドリストの取得
   static const String friendListEndpoint = '/app/friend';
+  // レスキューが必要なフレンドの取得
+  static const String rescueFriendListEndpoint = '/app/friend/rescue';
+  // レスキューが必要なフレンドの登録
+  static const String registerRescueFriendEndpoint = '/app/friend/rescue';
+
+  // 設定画面のユーザー情報
+  static const String userProfileEndpoint = '/app/user/setting';
 }
 
 // モックのAPIレスポンスを定義

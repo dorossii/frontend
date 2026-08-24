@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -33,9 +32,7 @@ class AuthManager {
   static Future<String?> getAccessToken() async {
     if (_cachedAccessToken != null &&
         _tokenExpiry != null &&
-        DateTime.now().isBefore(
-          _tokenExpiry!.subtract(const Duration(minutes: 1)),
-        )) {
+        DateTime.now().isBefore(_tokenExpiry!.subtract(const Duration(minutes: 1)))) {
       return _cachedAccessToken;
     }
 
@@ -51,9 +48,7 @@ class AuthManager {
         headers: {'Authorization': refreshToken},
       );
 
-      debugPrint(
-        "🔍 Token response: ${response.statusCode} - ${response.body}",
-      );
+      debugPrint("🔍 Token response: ${response.statusCode} - ${response.body}");
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -90,27 +85,9 @@ class AuthManager {
 
     switch (method.toUpperCase()) {
       case 'POST':
-        // return await http.post(url, headers: requestHeaders, body: json.encode(body));
-        debugPrint('POST body type: ${body.runtimeType}');
-        debugPrint(
-          'POST body size: ${body is Uint8List ? body.length : 'JSON'}',
-        );
-
-        return await http.post(
-          url,
-          headers: requestHeaders,
-          body: body is Uint8List
-              ? body
-              : body != null
-              ? json.encode(body)
-              : null,
-        );
+        return await http.post(url, headers: requestHeaders, body: json.encode(body));
       case 'PUT':
-        return await http.put(
-          url,
-          headers: requestHeaders,
-          body: json.encode(body),
-        );
+        return await http.put(url, headers: requestHeaders, body: json.encode(body));
       case 'DELETE':
         return await http.delete(url, headers: requestHeaders);
       case 'GET':
@@ -132,14 +109,12 @@ class AuthManager {
         Uri.parse('${AppConfig.baseUrl}${AppConfig.meEndpoint}'),
         headers: {'Authorization': refreshToken},
       );
-
-      debugPrint(
-        "🔍 ${AppConfig.meEndpoint} response: ${response.statusCode} - ${response.body}",
-      );
+      
+      debugPrint("🔍 ${AppConfig.meEndpoint} response: ${response.statusCode} - ${response.body}");
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
-        return UserInfo.fromJson(jsonData);
+      return UserInfo.fromJson(jsonData);
       }
     } catch (e) {
       debugPrint("❌ getCurrentUserInfo error: $e");
