@@ -10,16 +10,25 @@ class FriendRescueService {
   /// フレンド情報取得
   Future<List<RescueFriend>> fetchFriendInfo() async {
     final response = await AuthManager.authenticatedRequest(
-      AppConfig.friendListEndpoint,
+      AppConfig.rescueFriendListEndpoint,
       method: 'GET',
     );
 
     /// 通信成功
     if (response.statusCode == 200) {
       debugPrint('レスキュー情報取得成功: ${response.body}');
-      
-      final Map<String, dynamic> jsonData = jsonDecode(response.body);
-      final List<dynamic> friendsList = jsonData['friends'] ?? [];
+
+      final dynamic decoded = jsonDecode(response.body);
+      List<dynamic> friendsList = [];
+
+      // JSONが直接 List で返ってくる場合
+      if (decoded is List) {
+        friendsList = decoded;
+      }
+      // もし将来 Map {"friends": [...]} で包まれて戻っても壊れないケア
+      else if (decoded is Map<String, dynamic>) {
+        friendsList = decoded['friends'] ?? [];
+      }
 
       /// Modelへ変換
       return friendsList
