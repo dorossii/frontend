@@ -308,7 +308,7 @@ class _TaskView extends State<TaskView> {
     return InkWell(
       // タスク詳細を表示
       onTap: () async {
-        _showModalBottomSheet();
+        _showModalBottomSheet(task);
       },
 
       child: Container(
@@ -638,13 +638,42 @@ class _TaskView extends State<TaskView> {
   }
 
   // タスク詳細
-  void _showModalBottomSheet() {
+  void _showModalBottomSheet(task) {
+    debugPrint('taskId: ${task.taskId}');
+    debugPrint('imageId: ${task.imageId}');
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return const DetailModalView();
+        return DetailModalView(
+          viewModel: widget.viewModel,
+          task: task,
+          // 完了時の処理
+          onUpDate: () async {
+            List<String> taegetTask = [task.taskId]; 
+            // タスク更新処理
+            final (data, resultId) = await widget.viewModel.handleUpdateTask(
+              taegetTask,
+              "",
+              widget.viewModel,
+            );
+
+            // 画面遷移
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CompletionedScreen(
+                  viewModel: widget.viewModel,
+                  selectedTaskId: resultId,
+                  // 写真が必須の場合は1(写真を撮る画面)
+                  confirmType: data['requireImage']
+                      ? 1
+                      : widget.viewModel.randamNum(2, 4),
+                ),
+              ),
+            );
+          },
+        );
       },
     );
   }

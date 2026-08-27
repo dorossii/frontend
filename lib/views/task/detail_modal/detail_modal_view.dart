@@ -1,11 +1,22 @@
 import 'dart:math';
 
 import 'package:authbase_mobile/components/colors.dart';
+import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/views/task/detail_modal/underlineText.dart';
+import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:flutter/material.dart';
 
 class DetailModalView extends StatelessWidget {
-  const DetailModalView({super.key});
+  final TaskViewModel viewModel;
+  final TaskInfo task;
+  final VoidCallback onUpDate;
+
+  const DetailModalView({
+    super.key,
+    required this.viewModel,
+    required this.task,
+    required this.onUpDate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +97,20 @@ class DetailModalView extends StatelessWidget {
                                   color: AppColors.gray,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
+                                child: (task.imageId != null)
+                                    ? Image.network(
+                                        'https://mock-dorossii.mattuu.com/app/user/task/${task.imageId}/image',
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Center(
+                                        child: Text(
+                                          "画像がありません",
+                                          style: TextStyle(
+                                            fontFamily: 'textFont',
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ),
 
@@ -132,7 +157,10 @@ class DetailModalView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("皿洗いをする", style: TextStyle(fontSize: 24)),
+                          Text(
+                            task.taskName,
+                            style: const TextStyle(fontSize: 24),
+                          ),
 
                           const SizedBox(height: 10),
 
@@ -207,11 +235,12 @@ class DetailModalView extends StatelessWidget {
                                       child: Row(
                                         children: [
                                           const SizedBox(width: 16),
-                                          Image.asset(
-                                            height: 20,
-                                            width: 20,
-                                            'images/task/difficultyLevel_green.webp',
-                                          ),
+                                          for (int i = 0; i < task.level; i++)
+                                            Image.asset(
+                                              height: 20,
+                                              width: 20,
+                                              'images/task/difficultyLevel_green.webp',
+                                            ),
                                         ],
                                       ),
                                     ),
@@ -242,9 +271,7 @@ class DetailModalView extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child: UnderlineText(
-                              text: "フレンドからのコメント。フレンドからのコメント。フレンドからのコメント。",
-                            ),
+                            child: UnderlineText(text: task.message),
                           ),
 
                           const SizedBox(height: 32),
@@ -264,14 +291,14 @@ class DetailModalView extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child: UnderlineText(text: "タスク詳細"),
+                            child: UnderlineText(text: task.description),
                           ),
 
                           const SizedBox(height: 32),
 
                           Center(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: onUpDate,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.darkBackground,
                                 shape: RoundedRectangleBorder(
