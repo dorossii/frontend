@@ -234,10 +234,10 @@ class BottomView extends StatelessWidget {
     );
   }
 
-  // =========================
+ // =========================
   // 友達救済ボタン
   // =========================
-  Widget _buildRescueButton(BuildContext context) {
+ Widget _buildRescueButton(BuildContext context) {
     return GestureDetector(
       onTap: () async {
         final List<RescueFriend>? selectedUuids =
@@ -246,7 +246,7 @@ class BottomView extends StatelessWidget {
           await RescueViewModel().getFriends(),
         );
 
-        if (selectedUuids == null || selectedUuids.isEmpty) return;
+        if (selectedUuids == null) return;
         if (!context.mounted) return;
 
         try {

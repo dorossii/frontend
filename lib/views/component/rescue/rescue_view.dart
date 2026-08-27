@@ -8,7 +8,13 @@ class RescueView {
     BuildContext context,
     List<RescueFriend> rescueFriends,
   ) async {
+    // 1. isRescued が true の人の ID を初期選択（チェック状態）に設定
     final selected = <String>{};
+    for (var friend in rescueFriends) {
+      if (friend.isRescued) {
+        selected.add(friend.id);
+      }
+    }
 
     return showDialog<List<RescueFriend>>(
       context: context,
@@ -76,7 +82,6 @@ class RescueView {
                 width: double.maxFinite,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-
                   children: [
                     Image.asset(
                       'images/chara/zonbi.webp',
@@ -95,12 +100,10 @@ class RescueView {
 
                           return ListTile(
                             contentPadding: EdgeInsets.zero,
-
                             leading: Checkbox(
                               value: isSelected,
                               activeColor: AppColors.btnBackground,
                               checkColor: AppColors.subWhiteBackground,
-
                               onChanged: (value) {
                                 setState(() {
                                   if (value == true) {
@@ -150,15 +153,11 @@ class RescueView {
                   child: SizedBox(
                     width: 150,
                     height: 45,
-
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.sub,
-
                         foregroundColor: AppColors.text,
-
                         elevation: 8,
-
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                           side: const BorderSide(
@@ -167,17 +166,13 @@ class RescueView {
                           ),
                         ),
                       ),
-
                       onPressed: () {
-                        // 選択された友達のオブジェクト（RescueFriend）のリストを作る
                         final resultList = rescueFriends
                             .where((f) => selected.contains(f.id))
                             .toList();
 
-                        //  元の設計通り、オブジェクトのリストを返して閉じる（これで型エラーが消えます）
                         Navigator.pop(context, resultList);
                       },
-
                       child: const Text(
                         "レスキュー実行",
                         style: TextStyle(

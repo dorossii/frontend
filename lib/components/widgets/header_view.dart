@@ -5,7 +5,6 @@ import '../extensions/life_state_layout.dart';
 import '../../../components/extensions/dirtLevelIcon.dart';
 import '../extensions/user_view_model.dart';
 
-
 class HeaderView extends StatelessWidget implements PreferredSizeWidget {
   final bool isTop;
 
@@ -29,21 +28,12 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
       ),
       padding: EdgeInsets.only(top: topPadding),
       // isTop が true ならログ、false ならステータスを表示
-      child: isTop ? _buildLogHeader() : _buildMyStatusHeader(vm, context),
+      child: isTop ? _buildLogHeader(vm) : _buildMyStatusHeader(vm, context),
     );
   }
 
-  // トップ画面用：ログ表示
-  Widget _buildLogHeader() {
-    // 表示したいログの配列
-    final List<String> logs = [
-      "2025/04/19 ごろちゃんにゴミを投げつけられました。",
-      "2025/04/19 ごろちゃんにゴミを投げつけられました。",
-      "2025/04/19 ごろちゃんにゴミを投げつけられました。",
-      "2025/04/19 ごろちゃんにゴミを投げつけられました。",
-      "2025/04/19 ごろちゃんにゴミを投げつけられました。",
-    ];
-
+  // トップ画面用：ログ表示（vmから取得）
+  Widget _buildLogHeader(UserViewModel vm) {
     return Container(
       height: 80,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -52,22 +42,33 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: AppColors.darkEdgey, width: 1),
       ),
-      child: Scrollbar(
-        thickness: 2,
-        child: ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-          itemCount: logs.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 1),
+      child: vm.logs.isEmpty
+          ? const Center(
               child: Text(
-                logs[index],
-                style: const TextStyle(fontSize: 12, fontFamily: 'textFont'),
+                'お知らせはありません',
+                style: TextStyle(fontSize: 12, fontFamily: 'textFont'),
               ),
-            );
-          },
-        ),
-      ),
+            )
+          : Scrollbar(
+              thickness: 2,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                itemCount: vm.logs.length,
+                itemBuilder: (context, index) {
+                  final log = vm.logs[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 1),
+                    child: Text(
+                      log.displayText, // ActivityLogで定義した "YYYY/MM/DD タイトル"
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'textFont',
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
 
@@ -81,10 +82,7 @@ class HeaderView extends StatelessWidget implements PreferredSizeWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
-            child: Image.asset(
-              (vm.dirtLevel).statusIcon,
-              fit: BoxFit.contain,
-            ),
+            child: Image.asset((vm.dirtLevel).statusIcon, fit: BoxFit.contain),
           ),
           const SizedBox(width: 12),
           Expanded(
