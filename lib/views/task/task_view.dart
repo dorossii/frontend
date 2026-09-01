@@ -639,8 +639,6 @@ class _TaskView extends State<TaskView> {
 
   // タスク詳細
   void _showModalBottomSheet(task) {
-    debugPrint('taskId: ${task.taskId}');
-    debugPrint('imageId: ${task.imageId}');
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
