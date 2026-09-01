@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:authbase_mobile/components/colors.dart';
 import 'package:authbase_mobile/models/task_info.dart';
+import 'package:authbase_mobile/views/task/detail_modal/detail_modal.dart';
 import 'package:authbase_mobile/views/task/detail_modal/underlineText.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:flutter/material.dart';
@@ -197,9 +198,9 @@ class DetailModalView extends StatelessWidget {
                                     Expanded(
                                       flex: 4,
                                       child: Row(
-                                        children: const [
-                                          SizedBox(width: 16),
-                                          Text("2026年○月×日(火)"),
+                                        children: [
+                                          const SizedBox(width: 16),
+                                          Text(handleGetStartDate(task.startDate)),
                                         ],
                                       ),
                                     ),

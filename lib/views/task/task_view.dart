@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:authbase_mobile/views/app.dart';
 import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
-import 'package:authbase_mobile/views/task/detail_modal/detail_modal_view.dart';
+import 'package:authbase_mobile/views/task/detail_modal/detail_view.dart';
 import 'package:authbase_mobile/views/task/selected_bar/completeModal.dart';
 import 'package:flutter/material.dart';
 import 'task_view_model.dart';
