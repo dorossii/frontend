@@ -60,7 +60,7 @@ class TaskViewModel {
 
     // 期限順
     if (selectSortIndex == 1) {
-      taskItems.sort((b, a) => a.endTime.compareTo(b.endTime));
+      taskItems.sort((a, b) => a.endTime.compareTo(b.endTime));
     }
 
     // 難易度順
