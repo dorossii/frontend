@@ -203,20 +203,6 @@ class TaskViewModel {
         checkTask = res[randam];
         checkTaskId = res[randam].id;
       }
-      
-
-      // 選択が複数の場合、requireImageがtrueの要素でresultを上書き
-      // for (final item in selectedTaskId) {
-      //   target = await TaskService().updateTaskStatus(
-      //     selectedTaskId: [item],
-      //     message: message,
-      //   );
-
-      //   if (target['requireImage'] == true) {
-      //     res = target;
-      //     resultId = item;
-      //   }
-      // }
 
     } else {
       debugPrint('❌ 選択されたタスクIDが見つかりません');
@@ -248,10 +234,11 @@ class TaskViewModel {
   Future<(TaskInfo, FriendInfo)?> getFriendPicture() async {
     final pendingData = await _service.getFriendPending();
     // for (final task in pendingData) {
-    //   debugPrint('taskId: ${task.taskId}, userId: ${task.userId}, taskName: ${task.taskName}');
+    //   debugPrint('承認待ちタスク一覧：　taskId: ${task.taskId}, userId: ${task.userId}, taskName: ${task.taskName}');
     // }
 
     if (pendingData.isEmpty) {
+      // debugPrint("承認待ちタスクがありません");
       return null;
     }
 
