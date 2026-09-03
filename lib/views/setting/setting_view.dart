@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../components/Colors.dart';
+import '../../components/extensions/user_view_model.dart';
 import 'user/setting_user_view.dart';
+import 'target/target_view_screen.dart';
 
 class SettingsView extends StatelessWidget {
   final VoidCallback onLogoutPressed;
@@ -9,6 +12,7 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<UserViewModel>();
     return Scaffold(
       backgroundColor: AppColors.subWhiteBackground,
       body: SafeArea(
@@ -22,36 +26,36 @@ class SettingsView extends StatelessWidget {
                     Container(
                       width: 50,
                       height: 50,
-                      decoration: const BoxDecoration(
-                        color: AppColors.darkBackground, 
+                      decoration: BoxDecoration(
+                        color: AppColors.getBackgroundColor(vm.bgColors),
                         shape: BoxShape.circle,
                       ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.laptop_mac,
-                          color: Colors.white,
-                          size: 32,
+                      child: Center(
+                        child: Image(
+                          image: AssetImage('images/icons/${vm.userIcon}.png',),
+                          width: 48,
+                          height: 48,
                         ),
                       ),
                     ),
                     const SizedBox(width: 16),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'まつえもん',
-                            style: TextStyle(
+                            vm.userName,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'textFont',
                               color: AppColors.text,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            '2005/01/20',
-                            style: TextStyle(
+                            vm.birthDate,
+                            style: const TextStyle(
                               fontSize: 14,
                               fontFamily: 'textFont',
                               color: AppColors.text,
@@ -67,11 +71,11 @@ class SettingsView extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ProfileEditView(
-                              initialName: 'まつえもん',
-                              birthday: '2005/01/20',
-                              initialBgColor: AppColors.darkBackground,
-                              initialIconPath: 'images/icons/pc.png',
+                            builder: (context) => ProfileEditView(
+                              initialName: vm.userName,
+                              birthday: vm.birthDate,
+                              initialBgColor: AppColors.getBackgroundColor(vm.bgColors),
+                              initialIconPath: 'images/icons/${vm.userIcon}.png',
                             ),
                           ),
                         );
@@ -99,9 +103,9 @@ class SettingsView extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Center(
-                            child: const Text(
-                              '一人暮らし',
-                              style: TextStyle(
+                            child: Text(
+                              vm.livingType,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'textFont',
                                 fontWeight: FontWeight.w500,
@@ -124,7 +128,10 @@ class SettingsView extends StatelessWidget {
 
               // 3. フレンド設定
               _buildCard(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
                 child: Row(
                   children: [
                     const Icon(
@@ -151,13 +158,17 @@ class SettingsView extends StatelessWidget {
                     ),
                   ],
                 ),
-                onTap: () {},
+                onTap: () {
+                },
               ),
               const SizedBox(height: 16),
 
               // 嫌がらせのターゲット変更
               _buildCard(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
                 child: Row(
                   children: [
                     const Icon(
@@ -199,7 +210,15 @@ class SettingsView extends StatelessWidget {
                     ),
                   ],
                 ),
-                onTap: () {},
+                onTap: () {
+  // ターゲット変更画面に遷移
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const TargetListScreen(),
+    ),
+  );
+},
               ),
               const SizedBox(height: 48),
 
@@ -244,7 +263,7 @@ class SettingsView extends StatelessWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.subWhiteBackground, 
+        color: AppColors.subWhiteBackground,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           // 下だけ影をつける
@@ -293,9 +312,7 @@ class SettingsView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
     );
   }

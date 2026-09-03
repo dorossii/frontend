@@ -7,7 +7,6 @@ import '../../services/user/user_service.dart';
 import '../models/status.dart';
 
 class UserViewModel extends ChangeNotifier {
-
   /// APIから取得したユーザー情報
   UserStatus? userStatus;
 
@@ -24,7 +23,9 @@ class UserViewModel extends ChangeNotifier {
   Timer? _pollingTimer;
 
   /// 初期化（タイマー開始）
-  Future<void> initialize({Duration interval = const Duration(seconds: 5)}) async {
+  Future<void> initialize({
+    Duration interval = const Duration(seconds: 5),
+  }) async {
     // 初回取得
     await fetchUser();
     // 定期取得を開始
@@ -87,9 +88,7 @@ class UserViewModel extends ChangeNotifier {
 
   /// 汚さレベルから状態取得
   LifeState get currentState {
-    return LifeState.fromValue(
-      userStatus?.dirtLevel ?? 0,
-    );
+    return LifeState.fromValue(userStatus?.dirtLevel ?? 0);
   }
 
   /// HP表示用
@@ -101,6 +100,41 @@ class UserViewModel extends ChangeNotifier {
   String get userName {
     return userStatus?.userName ?? "";
   }
+
+  /// 生年月日
+  String get birthDate {
+    final timestamp = userStatus?.birthDate;
+
+    if (timestamp == null || timestamp == 0) {
+      return "";
+    }
+
+    final date = DateTime.fromMillisecondsSinceEpoch(
+      timestamp * 1000,
+      isUtc: true,
+    ).toLocal();
+
+    return '${date.year}/${date.month}/${date.day}';
+  }
+  String get bgColors {
+  return userStatus?.bgColors ?? "";
+}
+String get userIcon {
+  return userStatus?.userIcon ?? "";
+}
+/// 居住タイプ
+String get livingType {
+  switch (userStatus?.livingType) {
+    case 'alone':
+      return '一人暮らし';
+    case 'family':
+      return '実家暮らし';
+    case 'share':
+      return 'シェアハウス';
+    default:
+      return '';
+  }
+}
 
   /// 汚さレベル
   int get dirtLevel {
