@@ -55,19 +55,24 @@ class TaskService {
         method: 'PUT',
         body: {"status": "complete", "message": message},
       );
-      // response = await http.put(
-      //   Uri.parse('$url/${selectedTaskId.first}'),
-      //   headers: {'accept': 'application/json', 'Authorization': token},
-      //   body: {"status": "complete", "message": message},
-      // );
     } else {
       // まとめて更新
+      final requestBody = selectedTaskId.map((taskId) {
+        return {
+          "id": taskId,
+          "status": "complete",
+        };
+      }).toList();
+
       response = await AuthManager.authenticatedRequest(
         '/app/user/tasks/complete',
-        method: 'PUT',
-        body: selectedTaskId
+        method: 'POST',
+        body: requestBody
       );
     }
+
+    debugPrint('ステータスコード: ${response.statusCode}');
+    debugPrint('レスポンス: ${response.body}');
 
     /// 成功
     if (response.statusCode == 200) {
