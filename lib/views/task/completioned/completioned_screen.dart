@@ -61,7 +61,6 @@ class CompletionedScreen extends StatelessWidget {
 
         // isChangeで写真撮影かメッセージ送信かを分岐
         if (checkTask['isChanged']) {
-
           // あおりメッセージ送信画面
           if (checkTask['messageUserId'] != '') {
             return FutureBuilder<UserStatus>(
@@ -77,8 +76,6 @@ class CompletionedScreen extends StatelessWidget {
 
                 final user = userSnapshot.data!;
 
-                debugPrint('ユーザー情報： ${user.toString()}');
-
                 // ユーザーIDであおりメッセージ画面分岐
                 if (checkTask['messageUserId'] == user.userId) {
                   // あおりメッセージ送信画面(未来の自分)
@@ -89,12 +86,24 @@ class CompletionedScreen extends StatelessWidget {
                 } else {
                   // あおりメッセージ送信画面(フレンド)
                   return FutureBuilder<FriendInfo>(
-                    future: viewModel.findFriend(),
+                    future: viewModel.findFriend(checkTask['messageUserId']),
                     builder: (context, snapshot) {
-                      // まだデータの取得が終わっていない間は、ローディング画面を表示する
+                      // 読み込み中
                       if (snapshot.connectionState != ConnectionState.done) {
                         return const Center(child: CircularProgressIndicator());
                       }
+
+                      // エラー
+                      if (snapshot.hasError) {
+                        debugPrint('フレンド取得エラー: ${snapshot.error}');
+                        return const Center(child: Text('フレンド情報の取得に失敗しました'));
+                      }
+
+                      // データがない
+                      if (!snapshot.hasData) {
+                        return const Center(child: Text('フレンド情報が見つかりません'));
+                      }
+
                       return FriendMessageView(
                         viewModel: viewModel,
                         friendData: snapshot.data!,

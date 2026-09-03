@@ -58,16 +58,13 @@ class TaskService {
     } else {
       // まとめて更新
       final requestBody = selectedTaskId.map((taskId) {
-        return {
-          "id": taskId,
-          "status": "complete",
-        };
+        return {"id": taskId, "status": "complete"};
       }).toList();
 
       response = await AuthManager.authenticatedRequest(
         '/app/user/tasks/complete',
         method: 'POST',
-        body: requestBody
+        body: requestBody,
       );
     }
 

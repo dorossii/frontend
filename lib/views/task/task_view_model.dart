@@ -220,13 +220,17 @@ class TaskViewModel {
   }
 
   // ランダムに選んだフレンド情報を取得する処理
-  Future<FriendInfo> findFriend() async {
+  Future<FriendInfo> findFriend(String friendId) async {
     List<FriendInfo> friendList = await FriendService().fetchFriendInfo();
     if (friendList.isEmpty) {
       throw Exception('フレンドが登録されていません');
     }
-    int random = randamNum(0, friendList.length - 1);
-    return friendList[random];
+
+    FriendInfo selectrdFriend = friendList.firstWhere(
+      (f) => f.userId == friendId,
+    );
+    
+    return selectrdFriend;
   }
 
   // フレンドの承認待ちのタスクを取得し、ランダムに一つ表示する処理
@@ -244,10 +248,10 @@ class TaskViewModel {
     final friendList = await FriendService().fetchFriendInfo();
     int random = randamNum(0, pendingData.length - 1);
     // フレンドを取得
-    FriendInfo selectrdFrien = friendList.firstWhere(
+    FriendInfo selectedFriend = friendList.firstWhere(
       (f) => f.userId == pendingData[random].userId,
     );
 
-    return (pendingData[random], selectrdFrien);
+    return (pendingData[random], selectedFriend);
   }
 }
