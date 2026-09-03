@@ -6,7 +6,7 @@ class TaskInfo {
   final int status;           // ステータス
   final int tag;             // 掃除カテゴリーのタグ
   final int level;            // 難易度
-   final String description;   // タスク説明文
+  final String description;   // タスク説明文
   final int startDate;     // 開始時間
   final int endTime;       // 終了時間
   final String imageId;       // 詳細画像

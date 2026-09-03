@@ -28,7 +28,11 @@ class _FriendPictureView extends State<FriendPictureView> {
     super.initState();
     _controller = TextEditingController();
     widget.viewModel.initialize(() async {
-      final (task, friend) = await widget.viewModel.getFriendPicture();
+      final result = await widget.viewModel.getFriendPicture();
+
+      if (result == null) return;
+
+      final (task, friend) = result;
 
       if (!mounted) return;
 
@@ -122,9 +126,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                     selectedTaskId: selectedTaskId,
                     message: "",
                   );
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: "まつえもん")),
-                  );
+                  Navigator.pop(context); // 一つ前の画面に戻る
                 },
                 child: Container(
                   width: 112,
@@ -228,7 +230,8 @@ class _FriendPictureView extends State<FriendPictureView> {
                           // 画面遷移
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => TaskAnimationScreen(friendName: "まつえもん"),
+                              builder: (context) =>
+                                  TaskAnimationScreen(friendName: "まつえもん"),
                             ),
                           ),
                         },

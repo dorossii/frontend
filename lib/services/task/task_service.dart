@@ -8,7 +8,7 @@ import '../../constants/app_config.dart';
 /// タスクの情報を取得する
 class TaskService {
   /// API URL
- static const String url =
+  static const String url =
       MockApiResponse.baseUrl + MockApiResponse.taskListEndpoint;
 
   /// 認証トークン
@@ -16,7 +16,6 @@ class TaskService {
 
   /// ==== タスク情報取得 ====
   Future<List<TaskInfo>> fetchTaskInfo() async {
-
     /// GET通信
     final response = await AuthManager.authenticatedRequest(
       AppConfig.taskListEndpoint,
@@ -26,6 +25,7 @@ class TaskService {
     /// 通信成功
     if (response.statusCode == 200) {
       debugPrint("タスク一覧取得完了");
+
       /// JSON変換
       final jsonData = jsonDecode(response.body);
 
@@ -46,25 +46,26 @@ class TaskService {
     required List<String> selectedTaskId,
     required String message,
   }) async {
-    final http.Response response;
+    final response;
 
     if (selectedTaskId.length == 1) {
       // 単体で更新
-      response = await http.put(
-        Uri.parse('$url/${selectedTaskId.first}'),
-        headers: {'accept': 'application/json', 'Authorization': token},
+      response = await AuthManager.authenticatedRequest(
+        '${AppConfig.taskListEndpoint}/${selectedTaskId.first}',
+        method: 'PUT',
         body: {"status": "complete", "message": message},
       );
+      // response = await http.put(
+      //   Uri.parse('$url/${selectedTaskId.first}'),
+      //   headers: {'accept': 'application/json', 'Authorization': token},
+      //   body: {"status": "complete", "message": message},
+      // );
     } else {
       // まとめて更新
-      response = await http.put(
-        Uri.parse('$url/${selectedTaskId.first}'),
-        headers: {
-          'accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': token,
-        },
-        body: jsonEncode({"status": "complete", "message": message}),
+      response = await AuthManager.authenticatedRequest(
+        '/app/user/tasks/complete',
+        method: 'PUT',
+        body: selectedTaskId
       );
     }
 
@@ -79,10 +80,9 @@ class TaskService {
   // ==== 承認待ちタスク一覧取得 ====
   Future<List<TaskInfo>> getFriendPending() async {
     /// GET通信
-    final response = await http.get(
-      Uri.parse('${MockApiResponse.baseUrl}/app/user/tasks/pending'),
-
-      headers: {'accept': 'application/json', 'Authorization': token},
+    final response = await AuthManager.authenticatedRequest(
+      '/app/user/tasks/pending',
+      method: 'GET',
     );
 
     /// 通信成功

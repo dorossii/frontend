@@ -11,14 +11,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 class CreateMessageDesign extends StatelessWidget {
   final TaskViewModel viewModel;
   final TextEditingController controller;
-  final String labelText;
+  final String userName;
   final String sendUserId;
 
   const CreateMessageDesign({
     super.key,
     required this.viewModel,
     required this.controller,
-    required this.labelText,
+    required this.userName,
     required this.sendUserId,
   });
 
@@ -37,7 +37,7 @@ class CreateMessageDesign extends StatelessWidget {
               Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 20),
-                child: Text(labelText, style: TextStyle(fontSize: 16)),
+                child: Text('$userNameに向けて、メッセージを送ろう！', style: TextStyle(fontSize: 16)),
               ),
               Positioned(
                 top: -20,
@@ -148,7 +148,7 @@ class CreateMessageDesign extends StatelessWidget {
                         message: controller.text,
                       );
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: "まつえもん")),
+                        MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: userName)),
                       );
                     }
                   },

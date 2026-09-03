@@ -42,7 +42,7 @@ class _FriendMessageView extends State<FriendMessageView> {
     return CreateMessageDesign(
       viewModel: widget.viewModel,
       controller: _controller,
-      labelText: "${widget.friendData.userName}向けて、メッセージを送ろう！",
+      userName: widget.friendData.userName,
       sendUserId: widget.friendData.userId,
     );
   }

@@ -158,15 +158,14 @@ class _TaskView extends State<TaskView> {
                                 );
 
                             // 画面遷移
+                            // ToDo: 
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => CompletionedScreen(
                                   viewModel: widget.viewModel,
-                                  selectedTaskId: resultId,
-                                  // 写真が必須の場合は1(写真を撮る画面)
-                                  confirmType: data['requireImage']
-                                      ? 1
-                                      : widget.viewModel.randamNum(2, 4),
+                                  checkTaskId: resultId,
+                                  checkTask: data,
+                                  firstTime: true,
                                 ),
                               ),
                             );
@@ -662,11 +661,9 @@ class _TaskView extends State<TaskView> {
               MaterialPageRoute(
                 builder: (context) => CompletionedScreen(
                   viewModel: widget.viewModel,
-                  selectedTaskId: resultId,
-                  // 写真が必須の場合は1(写真を撮る画面)
-                  confirmType: data['requireImage']
-                      ? 1
-                      : widget.viewModel.randamNum(2, 4),
+                  checkTaskId: resultId,
+                  checkTask: data,
+                  firstTime: true,
                 ),
               ),
             );
