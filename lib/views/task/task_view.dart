@@ -158,7 +158,6 @@ class _TaskView extends State<TaskView> {
                                 );
 
                             // 画面遷移
-                            // ToDo: 
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => CompletionedScreen(

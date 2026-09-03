@@ -178,7 +178,6 @@ class TaskViewModel {
     TaskViewModel viewModel,
   ) async {
     Map<String, dynamic> res = {}; // 結果を格納する変数
-    Map<String, dynamic> target = {}; // データを一つづつ格納する変数
     List<String> updateTaskId = []; // 完了する対象タスクのリスト
     Map<String, dynamic> checkTask = {};  // タスク完了時にチェックするタスクを格納する変数
     String checkTaskId = "";  // タスク完了時にチェックするタスクIDを格納する変数
