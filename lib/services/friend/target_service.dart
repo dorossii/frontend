@@ -35,4 +35,29 @@ class TargetService {
 
     throw Exception('ターゲット情報取得失敗');
   }
+  // ターゲットの情報を更新する
+  Future<void> updateTargetInfo(TargetInfo targetInfo) async {
+  /// PUT通信
+  final response = await AuthManager.authenticatedRequest(
+    AppConfig.targetListEndpoint,
+    method: 'PUT',
+    body: targetInfo.toJson(),
+  );
+
+  /// 通信成功
+  if (response.statusCode == 200) {
+    debugPrint('ターゲット情報更新成功');
+    return;
+  }
+
+  /// 通信失敗
+  debugPrint(
+    'Failed to update target info: ${response.statusCode}',
+  );
+  debugPrint(
+    'target update response: ${response.body}',
+  );
+
+  throw Exception('ターゲット情報更新失敗');
+}
 }

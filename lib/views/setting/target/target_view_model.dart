@@ -98,4 +98,18 @@ class TargetListViewModel {
       targetInfo = TargetInfo(targetUser: userId);
     }
   }
+  // 嫌がらせ対象をサーバーに更新する
+  Future<void> updateTargetInfo(String userId) async {
+  final newTarget = TargetInfo(
+    targetUser: userId,
+  );
+
+  try {
+    await _targetService.updateTargetInfo(newTarget);
+
+    targetInfo = newTarget;
+  } catch (e) {
+    debugPrint('target update error: $e');
+  }
+}
 }

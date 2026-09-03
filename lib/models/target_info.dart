@@ -1,4 +1,4 @@
-// 嫌がらせユーザーの取得
+// 嫌がらせユーザー
 class TargetInfo {
   final String targetUser;
 
@@ -6,13 +6,13 @@ class TargetInfo {
 
   factory TargetInfo.fromJson(Map<String, dynamic> json) {
     return TargetInfo(
-      targetUser: json['targetUser'] ?? '',
+      targetUser: json['TargetUser'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'targetUser': targetUser,
+      'TargetUser': targetUser,
     };
   }
 }

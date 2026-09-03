@@ -8,10 +8,7 @@ import '../../../models/friend_info.dart';
 class TargetListView extends StatefulWidget {
   final TargetListViewModel viewModel;
 
-  const TargetListView({
-    super.key,
-    required this.viewModel,
-  });
+  const TargetListView({super.key, required this.viewModel});
 
   @override
   State<TargetListView> createState() => _TargetListViewState();
@@ -38,21 +35,21 @@ class _TargetListViewState extends State<TargetListView> {
 
       body: Column(
         children: [
-            // 左上の戻るボタンエリア
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12, top: 8, bottom: 4),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new,
-                    color: darkTextColor,
-                    size: 28,
-                  ),
-                  onPressed: () => Navigator.of(context).pop(),
+          // 左上の戻るボタンエリア
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12, top: 8, bottom: 4),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: darkTextColor,
+                  size: 28,
                 ),
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
+          ),
           // 検索バー
           Padding(
             padding: const EdgeInsets.only(
@@ -114,21 +111,14 @@ class _TargetListViewState extends State<TargetListView> {
           // フレンド一覧
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
 
-              itemCount:
-                  widget.viewModel.filteredFriendList.length,
+              itemCount: widget.viewModel.filteredFriendList.length,
 
               itemBuilder: (context, index) {
-                final user =
-                    widget.viewModel.filteredFriendList[index];
+                final user = widget.viewModel.filteredFriendList[index];
 
-                return _buildFriendItem(
-                  context,
-                  user,
-                );
+                return _buildFriendItem(context, user);
               },
             ),
           ),
@@ -137,10 +127,7 @@ class _TargetListViewState extends State<TargetListView> {
     );
   }
 
-  Widget _buildFriendItem(
-    BuildContext context,
-    FriendInfo friend,
-  ) {
+  Widget _buildFriendItem(BuildContext context, FriendInfo friend) {
     String dirtLevelImage;
 
     if (friend.dirtLevel > 5) {
@@ -154,18 +141,10 @@ class _TargetListViewState extends State<TargetListView> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 15,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
 
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-            width: 1,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: Colors.black12, width: 1)),
       ),
 
       child: Row(
@@ -181,8 +160,7 @@ class _TargetListViewState extends State<TargetListView> {
                   'images/icons/${friend.iconName}.png',
                 ),
 
-                backgroundColor:
-                    AppColors.getBackgroundColor(
+                backgroundColor: AppColors.getBackgroundColor(
                   friend.background,
                 ),
               ),
@@ -208,8 +186,7 @@ class _TargetListViewState extends State<TargetListView> {
           // 名前・HP
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
                 Text(
@@ -224,9 +201,7 @@ class _TargetListViewState extends State<TargetListView> {
 
                 const SizedBox(height: 8),
 
-                HpBar(
-                  value: friend.healthPoint / 1000,
-                ),
+                HpBar(value: friend.healthPoint / 1000),
               ],
             ),
           ),
@@ -234,32 +209,22 @@ class _TargetListViewState extends State<TargetListView> {
           const SizedBox(width: 15),
 
           // 嫌がらせ対象チェック
-          _buildActionButton(
-            context,
-            friend,
-          ),
+          _buildActionButton(context, friend),
         ],
       ),
     );
   }
 
-  Widget _buildActionButton(
-    BuildContext context,
-    FriendInfo friend,
-  ) {
-    final isTarget =
-        widget.viewModel.isTarget(friend.userId);
+  Widget _buildActionButton(BuildContext context, FriendInfo friend) {
+    final isTarget = widget.viewModel.isTarget(friend.userId);
 
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          widget.viewModel.toggleTarget(
-            friend.userId,
-          );
-        });
+      onTap: () async {
+        await widget.viewModel.updateTargetInfo(friend.userId);
 
-        // TODO:
-        // ここで嫌がらせ対象変更APIを呼ぶ
+        if (mounted) {
+          setState(() {});
+        }
       },
 
       child: Container(
@@ -269,17 +234,11 @@ class _TargetListViewState extends State<TargetListView> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
 
-          color: isTarget
-              ? AppColors.btnBackground
-              : AppColors.grayBackground,
+          color: isTarget ? AppColors.btnBackground : AppColors.grayBackground,
         ),
 
         child: isTarget
-            ? const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 24,
-              )
+            ? const Icon(Icons.check, color: Colors.white, size: 24)
             : null,
       ),
     );
@@ -287,11 +246,7 @@ class _TargetListViewState extends State<TargetListView> {
 }
 
 class HpBar extends StatelessWidget {
-  const HpBar({
-    super.key,
-    required this.value,
-    this.height = 12,
-  });
+  const HpBar({super.key, required this.value, this.height = 12});
 
   final double value;
   final double height;
@@ -299,18 +254,8 @@ class HpBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gradient = value <= 0.4
-        ? const LinearGradient(
-            colors: [
-              Color(0xFFD53B2A),
-              Color(0xFFFFDB4D),
-            ],
-          )
-        : const LinearGradient(
-            colors: [
-              Color(0xFFFEE590),
-              Color(0xFF55A871),
-            ],
-          );
+        ? const LinearGradient(colors: [Color(0xFFD53B2A), Color(0xFFFFDB4D)])
+        : const LinearGradient(colors: [Color(0xFFFEE590), Color(0xFF55A871)]);
 
     return Row(
       children: [
@@ -329,8 +274,7 @@ class HpBar extends StatelessWidget {
 
             decoration: BoxDecoration(
               color: const Color(0xFFEBEBEB),
-              borderRadius:
-                  BorderRadius.circular(height / 2),
+              borderRadius: BorderRadius.circular(height / 2),
             ),
 
             child: FractionallySizedBox(
@@ -339,16 +283,12 @@ class HpBar extends StatelessWidget {
               widthFactor: value.clamp(0, 1),
 
               child: AnimatedContainer(
-                duration:
-                    const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
 
                 decoration: BoxDecoration(
                   gradient: gradient,
 
-                  borderRadius:
-                      BorderRadius.circular(
-                    height / 2,
-                  ),
+                  borderRadius: BorderRadius.circular(height / 2),
                 ),
               ),
             ),
