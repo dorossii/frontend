@@ -2,16 +2,23 @@ import 'package:authbase_mobile/components/Colors.dart';
 import 'package:authbase_mobile/models/friend_info.dart';
 import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/views/component/task/take_picture_design.dart';
-import 'package:authbase_mobile/views/splash/task/splash_screen.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
+import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:flutter/material.dart';
 
 // 完了したタスクの写真を撮る画面
 class FriendPictureView extends StatefulWidget {
   final TaskViewModel viewModel;
+  final Map<String, dynamic> checkTask;
+  final String checkTaskId;
 
-  const FriendPictureView({super.key, required this.viewModel});
+  const FriendPictureView({
+    super.key,
+    required this.viewModel,
+    required this.checkTask,
+    required this.checkTaskId,
+  });
 
   @override
   State<FriendPictureView> createState() => _FriendPictureView();
@@ -28,7 +35,11 @@ class _FriendPictureView extends State<FriendPictureView> {
     super.initState();
     _controller = TextEditingController();
     widget.viewModel.initialize(() async {
-      final (task, friend) = await widget.viewModel.getFriendPicture();
+      final result = await widget.viewModel.getFriendPicture();
+
+      if (result == null) return;
+
+      final (task, friend) = result;
 
       if (!mounted) return;
 
@@ -122,9 +133,7 @@ class _FriendPictureView extends State<FriendPictureView> {
                     selectedTaskId: selectedTaskId,
                     message: "",
                   );
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => TaskAnimationScreen(friendName: "まつえもん")),
-                  );
+                  Navigator.pop(context); // 一つ前の画面に戻る
                 },
                 child: Container(
                   width: 112,
@@ -228,7 +237,12 @@ class _FriendPictureView extends State<FriendPictureView> {
                           // 画面遷移
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => TaskAnimationScreen(friendName: "まつえもん"),
+                              builder: (context) => CompletionedScreen(
+                                viewModel: widget.viewModel,
+                                checkTaskId: widget.checkTaskId,
+                                checkTask: widget.checkTask,
+                                firstTime: false,
+                              ),
                             ),
                           ),
                         },

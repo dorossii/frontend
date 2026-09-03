@@ -43,7 +43,7 @@ class _CreateMessageView extends State<CreateMessageView> {
     return CreateMessageDesign(
       viewModel: widget.viewModel,
       controller: _controller,
-      labelText: "未来の自分に向けて、メッセージを送ろう！",
+      userName: "未来の自分",
       sendUserId: widget.userStatus.userId,
     );
   }

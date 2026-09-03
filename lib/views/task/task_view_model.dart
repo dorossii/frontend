@@ -60,7 +60,7 @@ class TaskViewModel {
 
     // 期限順
     if (selectSortIndex == 1) {
-      taskItems.sort((b, a) => a.endTime.compareTo(b.endTime));
+      taskItems.sort((a, b) => a.endTime.compareTo(b.endTime));
     }
 
     // 難易度順
@@ -164,7 +164,7 @@ class TaskViewModel {
         taskSelectedBool[index] = true;
       }
     }
-    if(task.status == 1 || task.status == 2){
+    if (task.status == 1 || task.status == 2) {
       taskSelectedBool[index] = false;
     }
   }
@@ -178,35 +178,36 @@ class TaskViewModel {
     TaskViewModel viewModel,
   ) async {
     Map<String, dynamic> res = {}; // 結果を格納する変数
-    Map<String, dynamic> target = {}; // データを一つづつ格納する変数
-    String resultId = "";
+    List<String> updateTaskId = []; // 完了する対象タスクのリスト
+    Map<String, dynamic> checkTask = {};  // タスク完了時にチェックするタスクを格納する変数
+    String checkTaskId = "";  // タスク完了時にチェックするタスクIDを格納する変数
 
     if (selectedTaskId.isNotEmpty) {
-      resultId = selectedTaskId.first;
+      updateTaskId = selectedTaskId;
 
       // タスク更新のPUT処理
       res = await TaskService().updateTaskStatus(
-        selectedTaskId: [resultId],
+        selectedTaskId: updateTaskId,
         message: message,
       );
 
-      // 選択が複数の場合、requireImageがtrueの要素でresultを上書き
-      for (final item in selectedTaskId) {
-        target = await TaskService().updateTaskStatus(
-          selectedTaskId: [item],
-          message: message,
-        );
+      if(selectedTaskId.length == 1) {  
+        // 単体の場合
+        checkTask = res;
+        checkTaskId = updateTaskId.first;
+      } else {
+        // 複数の場合、一件ランダムに選んで格納
+        int randam = randamNum(0, res.length - 1);
 
-        if (target['requireImage'] == true) {
-          res = target;
-          resultId = item;
-        }
+        checkTask = res[randam];
+        checkTaskId = res[randam].id;
       }
+
     } else {
       debugPrint('❌ 選択されたタスクIDが見つかりません');
     }
 
-    return (res, resultId);
+    return (checkTask, checkTaskId);
   }
 
   // ランダムに値を出力する処理
@@ -219,38 +220,38 @@ class TaskViewModel {
   }
 
   // ランダムに選んだフレンド情報を取得する処理
-  Future<FriendInfo> findFriend() async {
+  Future<FriendInfo> findFriend(String friendId) async {
     List<FriendInfo> friendList = await FriendService().fetchFriendInfo();
     if (friendList.isEmpty) {
       throw Exception('フレンドが登録されていません');
     }
-    int random = randamNum(0, friendList.length - 1);
-    return friendList[random];
+
+    FriendInfo selectrdFriend = friendList.firstWhere(
+      (f) => f.userId == friendId,
+    );
+    
+    return selectrdFriend;
   }
 
   // フレンドの承認待ちのタスクを取得し、ランダムに一つ表示する処理
-  Future<(TaskInfo, FriendInfo)> getFriendPicture() async {
+  Future<(TaskInfo, FriendInfo)?> getFriendPicture() async {
     final pendingData = await _service.getFriendPending();
+    // for (final task in pendingData) {
+    //   debugPrint('承認待ちタスク一覧：　taskId: ${task.taskId}, userId: ${task.userId}, taskName: ${task.taskName}');
+    // }
+
     if (pendingData.isEmpty) {
-      throw Exception('承認待ちタスクがありません');
+      debugPrint("承認待ちタスクがありません");
+      return null;
     }
+
     final friendList = await FriendService().fetchFriendInfo();
     int random = randamNum(0, pendingData.length - 1);
-    // フレンド名を取得
-    FriendInfo selectrdFrien = friendList.firstWhere(
-      // ToDo: モックで返ってくる承認待ちユーザーがフレンド一覧にいないためテストデータ
-      // (f) => f.userId == pendingData[random].userId,
-      (f) => f.userId == 'u00001',
-      orElse: () => FriendInfo(
-        background: '',
-        dirtLevel: 0,
-        healthPoint: 0,
-        iconName: '',
-        userName: 'notFound',
-        userId: '',
-      ),
+    // フレンドを取得
+    FriendInfo selectedFriend = friendList.firstWhere(
+      (f) => f.userId == pendingData[random].userId,
     );
 
-    return (pendingData[random], selectrdFrien);
+    return (pendingData[random], selectedFriend);
   }
 }

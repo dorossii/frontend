@@ -258,7 +258,8 @@ class _TakePictureView extends State<TakePictureView> {
                         onPressed: () => {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => TaskAnimationScreen(friendName: "まつえもん"),
+                              // ToDO: 設定してるゴミを投げつける相手の名前に変更
+                              builder: (context) => TaskAnimationScreen(labelText: "まつえもんさんにゴミを渡しています"),
                             ),
                           ),
                         },
