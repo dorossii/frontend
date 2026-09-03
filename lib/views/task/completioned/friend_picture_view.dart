@@ -2,7 +2,6 @@ import 'package:authbase_mobile/components/Colors.dart';
 import 'package:authbase_mobile/models/friend_info.dart';
 import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/views/component/task/take_picture_design.dart';
-import 'package:authbase_mobile/views/splash/task/splash_screen.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
 import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';

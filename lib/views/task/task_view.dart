@@ -4,6 +4,7 @@ import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart
 import 'package:authbase_mobile/views/task/detail_modal/detail_view.dart';
 import 'package:authbase_mobile/views/task/selected_bar/completeModal.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'task_view_model.dart';
 import '../../components/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -647,25 +648,33 @@ class _TaskView extends State<TaskView> {
           task: task,
           // 完了時の処理
           onUpDate: () async {
-            List<String> taegetTask = [task.taskId]; 
-            // タスク更新処理
-            final (data, resultId) = await widget.viewModel.handleUpdateTask(
-              taegetTask,
-              "",
-              widget.viewModel,
-            );
+            try {
+              List<String> taegetTask = [task.taskId]; 
+              // タスク更新処理
+              final (data, resultId) = await widget.viewModel.handleUpdateTask(
+                taegetTask,
+                "",
+                widget.viewModel,
+              );
 
-            // 画面遷移
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CompletionedScreen(
-                  viewModel: widget.viewModel,
-                  checkTaskId: resultId,
-                  checkTask: data,
-                  firstTime: true,
+              // 画面遷移
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CompletionedScreen(
+                    viewModel: widget.viewModel,
+                    checkTaskId: resultId,
+                    checkTask: data,
+                    firstTime: true,
+                  ),
                 ),
-              ),
-            );
+              );
+            } catch (e) {
+              Fluttertoast.showToast(
+                msg: 'このタスクは終了しています',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+              );
+            }
           },
         );
       },
