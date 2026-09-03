@@ -163,7 +163,7 @@ class CreateMessageDesign extends StatelessWidget {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => TaskAnimationScreen(
-                                  labelText: '$userNameさんにゴミを渡しています',
+                                  labelText: '$userNameにゴミを渡しています',
                                 ),
                               ),
                             );
