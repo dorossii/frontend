@@ -98,7 +98,7 @@ class DetailModalView extends StatelessWidget {
                                   color: AppColors.gray,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: (task.imageId != null)
+                                child: (task.imageId != '')
                                     ? Image.network(
                                         'https://mock-dorossii.mattuu.com/app/user/task/${task.imageId}/image',
                                         fit: BoxFit.cover,
