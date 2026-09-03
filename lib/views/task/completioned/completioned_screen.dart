@@ -55,7 +55,11 @@ class CompletionedScreen extends StatelessWidget {
         // 承認待ちタスク確認画面
         if (firstTime) {
           if (snapshot.data != null) {
-            return FriendPictureView(viewModel: viewModel);
+            return FriendPictureView(
+              viewModel: viewModel,
+              checkTask: checkTask,
+              checkTaskId: checkTaskId,
+            );
           }
         }
 
@@ -126,7 +130,7 @@ class CompletionedScreen extends StatelessWidget {
 
         // スプラッシュ画面
         // ToDO: ゴミを投げつける対象を取得して名前を表示
-        return TaskAnimationScreen(friendName: "まつえもん");
+        return TaskAnimationScreen(labelText: "ゴミを回収しています");
       },
     );
   }

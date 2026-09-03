@@ -5,9 +5,9 @@ import '../../../../components/colors.dart';
 import '../../app.dart';
 
 class TaskAnimationScreen extends StatefulWidget {
-  const TaskAnimationScreen({super.key, required this.friendName});
+  const TaskAnimationScreen({super.key, required this.labelText});
 
-  final String friendName;
+  final String labelText;
 
   @override
   State<TaskAnimationScreen> createState() => _TaskAnimationScreenState();
@@ -168,7 +168,8 @@ class _TaskAnimationScreenState extends State<TaskAnimationScreen>
                           vertical: 12,
                         ),
                         child: Text(
-                          "${widget.friendName}さんにゴミを渡しています...",
+                          widget.labelText,
+                          // "${widget.friendName}さんにゴミを渡しています...",
                           style: const TextStyle(
                             fontSize: 18,
                             color: AppColors.subWhiteBackground,

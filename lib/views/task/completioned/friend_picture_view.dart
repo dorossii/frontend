@@ -4,14 +4,22 @@ import 'package:authbase_mobile/models/task_info.dart';
 import 'package:authbase_mobile/views/component/task/take_picture_design.dart';
 import 'package:authbase_mobile/views/splash/task/splash_screen.dart';
 import 'package:authbase_mobile/services/task/task_service.dart';
+import 'package:authbase_mobile/views/task/completioned/completioned_screen.dart';
 import 'package:authbase_mobile/views/task/task_view_model.dart';
 import 'package:flutter/material.dart';
 
 // 完了したタスクの写真を撮る画面
 class FriendPictureView extends StatefulWidget {
   final TaskViewModel viewModel;
+  final Map<String, dynamic> checkTask;
+  final String checkTaskId;
 
-  const FriendPictureView({super.key, required this.viewModel});
+  const FriendPictureView({
+    super.key,
+    required this.viewModel,
+    required this.checkTask,
+    required this.checkTaskId,
+  });
 
   @override
   State<FriendPictureView> createState() => _FriendPictureView();
@@ -230,8 +238,12 @@ class _FriendPictureView extends State<FriendPictureView> {
                           // 画面遷移
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  TaskAnimationScreen(friendName: "まつえもん"),
+                              builder: (context) => CompletionedScreen(
+                                viewModel: widget.viewModel,
+                                checkTaskId: widget.checkTaskId,
+                                checkTask: widget.checkTask,
+                                firstTime: false,
+                              ),
                             ),
                           ),
                         },
